@@ -32,6 +32,9 @@
     <Filter Include="01.View\TabView\03.Collider">
       <UniqueIdentifier>{14e5bd53-d218-4e03-ac45-cc36cf8ec1f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.FileInfo">
+      <UniqueIdentifier>{394bcfb5-8fb5-4b10-bbf1-21b664fb39df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -65,6 +68,9 @@
       <Filter>01.View\TabView\01.TerrainTool</Filter>
     </ClInclude>
     <ClInclude Include="CollisionTool.h" />
+    <ClInclude Include="FileInfo.h">
+      <Filter>07.FileInfo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -92,6 +98,9 @@
       <Filter>01.View\TabView\01.TerrainTool</Filter>
     </ClCompile>
     <ClCompile Include="CollisionTool.cpp" />
+    <ClCompile Include="FileInfo.cpp">
+      <Filter>07.FileInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MapTool.rc">

@@ -1,5 +1,6 @@
 #pragma once
-
+#include "afxwin.h"
+#include "Engine_Define.h"
 
 // CTerrainTool 대화 상자입니다.
 
@@ -10,6 +11,10 @@ class CTerrainTool : public CDialogEx
 public:
 	CTerrainTool(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CTerrainTool();
+
+	BYTE m_drawID;
+	_tchar* m_objectKey;
+	_tchar* m_stateKey;
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -23,4 +28,6 @@ protected:
 
 public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
+	CListBox m_textureListBox;
+	afx_msg void OnLbnSelchangeList1();
 };
