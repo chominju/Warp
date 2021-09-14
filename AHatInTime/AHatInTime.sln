@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Client", "00. Client", "{1247AB57-2769-48E1-BD87-5D119FAE33B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Engine", "01. Engine", "{B349E3B1-4308-4DA3-A1B7-FDFBD376C1AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Base", "03. Base", "{2E2E66EC-5E29-4797-9C8E-AA5158CC457E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. System", "00. System", "{68C751C4-DEDF-4D4E-ABB5-B07465E26226}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Utility", "01. Utility", "{2503C1C5-485D-4A9E-B2EF-31C35D8C95BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Header", "02. Header", "{FD521355-2117-4DCF-9082-EE5899554CFB}"
+	ProjectSection(SolutionItems) = preProject
+		Engine\Header\Engine_Define.h = Engine\Header\Engine_Define.h
+		Engine\Header\Engine_Enum.h = Engine\Header\Engine_Enum.h
+		Engine\Header\Engine_Fuction.h = Engine\Header\Engine_Fuction.h
+		Engine\Header\Engine_Macro.h = Engine\Header\Engine_Macro.h
+		Engine\Header\Engine_Struct.h = Engine\Header\Engine_Struct.h
+		Engine\Header\Engine_Typedef.h = Engine\Header\Engine_Typedef.h
+		Engine\Header\Export_Function.h = Engine\Header\Export_Function.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. MapTool", "02. MapTool", "{79450327-399B-4DA0-A9C4-2A4E15A0EEF7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Include\Client.vcxproj", "{395A847C-D290-425F-8F2A-C0EDA43FDE33}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "Engine\System\Include\System.vcxproj", "{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Engine\Utility\Include\Utility.vcxproj", "{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapTool", "MapTool\Include\MapTool.vcxproj", "{270E7408-E22B-444F-864A-AFDFC4EC6880}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Debug|x64.ActiveCfg = Debug|x64
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Debug|x64.Build.0 = Debug|x64
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Debug|x86.ActiveCfg = Debug|Win32
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Debug|x86.Build.0 = Debug|Win32
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Release|x64.ActiveCfg = Release|x64
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Release|x64.Build.0 = Release|x64
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Release|x86.ActiveCfg = Release|Win32
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33}.Release|x86.Build.0 = Release|Win32
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Debug|x64.ActiveCfg = Debug|x64
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Debug|x64.Build.0 = Debug|x64
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Debug|x86.Build.0 = Debug|Win32
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Release|x64.ActiveCfg = Release|x64
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Release|x64.Build.0 = Release|x64
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Release|x86.ActiveCfg = Release|Win32
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E}.Release|x86.Build.0 = Release|Win32
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Debug|x64.ActiveCfg = Debug|x64
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Debug|x64.Build.0 = Debug|x64
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Debug|x86.ActiveCfg = Debug|Win32
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Debug|x86.Build.0 = Debug|Win32
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Release|x64.ActiveCfg = Release|x64
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Release|x64.Build.0 = Release|x64
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Release|x86.ActiveCfg = Release|Win32
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B}.Release|x86.Build.0 = Release|Win32
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Debug|x64.ActiveCfg = Debug|x64
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Debug|x64.Build.0 = Debug|x64
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Debug|x86.ActiveCfg = Debug|Win32
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Debug|x86.Build.0 = Debug|Win32
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Release|x64.ActiveCfg = Release|x64
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Release|x64.Build.0 = Release|x64
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Release|x86.ActiveCfg = Release|Win32
+		{270E7408-E22B-444F-864A-AFDFC4EC6880}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{68C751C4-DEDF-4D4E-ABB5-B07465E26226} = {B349E3B1-4308-4DA3-A1B7-FDFBD376C1AE}
+		{2503C1C5-485D-4A9E-B2EF-31C35D8C95BB} = {B349E3B1-4308-4DA3-A1B7-FDFBD376C1AE}
+		{FD521355-2117-4DCF-9082-EE5899554CFB} = {B349E3B1-4308-4DA3-A1B7-FDFBD376C1AE}
+		{395A847C-D290-425F-8F2A-C0EDA43FDE33} = {1247AB57-2769-48E1-BD87-5D119FAE33B4}
+		{A5B6E0CE-1A33-4C30-84C0-622AD9D4401E} = {68C751C4-DEDF-4D4E-ABB5-B07465E26226}
+		{A8F7E47E-6218-4E5F-8FE4-7420A0F2A83B} = {2503C1C5-485D-4A9E-B2EF-31C35D8C95BB}
+		{270E7408-E22B-444F-864A-AFDFC4EC6880} = {79450327-399B-4DA0-A9C4-2A4E15A0EEF7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4857643B-3EAD-4023-8648-1B42EFB241CD}
+	EndGlobalSection
+EndGlobal
