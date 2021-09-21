@@ -15,6 +15,7 @@ public:
 	BYTE m_drawID;
 	_tchar* m_objectKey;
 	_tchar* m_stateKey;
+	vector<CString> m_textureName;
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -30,4 +31,6 @@ public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 	CListBox m_textureListBox;
 	afx_msg void OnLbnSelchangeList1();
+	virtual BOOL OnInitDialog();
+	CStatic m_pictureControl;
 };

@@ -71,14 +71,14 @@ HRESULT Engine::CGraphicDev::Ready_GraphicDev(HWND hWnd,
 
 void Engine::CGraphicDev::Render_Begin(D3DXCOLOR Color) // 후면버퍼
 {
-	m_pGraphicDev->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, Color, 1.f, 0);
+	m_pGraphicDev->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, Color, 0.f, 1);
 	m_pGraphicDev->BeginScene();
 }
 
-void Engine::CGraphicDev::Render_End(void)	// 전면 버퍼
+void Engine::CGraphicDev::Render_End(HWND hWnd)	// 전면 버퍼
 {
 	m_pGraphicDev->EndScene();
-	m_pGraphicDev->Present(NULL, NULL, NULL, NULL);
+	m_pGraphicDev->Present(NULL, NULL, hWnd, NULL);
 }
 
 void Engine::CGraphicDev::Free(void)

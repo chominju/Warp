@@ -16,7 +16,7 @@ inline HRESULT			Ready_GraphicDev(HWND hWnd, WINMODE eMode,
 	CGraphicDev** ppGraphicDev);
 
 inline void			Render_Begin(D3DXCOLOR Color);
-inline void			Render_End(void);
+inline void			Render_End(HWND hWnd = nullptr);
 
 // TimerMgr
 inline _float			Get_TimeDelta(const _tchar* pTimerTag);

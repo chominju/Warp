@@ -15,8 +15,12 @@
 #define new DEBUG_NEW
 #endif
 
-
+HWND	g_hWnd;
+HINSTANCE g_hInst;
+CGraphicDev*			m_pDeviceClass;// = nullptr;
+LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
 // CMapToolApp
+
 
 BEGIN_MESSAGE_MAP(CMapToolApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CMapToolApp::OnAppAbout)
@@ -70,7 +74,7 @@ BOOL CMapToolApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
-
+	g_hInst = m_hInstance;
 	// OLE 라이브러리를 초기화합니다.
 	if (!AfxOleInit())
 	{

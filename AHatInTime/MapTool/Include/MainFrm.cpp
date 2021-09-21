@@ -126,6 +126,35 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	//	return FALSE;
 	//}
 
+
+	g_hWnd = m_hWnd;
+	Ready_GraphicDev(g_hWnd, MODE_WIN, 800, 600, &m_pDeviceClass);
+
+	m_pDeviceClass->AddRef();
+
+	m_pGraphicDev = m_pDeviceClass->Get_Device();
+	m_pGraphicDev->AddRef();
+
+	// ÆùÆ®
+
+	Ready_Font(m_pGraphicDev, L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_NORMAL);
+	Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±Ã¼­", 30, 30, FW_HEAVY);
+
+	// InputDev
+
+	Ready_InputDev(g_hInst, g_hWnd);
+
+
+
+
+
+
+
+
+
+
+
+
 	RECT rcMain{};
 	this->GetWindowRect(&rcMain);
 	SetRect(&rcMain, 0, 0, rcMain.right - rcMain.left, rcMain.bottom - rcMain.top);

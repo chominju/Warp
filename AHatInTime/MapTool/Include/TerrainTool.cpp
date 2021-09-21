@@ -27,6 +27,7 @@ void CTerrainTool::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_textureListBox);
+	DDX_Control(pDX, IDC_PICTURE, m_pictureControl);
 }
 
 
@@ -73,36 +74,92 @@ void CTerrainTool::OnLbnSelchangeList1()
 
 	UpdateData(TRUE);
 	int index = m_textureListBox.GetCurSel();
-	CString fileName;
-	m_textureListBox.GetText(index, fileName);
-	int i = 0;
-	for (; i < fileName.GetLength(); ++i)
-	{
-		if (isdigit(fileName[i]))
-			break;
-	}
-	fileName.Delete(0, i);
-	m_drawID = _ttoi(fileName.GetString());
 
-	/*CGraphic_Device::Get_Instance()->Render_Begin();
-	const Texture_Info * textureInfo = CTexture_Manager::Get_Instance()->Get_TextureInfo_Manager(L"Terrain", L"Tile", m_drawID);
-	if (nullptr == textureInfo)
+
+	//CString fileName;
+	//m_textureListBox.GetText(index, fileName);
+
+
+
+	//int i = 0;
+	//for (; i < fileName.GetLength(); ++i)
+	//{
+	//	if (isdigit(fileName[i]))
+	//		break;
+	//}
+	//fileName.Delete(0, i);
+	//m_drawID = _ttoi(fileName.GetString());
+	
+
+	CTexture* getTexture = dynamic_cast<CTexture*>(Clone_Proto(m_textureName[index]));
+	if (nullptr == getTexture)
 		return;
 
-	D3DXMATRIX matScale, matTrans, matWorld;
-	float ratioX = float(WINCX) / textureInfo->imageInfo.Width;
-	float ratioY = float(WINCY) / textureInfo->imageInfo.Height;
-	D3DXMatrixScaling(&matScale, ratioX, ratioY, 0.f);
-	D3DXMatrixTranslation(&matTrans, WINCX / 2, WINCY / 2, 0.f);
-	matWorld = matScale * matTrans;
+	m_pDeviceClass->Render_Begin(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.f));
+	
+	getTexture->Render_Texture();
 
 
-	float centerX = textureInfo->imageInfo.Width >> 1;
-	float centerY = textureInfo->imageInfo.Height >> 1;
-
-	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(textureInfo->texture, nullptr, &D3DXVECTOR3(centerX, centerY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	CGraphic_Device::Get_Instance()->Render_End(m_picture.m_hWnd);*/
+	//CGraphicDev::GetInstance()->Get_Device()->SetTexture(0, getTexture);
+	m_pDeviceClass->Render_End(m_pictureControl.m_hWnd);
+	//CGraphic_Device::Get_Instance()->Render_End(m_picture.m_hWnd);
 	UpdateData(FALSE);
+}
+
+
+BOOL CTerrainTool::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+
+	//CString path = _T("..\\Bin\Resource2\\Textures\\Terrain");
+	CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapTool\\Bin\\Resource2\\Textures\\Terrain");
+	CString wstrRelativePath = L"";
+	wstrRelativePath = CFileInfo::ConvertRelativePath(path);
+	CString temp = wstrRelativePath;
+
+	CFileFind finder;	
+	int size = path.GetLength();
+	path.Insert(size, L"\\*.*");
+
+	bool isWorking = finder.FindFile(path);
+	CString cData;
+	int i = 0;
+	while (isWorking)
+	{
+		isWorking = finder.FindNextFileW();
+		
+		if (finder.IsDirectory() || finder.IsDots())
+			continue;
+
+		cData = finder.GetFileName();
+		/*_tchar * str = (wchar_t*)(const wchar_t*)cData;*/
+		m_textureName.push_back(cData);
+		CString temp2 = temp +"\\"+ cData;
+		Ready_Proto(m_textureName[i], CTexture::Create(m_pGraphicDev, temp2, TYPE_NORMAL, 1));// , E_FAIL);
+		m_textureListBox.AddString(cData);
+		i++;
+	}
+
+
+	// 텍스쳐
+	//Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TYPE_NORMAL, 2));// , E_FAIL);
+	//Ready_Proto(L"Proto_Texture_Terrain2", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Terrain0.png", TYPE_NORMAL, 1));// , E_FAIL);
+	//Ready_Proto(L"Proto_Texture_SkyBox", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TYPE_CUBE, 4));// , E_FAIL);
+
+
+	//Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../Bin/Resource2/Textures/Terrain/Black%d.tga", TYPE_NORMAL, 2));// , E_FAIL);
+	//Ready_Proto(L"Proto_Texture_Terrain2", CTexture::Create(m_pGraphicDev, L"../Bin/Resource2/Textures/Terrain/Terrain0.png", TYPE_NORMAL, 1));// , E_FAIL);
+	//Ready_Proto(L"Proto_Texture_SkyBox", CTexture::Create(m_pGraphicDev, L"../Bin/Resource2/Textures/SkyBox/burger%d.dds", TYPE_CUBE, 4));// , E_FAIL);
+
+
+	//Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource2/Meshes/Scene_Boss/Static/Mafia_Theatre/", L"Mafia_Theatre.X"));// , E_FAIL);
+	//Ready_Proto(L"Proto_Mesh_Sword", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource2/Mesh/StaticMesh/Sword/", L"Sword.X"));// , E_FAIL);
+	//Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../Bin/Resource2/Mesh/DynamicMesh/PlayerXfile/", L"Player.X"));// , E_FAIL);
+
+
+	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }

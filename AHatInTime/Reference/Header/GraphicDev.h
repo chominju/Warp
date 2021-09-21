@@ -23,7 +23,7 @@ public:
 									CGraphicDev** ppGraphicDev);
 
 	void			Render_Begin(D3DXCOLOR Color);
-	void			Render_End(void);
+	void			Render_End(HWND hWnd=nullptr);
 
 private:
 	LPDIRECT3D9				m_pSDK;				// 장치의 조사하는 역할(실제적인 근본 객체)

@@ -48,5 +48,16 @@
 #endif
 #endif
 
+#define WIN32_LEAN_AND_MEAN   
+#include <windows.h>
 
-//#include "Engine_Define.h"
+#include "Engine_Define.h"
+#include "Export_Function.h"
+#include <wchar.h>
+
+#pragma once
+
+extern HWND		g_hWnd;
+extern HINSTANCE g_hInst;
+extern CGraphicDev*			m_pDeviceClass;// = nullptr;
+extern LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
