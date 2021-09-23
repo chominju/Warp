@@ -11,9 +11,9 @@ void			Render_Begin(D3DXCOLOR Color)
 {
 	CGraphicDev::GetInstance()->Render_Begin(Color);
 }
-void			Render_End(HWND hWnd)
+void			Render_End(void)
 {
-	CGraphicDev::GetInstance()->Render_End(hWnd);
+	CGraphicDev::GetInstance()->Render_End();
 }
 
 

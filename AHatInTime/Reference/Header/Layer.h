@@ -22,7 +22,7 @@ public:
 	_int		Update_Layer(const _float& fTimeDelta);
 
 private:
-	map<const _tchar*, CGameObject*>		m_mapObject;
+	multimap<const _tchar*, CGameObject*>		m_mapObject;
 
 	//map<const _tchar*, vector<CGameObject*>>		m_mapObject;
 

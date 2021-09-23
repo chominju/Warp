@@ -35,7 +35,9 @@ void CTransform::Set_Pos(const _float & fX, const _float & fY, const _float & fZ
 
 void CTransform::Set_Pos(_vec3 * pPos)
 {
-	memcpy(&m_matWorld._41, pPos, sizeof(_vec3));
+	//memcpy(&m_matWorld._41, pPos, sizeof(_vec3));
+
+	m_vInfo[INFO_POS] = *pPos;
 }
 
 const _matrix* Engine::CTransform::Get_NRotWorldMatrix(void)
@@ -191,6 +193,11 @@ const _matrix * CTransform::Compute_LookAtTarget(const _vec3 * pTargetPos)
 void Engine::CTransform::Set_ParentMatrix(const _matrix* pParentMatrix)
 {
 	m_matWorld *= *pParentMatrix;
+}
+
+void CTransform::Set_WorldMatrix(const _matrix * pWorld)
+{
+	m_matWorld = *pWorld;
 }
 
 void Engine::CTransform::Set_Scale(const _float& fX, const _float& fY, const _float& fZ)

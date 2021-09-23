@@ -58,6 +58,15 @@
     <Filter Include="02. GameObject\07. Sword">
       <UniqueIdentifier>{3d17e788-04fe-4751-b8c3-23cd8cb08c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\08. Tree">
+      <UniqueIdentifier>{160098f9-09f9-40c4-8f19-babc83da60c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\09. Effect">
+      <UniqueIdentifier>{a6a76f23-d713-4cd7-ae3b-f4249a5e03b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\10. UI">
+      <UniqueIdentifier>{72d28c05-ff9e-49d2-8638-7cf79cd08eb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -114,6 +123,15 @@
     <ClInclude Include="..\Code\Sword.h">
       <Filter>02. GameObject\07. Sword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Tree.h">
+      <Filter>02. GameObject\08. Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Effect.h">
+      <Filter>02. GameObject\09. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\UI.h">
+      <Filter>02. GameObject\10. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,6 +175,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
       <Filter>02. GameObject\07. Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Tree.cpp">
+      <Filter>02. GameObject\08. Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Effect.cpp">
+      <Filter>02. GameObject\09. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UI.cpp">
+      <Filter>02. GameObject\10. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

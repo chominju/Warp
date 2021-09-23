@@ -128,7 +128,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 
 	g_hWnd = m_hWnd;
-	Ready_GraphicDev(g_hWnd, MODE_WIN, 800, 600, &m_pDeviceClass);
+	Ready_GraphicDev(g_hWnd, MODE_WIN, WINCX, WINCY, &m_pDeviceClass);
 
 	m_pDeviceClass->AddRef();
 
@@ -145,16 +145,6 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	Ready_InputDev(g_hInst, g_hWnd);
 
 
-
-
-
-
-
-
-
-
-
-
 	RECT rcMain{};
 	this->GetWindowRect(&rcMain);
 	SetRect(&rcMain, 0, 0, rcMain.right - rcMain.left, rcMain.bottom - rcMain.top);
@@ -169,8 +159,8 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 	m_MainSplitter.CreateStatic(this, 1, 2);
 
-	m_MainSplitter.CreateView(0, 0, RUNTIME_CLASS(CForm), CSize(450, 600 + iGapY), pContext);
-	m_MainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMapToolView), CSize(800 + iGapX, 600+iGapX), pContext);
+	m_MainSplitter.CreateView(0, 0, RUNTIME_CLASS(CForm), CSize(450, WINCY + iGapY), pContext);
+	m_MainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMapToolView), CSize(WINCX + iGapX, WINCY+iGapX), pContext);
 
 	//m_MainSplitter.SetColumnInfo(1, 800, 600);
 
@@ -179,5 +169,4 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	//m_MainSplitter.SetRowInfo(0, 600, 300);
 
 	return TRUE;
-
 }

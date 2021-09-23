@@ -6,6 +6,7 @@
 #include "FrameMgr.h"
 #include "FontMgr.h"
 #include "InputDev.h"
+#include "SpriteDev.h"
 
 BEGIN(Engine)
 
@@ -16,7 +17,7 @@ inline HRESULT			Ready_GraphicDev(HWND hWnd, WINMODE eMode,
 	CGraphicDev** ppGraphicDev);
 
 inline void			Render_Begin(D3DXCOLOR Color);
-inline void			Render_End(HWND hWnd = nullptr);
+inline void			Render_End(void);
 
 // TimerMgr
 inline _float			Get_TimeDelta(const _tchar* pTimerTag);

@@ -6,6 +6,7 @@ Engine::CQuadTree::CQuadTree(void)
 {
 	ZeroMemory(m_pChild, sizeof(CQuadTree*) * CHILD_END);
 	ZeroMemory(m_dwCorner, sizeof(_ulong) * CORNER_END);
+	ZeroMemory(m_pNeighbor, sizeof(CQuadTree*) * NEIGHBOR_END);
 }
 
 Engine::CQuadTree::~CQuadTree(void)
@@ -42,6 +43,15 @@ void Engine::CQuadTree::CullingForTerrain(CFrustum* pFrustum,
 		//if (nullptr == m_pChild[0])
 		if(true == LevelOfDetail(pFrustum->Get_GraphicDev(), pVtxPos))
 		{
+			_bool		bNeighborDraw[NEIGHBOR_END] = { true, true, true, true };
+
+			for (_ulong i = 0; i < NEIGHBOR_END; ++i)
+			{
+				if (nullptr != m_pNeighbor[i])
+					bNeighborDraw[i] = m_pNeighbor[i]->LevelOfDetail(pFrustum->Get_GraphicDev(), pVtxPos);
+			}
+
+
 			_bool		bVertexInFrustum[3] = { false };
 
 			// 오른쪽 위
@@ -52,10 +62,72 @@ void Engine::CQuadTree::CullingForTerrain(CFrustum* pFrustum,
 
 			if (true == bVertexInFrustum[0] || true == bVertexInFrustum[1] || true == bVertexInFrustum[2])
 			{
-				pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
-				pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RT];
-				pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_RB];
-				(*pTriCnt)++;
+				if (bNeighborDraw[NEIGHBOR_TOP] && bNeighborDraw[NEIGHBOR_RIGHT])
+				{
+					if (nullptr == m_pChild[0])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_RB];
+						(*pTriCnt)++;
+					}
+
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+					}
+
+				}
+				else
+				{
+					if (false == bNeighborDraw[NEIGHBOR_TOP])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = (m_dwCorner[CORNER_LT] + m_dwCorner[CORNER_RT]) >> 1;
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = (m_dwCorner[CORNER_LT] + m_dwCorner[CORNER_RT]) >> 1;
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+					}
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+					}
+
+					if (false == bNeighborDraw[NEIGHBOR_RIGHT])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._1 = (m_dwCorner[CORNER_RT] + m_dwCorner[CORNER_RB]) >> 1;
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = (m_dwCorner[CORNER_RT] + m_dwCorner[CORNER_RB]) >> 1;
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+					}
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_RT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = m_dwCenter;
+						(*pTriCnt)++;
+					}
+				}			
 			}
 
 			// 왼쪽 아래
@@ -66,10 +138,72 @@ void Engine::CQuadTree::CullingForTerrain(CFrustum* pFrustum,
 
 			if (true == bVertexInFrustum[0] || true == bVertexInFrustum[1] || true == bVertexInFrustum[2])
 			{
-				pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
-				pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
-				pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_LB];
-				(*pTriCnt)++;
+				if (bNeighborDraw[NEIGHBOR_BOTTOM] && bNeighborDraw[NEIGHBOR_LEFT])
+				{
+					if (nullptr == m_pChild[0])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_LB];
+						(*pTriCnt)++;
+					}
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCenter;
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_LB];
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = m_dwCenter;
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_LB];
+						(*pTriCnt)++;
+					}
+				}
+
+				else
+				{
+					if (false == bNeighborDraw[NEIGHBOR_BOTTOM])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LB];
+						pIndex[*pTriCnt]._1 = m_dwCenter;
+						pIndex[*pTriCnt]._2 = (m_dwCorner[CORNER_LB] + m_dwCorner[CORNER_RB]) >> 1;
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = m_dwCenter;
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_RB];
+						pIndex[*pTriCnt]._2 = (m_dwCorner[CORNER_LB] + m_dwCorner[CORNER_RB]) >> 1;
+						(*pTriCnt)++;
+					}
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LB];
+						pIndex[*pTriCnt]._1 = m_dwCenter;
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_RB];
+						(*pTriCnt)++;
+					}
+
+					if (false == bNeighborDraw[NEIGHBOR_LEFT])
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCenter;
+						pIndex[*pTriCnt]._2 = (m_dwCorner[CORNER_LT] + m_dwCorner[CORNER_LB]) >> 1;
+						(*pTriCnt)++;
+
+						pIndex[*pTriCnt]._0 = m_dwCenter;
+						pIndex[*pTriCnt]._1 = m_dwCorner[CORNER_LB];
+						pIndex[*pTriCnt]._2 = (m_dwCorner[CORNER_LT] + m_dwCorner[CORNER_LB]) >> 1;
+						(*pTriCnt)++;
+					}
+					else
+					{
+						pIndex[*pTriCnt]._0 = m_dwCorner[CORNER_LT];
+						pIndex[*pTriCnt]._1 = m_dwCenter;
+						pIndex[*pTriCnt]._2 = m_dwCorner[CORNER_LB];
+						(*pTriCnt)++;
+					}
+				}
+
 			}
 			return;
 		}
@@ -174,6 +308,9 @@ CQuadTree* Engine::CQuadTree::Create(const _ulong& dwCntX, const _ulong& dwCntZ)
 	if (FAILED(pInstance->Ready_QuadTree(dwCntX, dwCntZ)))
 		Safe_Release(pInstance);
 
+	if (FAILED(pInstance->Ready_Neighbor()))
+		Safe_Release(pInstance);
+
 	return pInstance;
 }
 
@@ -207,5 +344,60 @@ Engine::_bool Engine::CQuadTree::LevelOfDetail(LPDIRECT3DDEVICE9 pGraphicDev, co
 	_float	fWidth = D3DXVec3Length(&(pVtxPos[m_dwCorner[CORNER_RT]] - pVtxPos[m_dwCorner[CORNER_LT]]));
 	
 	return fDistance * 0.1f > fWidth;
+}
+
+HRESULT Engine::CQuadTree::Ready_Neighbor(void)
+{
+	Make_Neighbor();
+
+	return S_OK;
+}
+
+void Engine::CQuadTree::Make_Neighbor(void)
+{
+	// 최하위 노드가 되면 리턴
+	if (nullptr == m_pChild[0])
+		return;
+
+	m_pChild[CHILD_LT]->m_pNeighbor[NEIGHBOR_RIGHT] = m_pChild[CHILD_RT];
+	m_pChild[CHILD_LT]->m_pNeighbor[NEIGHBOR_BOTTOM] = m_pChild[CHILD_LB];
+
+	m_pChild[CHILD_RT]->m_pNeighbor[NEIGHBOR_LEFT] = m_pChild[CHILD_LT];
+	m_pChild[CHILD_RT]->m_pNeighbor[NEIGHBOR_BOTTOM] = m_pChild[CHILD_RB];
+
+	m_pChild[CHILD_LB]->m_pNeighbor[NEIGHBOR_TOP] = m_pChild[CHILD_LT];
+	m_pChild[CHILD_LB]->m_pNeighbor[NEIGHBOR_RIGHT] = m_pChild[CHILD_RB];
+
+	m_pChild[CHILD_RB]->m_pNeighbor[NEIGHBOR_TOP] = m_pChild[CHILD_RT];
+	m_pChild[CHILD_RB]->m_pNeighbor[NEIGHBOR_LEFT] = m_pChild[CHILD_LB];
+
+
+	if (nullptr != m_pNeighbor[NEIGHBOR_LEFT])
+	{
+		m_pChild[CHILD_LT]->m_pNeighbor[NEIGHBOR_LEFT] = m_pNeighbor[NEIGHBOR_LEFT]->m_pChild[CHILD_RT];
+		m_pChild[CHILD_LB]->m_pNeighbor[NEIGHBOR_LEFT] = m_pNeighbor[NEIGHBOR_LEFT]->m_pChild[CHILD_RB];
+	}
+
+	if (nullptr != m_pNeighbor[NEIGHBOR_RIGHT])
+	{
+		m_pChild[CHILD_RT]->m_pNeighbor[NEIGHBOR_RIGHT] = m_pNeighbor[NEIGHBOR_RIGHT]->m_pChild[CHILD_LT];
+		m_pChild[CHILD_RB]->m_pNeighbor[NEIGHBOR_RIGHT] = m_pNeighbor[NEIGHBOR_RIGHT]->m_pChild[CHILD_LB];
+	}
+
+	if (nullptr != m_pNeighbor[NEIGHBOR_TOP])
+	{
+		m_pChild[CHILD_LT]->m_pNeighbor[NEIGHBOR_TOP] = m_pNeighbor[NEIGHBOR_TOP]->m_pChild[CHILD_LB];
+		m_pChild[CHILD_RT]->m_pNeighbor[NEIGHBOR_TOP] = m_pNeighbor[NEIGHBOR_TOP]->m_pChild[CHILD_RB];
+	}
+
+	if (nullptr != m_pNeighbor[NEIGHBOR_BOTTOM])
+	{
+		m_pChild[CHILD_LB]->m_pNeighbor[NEIGHBOR_BOTTOM] = m_pNeighbor[NEIGHBOR_BOTTOM]->m_pChild[CHILD_LT];
+		m_pChild[CHILD_RB]->m_pNeighbor[NEIGHBOR_BOTTOM] = m_pNeighbor[NEIGHBOR_BOTTOM]->m_pChild[CHILD_RT];
+	}
+
+	for (_ulong i = 0; i < CHILD_END; ++i)
+		m_pChild[i]->Make_Neighbor();
+
 }
 

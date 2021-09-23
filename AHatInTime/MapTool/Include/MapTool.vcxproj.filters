@@ -35,6 +35,24 @@
     <Filter Include="07.FileInfo">
       <UniqueIdentifier>{394bcfb5-8fb5-4b10-bbf1-21b664fb39df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Object">
+      <UniqueIdentifier>{2b2687f5-5d0d-463c-a167-de1ba7dca177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\Terrain">
+      <UniqueIdentifier>{31a13d92-7158-4cb6-bfb4-88e08e08728c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\Camera">
+      <UniqueIdentifier>{2ff897d1-b80a-4a44-b373-e17911cbf0f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Scene">
+      <UniqueIdentifier>{ab66f23e-c1f1-4be8-9993-e6eb2d04e29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\Stone">
+      <UniqueIdentifier>{07b7ad3b-00ec-4df5-8719-25fd2e507247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\Player">
+      <UniqueIdentifier>{9212e6f6-1e87-40b1-9414-610c5f2fdcea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -67,9 +85,29 @@
     <ClInclude Include="TerrainTool.h">
       <Filter>01.View\TabView\01.TerrainTool</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionTool.h" />
     <ClInclude Include="FileInfo.h">
       <Filter>07.FileInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Terrain2.h">
+      <Filter>03.Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_DynamicCamera2.h">
+      <Filter>03.Object\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionTool.h">
+      <Filter>01.View\TabView\03.Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Stage.h">
+      <Filter>04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Define.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Stone.h">
+      <Filter>03.Object\Stone</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Player.h">
+      <Filter>03.Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +135,26 @@
     <ClCompile Include="TerrainTool.cpp">
       <Filter>01.View\TabView\01.TerrainTool</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionTool.cpp" />
     <ClCompile Include="FileInfo.cpp">
       <Filter>07.FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Terrain2.cpp">
+      <Filter>03.Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_DynamicCamera2.cpp">
+      <Filter>03.Object\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionTool.cpp">
+      <Filter>01.View\TabView\03.Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Stage.cpp">
+      <Filter>04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Stone.cpp">
+      <Filter>03.Object\Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Player.cpp">
+      <Filter>03.Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

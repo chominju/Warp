@@ -17,8 +17,8 @@
 
 HWND	g_hWnd;
 HINSTANCE g_hInst;
-CGraphicDev*			m_pDeviceClass;// = nullptr;
-LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
+//CGraphicDev*			m_pDeviceClass;// = nullptr;
+//LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
 // CMapToolApp
 
 

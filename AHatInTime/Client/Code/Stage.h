@@ -13,6 +13,9 @@
 
 #include "Stone.h"
 #include "Sword.h"
+#include "Tree.h"
+#include "Effect.h"
+#include "UI.h"
 
 class CStage : public CScene
 {

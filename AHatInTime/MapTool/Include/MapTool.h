@@ -28,6 +28,11 @@ public:
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+
+
+	CGraphicDev*			m_pDeviceClass;// = nullptr;
+	LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
+
 };
 
 extern CMapToolApp theApp;

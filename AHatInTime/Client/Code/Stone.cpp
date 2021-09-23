@@ -24,7 +24,7 @@ HRESULT CStone::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransformCom->Set_Pos(&_vec3(5.f, 0.f, 5.f));
+	m_pTransformCom->Set_Pos(5.f, 0.f, 5.f);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
 
 	return S_OK;
@@ -32,9 +32,9 @@ HRESULT CStone::Ready_Object(void)
 
 Engine::_int CStone::Update_Object(const _float& fTimeDelta)
 {
-	SetUp_OnTerrain();
-
 	CGameObject::Update_Object(fTimeDelta);
+
+	SetUp_OnTerrain();
 
 	//m_bColl = Collision_ToObject(L"GameLogic", L"Player");
 

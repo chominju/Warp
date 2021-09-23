@@ -206,9 +206,15 @@
     <ClInclude Include="MapToolView.h" />
     <ClInclude Include="MeshTool.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Tool_Player.h" />
+    <ClInclude Include="Tool_Stone.h" />
+    <ClInclude Include="Tool_Define.h" />
+    <ClInclude Include="Tool_Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TerrainTool.h" />
+    <ClInclude Include="Tool_DynamicCamera2.h" />
+    <ClInclude Include="Tool_Terrain2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionTool.cpp" />
@@ -219,6 +225,9 @@
     <ClCompile Include="MapToolDoc.cpp" />
     <ClCompile Include="MapToolView.cpp" />
     <ClCompile Include="MeshTool.cpp" />
+    <ClCompile Include="Tool_Player.cpp" />
+    <ClCompile Include="Tool_Stone.cpp" />
+    <ClCompile Include="Tool_Stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -226,6 +235,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TerrainTool.cpp" />
+    <ClCompile Include="Tool_DynamicCamera2.cpp" />
+    <ClCompile Include="Tool_Terrain2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MapTool.rc" />

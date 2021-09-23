@@ -29,6 +29,7 @@ public:
 
 
 	void					Set_ParentMatrix(const _matrix* pParentMatrix);
+	void					Set_WorldMatrix(const _matrix* pWorld);
 
 public:
 	HRESULT					Ready_Transform(void);

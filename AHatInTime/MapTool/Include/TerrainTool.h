@@ -4,6 +4,8 @@
 
 // CTerrainTool 대화 상자입니다.
 
+class CTerrain;
+
 class CTerrainTool : public CDialogEx
 {
 	DECLARE_DYNAMIC(CTerrainTool)
@@ -15,7 +17,10 @@ public:
 	BYTE m_drawID;
 	_tchar* m_objectKey;
 	_tchar* m_stateKey;
-	vector<CString> m_textureName;
+
+	BYTE m_textureListIndex;
+	BYTE m_addListIndex;
+
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -33,4 +38,31 @@ public:
 	afx_msg void OnLbnSelchangeList1();
 	virtual BOOL OnInitDialog();
 	CStatic m_pictureControl;
+	CListBox m_addList;
+
+
+
+	CGraphicDev*			m_pDeviceClass;// = nullptr;
+	LPDIRECT3DDEVICE9		m_pGraphicDev;// = nullptr;
+
+
+	vector<CString> m_textureNameVector;
+	vector<CTerrain*> m_addTextureVector;
+	vector<CTerrainTex*> m_textureTexVector;
+
+
+	afx_msg void OnBnClickedButtonAdd();
+	afx_msg void OnBnClickedButtonDelete();
+	afx_msg void OnBnClickedButtonApply();
+	afx_msg void OnBnClickedButtonSave();
+	afx_msg void OnBnClickedButtonLoad();
+
+	float m_posX;
+	float m_posY;
+	float m_rotX;
+	float m_rotY;
+	float m_rotZ;
+	float m_countX;
+	float m_countZ;
+	float m_posZ;
 };

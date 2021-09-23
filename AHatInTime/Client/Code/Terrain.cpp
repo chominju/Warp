@@ -40,7 +40,7 @@ Engine::_int CTerrain::Update_Object(const _float& fTimeDelta)
 												m_pIndex, 
 												&m_dwTriCnt);
 
-	Add_RenderGroup(RENDER_PRIORITY, this);
+	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	return 0;
 }

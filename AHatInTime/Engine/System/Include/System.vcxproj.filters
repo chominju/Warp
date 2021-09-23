@@ -28,6 +28,9 @@
     <Filter Include="04. InputDev">
       <UniqueIdentifier>{c095e59e-edfe-4a74-84c9-3d70704da3ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. TextureDev">
+      <UniqueIdentifier>{fb209d01-b30b-40e5-a8d7-eee4ad9712fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDev.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\InputDev.cpp">
       <Filter>04. InputDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SpriteDev.cpp">
+      <Filter>05. TextureDev</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\InputDev.h">
       <Filter>04. InputDev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SpriteDev.h">
+      <Filter>05. TextureDev</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

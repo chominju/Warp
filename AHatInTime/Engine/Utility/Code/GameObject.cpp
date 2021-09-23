@@ -71,3 +71,26 @@ CComponent* Engine::CGameObject::Get_Component(const _tchar* pComponentTag, COMP
 	return pComponent;
 }
 
+void CGameObject::Add_Component(const _tchar * pComponentTag, COMPONENTID eID, CComponent * component)
+{
+	CComponent*		pComponent = Find_Component(pComponentTag, eID);
+
+	if (nullptr == pComponent)
+		m_mapComponent[eID].emplace(pComponentTag, component);
+}
+
+void Engine::CGameObject::Compute_ViewZ(const _vec3* pPos)
+{
+	_matrix		matView;
+
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, NULL, &matView);
+
+	_vec3	vCamPos;
+
+	memcpy(&vCamPos, &matView._41, sizeof(_vec3));
+
+	m_fViewZ = D3DXVec3Length(&(vCamPos - *pPos));
+
+}
+

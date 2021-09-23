@@ -171,6 +171,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\AniCtrl.cpp" />
     <ClCompile Include="..\Code\Calculator.cpp" />
     <ClCompile Include="..\Code\Camera.cpp" />
+    <ClCompile Include="..\Code\Cell.cpp" />
     <ClCompile Include="..\Code\Collider.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
     <ClCompile Include="..\Code\CubeTex.cpp" />
@@ -181,7 +182,9 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Layer.cpp" />
     <ClCompile Include="..\Code\Light.cpp" />
     <ClCompile Include="..\Code\LightMgr.cpp" />
+    <ClCompile Include="..\Code\Line.cpp" />
     <ClCompile Include="..\Code\Management.cpp" />
+    <ClCompile Include="..\Code\NaviMesh.cpp" />
     <ClCompile Include="..\Code\Optimization.cpp" />
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
     <ClCompile Include="..\Code\QuadTree.cpp" />
@@ -201,6 +204,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\AniCtrl.h" />
     <ClInclude Include="..\Code\Calculator.h" />
     <ClInclude Include="..\Code\Camera.h" />
+    <ClInclude Include="..\Code\Cell.h" />
     <ClInclude Include="..\Code\Collider.h" />
     <ClInclude Include="..\Code\Component.h" />
     <ClInclude Include="..\Code\CubeTex.h" />
@@ -211,7 +215,9 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\Layer.h" />
     <ClInclude Include="..\Code\Light.h" />
     <ClInclude Include="..\Code\LightMgr.h" />
+    <ClInclude Include="..\Code\Line.h" />
     <ClInclude Include="..\Code\Management.h" />
+    <ClInclude Include="..\Code\NaviMesh.h" />
     <ClInclude Include="..\Code\Optimization.h" />
     <ClInclude Include="..\Code\ProtoMgr.h" />
     <ClInclude Include="..\Code\QuadTree.h" />
@@ -219,6 +225,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\Code\RcTex.h" />
     <ClInclude Include="..\Code\Renderer.h" />
     <ClInclude Include="..\Code\Scene.h" />
+    <ClInclude Include="..\Code\Shader_Sample.hpp" />
     <ClInclude Include="..\Code\StaticMesh.h" />
     <ClInclude Include="..\Code\TerrainTex.h" />
     <ClInclude Include="..\Code\Texture.h" />

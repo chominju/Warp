@@ -12,6 +12,7 @@ Engine::CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphicDev)
 Engine::CTexture::CTexture(const CTexture& rhs)
 	:CComponent(rhs)
 	,m_vecTexture(rhs.m_vecTexture)
+	, m_textureInfo(rhs.m_textureInfo)
 {
 	_uint iContainerSize = rhs.m_vecTexture.size();
 	m_vecTexture.reserve(iContainerSize);
@@ -87,3 +88,36 @@ void Engine::CTexture::Free(void)
 	CComponent::Free();
 }
 
+HRESULT CTexture::Insert_Texture(LPDIRECT3DDEVICE9 pGraphicDev, const wstring & filePath, const wstring & stateKey, const DWORD & count)
+{
+	if (FAILED(D3DXGetImageInfoFromFile(filePath.c_str(), &m_textureInfo.imageInfo)))
+		goto ERR;
+
+	if (FAILED(D3DXCreateTextureFromFileEx(pGraphicDev,
+		filePath.c_str(),
+		m_textureInfo.imageInfo.Width,
+		m_textureInfo.imageInfo.Height,
+		m_textureInfo.imageInfo.MipLevels,
+		0,
+		m_textureInfo.imageInfo.Format,
+		D3DPOOL_MANAGED,
+		D3DX_DEFAULT,
+		D3DX_DEFAULT,
+		0,
+		nullptr,
+		nullptr,
+		&m_textureInfo.texture)))
+		goto ERR;
+
+	return S_OK;
+
+
+ERR:
+	//ERR_MSG(L"Single Texture Error");
+	return E_FAIL;
+}
+
+const Texture_Info* CTexture::Get_TextureInfo(const wstring & stateKey, const DWORD & index)
+{
+	return &m_textureInfo;
+}

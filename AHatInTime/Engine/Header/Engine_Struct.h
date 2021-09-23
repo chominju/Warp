@@ -71,6 +71,11 @@ namespace Engine
 
 	}D3DXMESHCONTAINER_DERIVED;
 
+	typedef struct
+	{
+		LPDIRECT3DTEXTURE9 texture; // 텍스쳐 한장을 보관하기 위한 컴객체
+		D3DXIMAGE_INFO imageInfo;
+	}Texture_Info;
 }
 
 

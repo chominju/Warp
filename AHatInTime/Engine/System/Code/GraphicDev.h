@@ -16,6 +16,8 @@ private:
 
 public:
 	LPDIRECT3DDEVICE9		Get_Device() { return m_pGraphicDev; }
+	LPD3DXSPRITE Get_Sprite() { return m_sprite; }
+	LPD3DXFONT Get_Font() { return m_font; }
 public:
 	HRESULT			Ready_GraphicDev(HWND hWnd, WINMODE eMode, 
 									const _uint& iSizeX, 
@@ -23,13 +25,14 @@ public:
 									CGraphicDev** ppGraphicDev);
 
 	void			Render_Begin(D3DXCOLOR Color);
-	void			Render_End(HWND hWnd=nullptr);
+	void			Render_End(HWND hWnd = NULL);
 
 private:
 	LPDIRECT3D9				m_pSDK;				// 장치의 조사하는 역할(실제적인 근본 객체)
 	LPDIRECT3DDEVICE9		m_pGraphicDev;		// 그리기 장치를 컨트롤하는 객체(m_pSDK에 의해서만 생성 가능)
 
-
+	LPD3DXSPRITE			m_sprite;
+	LPD3DXFONT				m_font;
 
 public:
 	virtual		void		Free(void);

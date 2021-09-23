@@ -26,7 +26,9 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
-
+	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
+	
+	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(57);
 
 	return S_OK;
@@ -34,12 +36,11 @@ HRESULT CPlayer::Ready_Object(void)
 
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
+	CGameObject::Update_Object(fTimeDelta);
+
 	SetUp_OnTerrain();
 
 	Key_Input(fTimeDelta);
-
-
-	CGameObject::Update_Object(fTimeDelta);
 
 	m_pMeshCom->Play_Animation(fTimeDelta);
 
@@ -51,6 +52,8 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 void CPlayer::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+
+	m_pNaviCom->Render_NaviMesh();
 
 	m_pMeshCom->Render_Meshes();
 
@@ -65,6 +68,11 @@ HRESULT CPlayer::Add_Component(void)
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(L"Proto_Mesh_Player"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
+
+	// NaviMesh
+	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -91,13 +99,15 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	if (Get_DIKeyState(DIK_UP) & 0x80)
 	{
-		//D3DXVec3Normalize(&m_vDir, &m_vDir);
-		//m_pTransformCom->Move_Pos(&m_vDir, 10.f, fTimeDelta);
+		_vec3	vPos, vDir;
+		m_pTransformCom->Get_Info(INFO_POS, &vPos);
+		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
+		D3DXVec3Normalize(&vDir, &vDir);
 
+		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
 		m_pMeshCom->Set_AnimationIndex(54);
-
 	}
 	
 

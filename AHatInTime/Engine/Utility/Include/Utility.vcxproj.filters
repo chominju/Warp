@@ -85,6 +85,21 @@
     <Filter Include="04. Component\08. Optimization\01. QuadTree">
       <UniqueIdentifier>{c7ec9b46-c859-441f-a9f9-8e19e5729dcd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\09. NaviMesh">
+      <UniqueIdentifier>{77a9e135-7b55-4d88-a793-fe69c061bee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. NaviMesh\00. Line">
+      <UniqueIdentifier>{fb8e89ef-522a-482d-bdf2-32a2aae68efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\09. NaviMesh\01. Cell">
+      <UniqueIdentifier>{1b53ceed-3585-491b-a9f6-2444acd182cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\10. Shader">
+      <UniqueIdentifier>{4c40320a-453f-40b2-b96d-13ef33312098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\10. Shader\hpp">
+      <UniqueIdentifier>{9692f30a-7855-4ff5-9d14-b8d3c448119a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -167,6 +182,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\QuadTree.cpp">
       <Filter>04. Component\08. Optimization\01. QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NaviMesh.cpp">
+      <Filter>04. Component\09. NaviMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Line.cpp">
+      <Filter>04. Component\09. NaviMesh\00. Line</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cell.cpp">
+      <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +277,18 @@
     </ClInclude>
     <ClInclude Include="..\Code\QuadTree.h">
       <Filter>04. Component\08. Optimization\01. QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NaviMesh.h">
+      <Filter>04. Component\09. NaviMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Line.h">
+      <Filter>04. Component\09. NaviMesh\00. Line</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cell.h">
+      <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Sample.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
