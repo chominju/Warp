@@ -8,8 +8,8 @@
 #include "TerrainTab.h"
 #include "MeshTab.h"
 #include "ColliderTab.h"
-
-
+#include "Tool_Stage.h"
+#include "NaviMeshTab.h"
 
 // CTab
 
@@ -17,6 +17,8 @@ IMPLEMENT_DYNCREATE(CTab, CFormView)
 
 CTab::CTab()
 	: CFormView(IDD_TAB)
+	, m_pDeviceClass(CGraphicDev::GetInstance())
+	, m_pGraphicDev(CGraphicDev::GetInstance()->Get_Device())
 {
 
 }
@@ -65,6 +67,7 @@ void CTab::OnInitialUpdate()
 	m_Tab.InsertItem(0, _T("TerrainTool"));
 	m_Tab.InsertItem(1, _T("MeshTool"));
 	m_Tab.InsertItem(2, _T("EffectTool"));
+	m_Tab.InsertItem(3, _T("NaviMeshTool"));
 
 	m_Tab.SetCurSel(0);
 
@@ -87,10 +90,23 @@ void CTab::OnInitialUpdate()
 	m_pColliderTab->MoveWindow(0, 25, rect.Width(), rect.Height());
 	m_pColliderTab->ShowWindow(SW_HIDE);
 
+	m_pNaviMeshTab = new CNaviMeshTab;
+	m_pNaviMeshTab->Create(IDD_DIALOG4, &m_Tab);
+	m_pNaviMeshTab->MoveWindow(0, 25, rect.Width(), rect.Height());
+	m_pNaviMeshTab->ShowWindow(SW_HIDE);
+
 	this->GetClientRect(&rect);
 
 	int x = rect.Width();
 	int y = rect.Height();
+
+
+	Create_Management(&m_pManagementClass);
+	m_pManagementClass->AddRef();
+
+	m_pScene = CStage::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(m_pScene);
+	m_pManagementClass->Set_Scene(m_pScene);
 
 }
 
@@ -108,6 +124,7 @@ void CTab::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 		m_pTerrainTab->ShowWindow(SW_SHOW);
 		m_pMeshTab->ShowWindow(SW_HIDE);
 		m_pColliderTab->ShowWindow(SW_HIDE);
+		m_pNaviMeshTab->ShowWindow(SW_HIDE);
 	}
 	break;
 	case 1:
@@ -115,6 +132,7 @@ void CTab::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 		m_pTerrainTab->ShowWindow(SW_HIDE);
 		m_pMeshTab->ShowWindow(SW_SHOW);
 		m_pColliderTab->ShowWindow(SW_HIDE);
+		m_pNaviMeshTab->ShowWindow(SW_HIDE);
 	}
 	break;
 	case 2:
@@ -122,6 +140,14 @@ void CTab::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 		m_pTerrainTab->ShowWindow(SW_HIDE);
 		m_pMeshTab->ShowWindow(SW_HIDE);
 		m_pColliderTab->ShowWindow(SW_SHOW);
+		m_pNaviMeshTab->ShowWindow(SW_HIDE);
+	}
+	case 3:
+	{
+		m_pTerrainTab->ShowWindow(SW_HIDE);
+		m_pMeshTab->ShowWindow(SW_HIDE);
+		m_pColliderTab->ShowWindow(SW_HIDE);
+		m_pNaviMeshTab->ShowWindow(SW_SHOW);
 	}
 	break;
 	}

@@ -41,7 +41,8 @@ CMapToolMFCView::CMapToolMFCView()
 	, m_pGraphicDev(CGraphicDev::GetInstance()->Get_Device())
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-
+	m_pManagementClass = CManagement::GetInstance();
+	m_pManagementClass->AddRef();
 }
 
 CMapToolMFCView::~CMapToolMFCView()
@@ -72,6 +73,8 @@ void CMapToolMFCView::OnDraw(CDC* /*pDC*/)
 	{
 		Update_TimeDelta(L"Timer_FPS60");
 		_float fTimeFPS60 = Get_TimeDelta(L"Timer_FPS60");
+
+		Update_InputDev();
 
 		m_pManagementClass->Update_Scene(fTimeFPS60);
 
@@ -143,9 +146,9 @@ void CMapToolMFCView::OnInitialUpdate()
 	Ready_Frame(L"Frame60", 60.f);// , FALSE);
 
 
-	Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV));// , E_FAIL);
+	//Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV));// , E_FAIL);
 	Ready_Proto(L"Proto_Buffer_CubeTex", CCubeTex::Create(m_pGraphicDev));// , E_FAIL);
-
+	Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, 3, 3, VTXITV));// , E_FAIL);
 
 	Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TYPE_NORMAL, 2));// , E_FAIL);
 	Ready_Proto(L"Proto_Texture_Terrain2", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Terrain0.png", TYPE_NORMAL, 1));// , E_FAIL);
@@ -162,12 +165,12 @@ void CMapToolMFCView::OnInitialUpdate()
 	Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X"));
 	Ready_Proto(L"Proto_Texture_Player", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Player/Ma.jpg", TYPE_NORMAL));// , E_FAIL);
 
-	Create_Management(&m_pManagementClass);
+	/*Create_Management(&m_pManagementClass);
 	m_pManagementClass->AddRef();
 
 	m_pScene = CStage::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(m_pScene);
-	m_pManagementClass->Set_Scene(m_pScene);
+	m_pManagementClass->Set_Scene(m_pScene);*/
 
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }

@@ -199,6 +199,7 @@
     <ClInclude Include="MapToolMFCDoc.h" />
     <ClInclude Include="MapToolMFCView.h" />
     <ClInclude Include="MeshTab.h" />
+    <ClInclude Include="NaviMeshTab.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Tab.h" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Tool_Define.h" />
     <ClInclude Include="Tool_DynamicCamera.h" />
     <ClInclude Include="Tool_Stage.h" />
+    <ClInclude Include="Tool_Stone.h" />
     <ClInclude Include="Tool_Terrain.h" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +219,7 @@
     <ClCompile Include="MapToolMFCDoc.cpp" />
     <ClCompile Include="MapToolMFCView.cpp" />
     <ClCompile Include="MeshTab.cpp" />
+    <ClCompile Include="NaviMeshTab.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -227,6 +230,7 @@
     <ClCompile Include="TerrainTab.cpp" />
     <ClCompile Include="Tool_DynamicCamera.cpp" />
     <ClCompile Include="Tool_Stage.cpp" />
+    <ClCompile Include="Tool_Stone.cpp" />
     <ClCompile Include="Tool_Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>

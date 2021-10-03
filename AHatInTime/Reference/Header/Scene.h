@@ -16,6 +16,11 @@ public:
 								const _tchar* pObjTag,
 								const _tchar* pComponentTag,
 								COMPONENTID eID);
+
+	void Add_LayerGameObject(const _tchar* pLayerTag , CLayer* layer, const _tchar * pObjectTag, CGameObject* gameObject);
+
+	CGameObject* Get_MapLayer(const _tchar* pLayerTag, const _tchar * pObjTag, int index);
+
 public:
 	virtual HRESULT		Ready_Scene(void);
 	virtual _int		Update_Scene(const _float& fTimeDelta);

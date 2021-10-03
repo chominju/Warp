@@ -81,12 +81,16 @@
     <ClInclude Include="Tool_Terrain.h">
       <Filter>04. Object</Filter>
     </ClInclude>
-    <ClInclude Include="Tool_Stage.h">
-      <Filter>04. Object</Filter>
-    </ClInclude>
     <ClInclude Include="FileInfo.h">
       <Filter>09. FileInfo</Filter>
     </ClInclude>
+    <ClInclude Include="Tool_Stage.h">
+      <Filter>03. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Stone.h">
+      <Filter>04. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviMeshTab.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -122,12 +126,16 @@
     <ClCompile Include="Tool_Terrain.cpp">
       <Filter>04. Object</Filter>
     </ClCompile>
-    <ClCompile Include="Tool_Stage.cpp">
-      <Filter>04. Object</Filter>
-    </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>09. FileInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Tool_Stage.cpp">
+      <Filter>03. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Stone.cpp">
+      <Filter>04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviMeshTab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MapToolMFC.ico">

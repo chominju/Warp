@@ -75,23 +75,16 @@ void Engine::CGraphicDev::Render_Begin(D3DXCOLOR Color) // 후면버퍼
 {
 	m_pGraphicDev->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, Color, 1.f, 0);
 	m_pGraphicDev->BeginScene();
-	if (m_sprite)
-		m_sprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 
 void Engine::CGraphicDev::Render_End(HWND hWnd)	// 전면 버퍼
 {
-	if (m_sprite)
-		m_sprite->End();
 	m_pGraphicDev->EndScene();
 	m_pGraphicDev->Present(NULL, NULL, hWnd, NULL);
 }
 
 void Engine::CGraphicDev::Free(void)
 {
-	if (m_sprite)
-		m_sprite->Release();
-
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pSDK);
 }

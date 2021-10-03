@@ -27,6 +27,32 @@ CComponent * CScene::Get_Component(const _tchar * pLayerTag,
 	return iter->second->Get_Component(pObjTag, pComponentTag, eID);
 }
 
+void CScene::Add_LayerGameObject(const _tchar * pLayerTag, CLayer* layer , const _tchar * pObjectTag, CGameObject* gameObject)
+{
+	auto iter= find_if(m_mapLayer.begin(),m_mapLayer.end(), CTag_Finder(pLayerTag));
+
+	if (iter == m_mapLayer.end())
+		m_mapLayer.emplace(pLayerTag, layer);
+	else
+	{
+		iter->second->Add_GameObject(pObjectTag , gameObject);
+	}
+		
+
+}
+
+CGameObject* CScene::Get_MapLayer(const _tchar * pLayerTag , const _tchar * pObjTag, int index)
+{
+	auto iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+
+	if (iter == m_mapLayer.end())
+		return nullptr;
+	else
+	{
+		return iter->second->Get_GameObjectVector(index);// Get_GameObject(pObjTag, index);// Get_GameObjectVector(index);
+	}
+}
+
 HRESULT Engine::CScene::Ready_Scene(void)
 {
 	return S_OK;

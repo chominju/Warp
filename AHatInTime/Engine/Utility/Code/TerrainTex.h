@@ -18,17 +18,24 @@ public:
 	// 이 함수는 높이맵의 해상도와 정점의 개수가 일치하다는 전제 하에 사용하는 코드
 	_ulong			Get_VtxCntX(void) const { return m_iH.biWidth; }
 	_ulong			Get_VtxCntZ(void) const { return m_iH.biHeight; }
+
+	_ulong			Get_CntX(void) const { return m_cntX; }
+	_ulong			Get_CntZ(void) const { return m_cntZ; }
 	
 	void			Copy_Index(INDEX32* pIndex, const _ulong& dwTriCnt);
 public:
 	HRESULT Ready_Buffer(const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv);
 	virtual void Render_Buffer(void) override;
 
+	void Reset_Buffer(const _ulong& dwCntX, const _ulong& dwCntZ);
+
 private:
 	HANDLE					m_hFile;
 	BITMAPFILEHEADER		m_fH;
 	BITMAPINFOHEADER		m_iH;
 	_vec3*					m_pPos = nullptr;
+	_ulong					m_cntX;
+	_ulong					m_cntZ;
 
 public:
 	static CTerrainTex*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv = 1);

@@ -10,6 +10,7 @@
 #define IDD_DIALOG1                     311
 #define IDD_DIALOG2                     312
 #define IDD_DIALOG3                     313
+#define IDD_DIALOG4                     318
 #define IDC_TAB1                        1000
 #define IDC_BUTTON1                     1002
 #define IDC_LIST1                       1003
@@ -37,6 +38,7 @@
 #define IDC_BUTTON4                     1028
 #define IDC_LIST2                       1029
 #define IDC_BUTTON5                     1030
+#define IDC_TREE                        1031
 #define AFX_IDS_APP_TITLE               0xE000
 #define AFX_IDS_IDLEMESSAGE             0xE001
 #define ID_FILE_CLOSE                   0xE102
@@ -86,9 +88,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        318
+#define _APS_NEXT_RESOURCE_VALUE        320
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_CONTROL_VALUE         1032
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

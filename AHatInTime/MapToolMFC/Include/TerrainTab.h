@@ -1,5 +1,6 @@
 #pragma once
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CTerrainTab 대화 상자입니다.
@@ -38,6 +39,9 @@ public:
 
 	vector<CString> m_textureNameVector;
 	vector<CTerrain*> m_addTextureVector;
+	vector<int> m_addTextrueIndexVector;
+
+	CManagement*			m_pManagementClass;
 
 	afx_msg void OnLbnSelchangeList1();
 	virtual BOOL OnInitDialog();
@@ -45,7 +49,6 @@ public:
 	afx_msg void OnBnClickedButtonDelete();
 	float m_posX;
 	float m_posY;
-	float m_posZ;
 	float m_rotX;
 	float m_rotY;
 	float m_rotZ;
@@ -53,4 +56,10 @@ public:
 	int m_countZ;
 
 	void CreateTerrain();
+	afx_msg void OnLbnSelchangeListAdd();
+	afx_msg void OnBnClickedButtonApply();
+	int m_posZ;
+	CTreeCtrl m_tree;
+	void InitTreeCtrl();
+	afx_msg void OnTvnSelchangedTree(NMHDR *pNMHDR, LRESULT *pResult);
 };

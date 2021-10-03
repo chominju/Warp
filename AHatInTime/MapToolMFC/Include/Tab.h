@@ -4,9 +4,10 @@
 class CTerrainTab;
 class CMeshTab;
 class CColliderTab;
+class CNaviMeshTab;
 
 // CTab Æû ºäÀÔ´Ï´Ù.
-
+class CStage;
 class CTab : public CFormView
 {
 	DECLARE_DYNCREATE(CTab)
@@ -19,8 +20,8 @@ public:
 	CTerrainTab*	m_pTerrainTab;
 	CMeshTab*		m_pMeshTab;
 	CColliderTab*	m_pColliderTab;
-
-
+	CNaviMeshTab*	m_pNaviMeshTab;
+	
 public:
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TAB };
@@ -40,6 +41,13 @@ public:
 	CTabCtrl m_Tab;
 	virtual void OnInitialUpdate();
 	afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
+
+
+	CGraphicDev*			m_pDeviceClass;
+	LPDIRECT3DDEVICE9		m_pGraphicDev;
+
+	CStage* m_pScene;
+	CManagement*			m_pManagementClass;
 };
 
 

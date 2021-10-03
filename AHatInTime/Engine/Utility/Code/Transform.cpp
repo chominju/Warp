@@ -60,6 +60,11 @@ void Engine::CTransform::Rotation(ROTATION eType, const _float& fAngle)
 	*(((_float*)&m_vAngle) + eType) += fAngle;
 }
 
+void CTransform::Get_Rotation(_vec3 * pRot)
+{
+	memcpy(pRot, &m_vAngle, sizeof(_vec3));
+}
+
 
 void Engine::CTransform::Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta)
 {

@@ -23,10 +23,10 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
-
+	HRESULT					SetUp_Material(void);
 
 private:
-	HRESULT					Add_Component(void);
+	//HRESULT					Add_Component(void);
 
 public:
 	CTerrainTex*				m_pBufferCom = nullptr;

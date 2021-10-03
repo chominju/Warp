@@ -18,6 +18,7 @@ HRESULT Engine::CLayer::Add_GameObject(const _tchar* pObjTag, CGameObject* pInst
 		return E_FAIL;
 
 	m_mapObject.emplace(pObjTag, pInstance);
+	m_vecObject.push_back(pInstance);
 
 	return S_OK;
 }
@@ -68,3 +69,34 @@ CComponent* Engine::CLayer::Get_Component(const _tchar* pObjTag, const _tchar* p
 	return iter->second->Get_Component(pComponentTag, eID);
 }
 
+CGameObject * CLayer::Get_GameObject(const _tchar * mapTag, int index)
+{
+	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(mapTag));
+
+	while (true)
+	{
+		if (iter == m_mapObject.end())
+			return nullptr;
+
+		if (iter->second->Get_Index() == index)
+			return iter->second;
+		else
+			iter++;
+	}
+
+	// return iter->second->Get_Index second->Get_Component(pComponentTag, eID);
+}
+
+CGameObject* CLayer::Get_GameObjectVector(int index)
+{
+	int size = m_vecObject.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (index == m_vecObject[i]->Get_Index())
+		{
+			return m_vecObject[i];
+		}
+	}
+
+	return nullptr;
+}

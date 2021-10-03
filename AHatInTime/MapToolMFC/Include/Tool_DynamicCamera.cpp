@@ -3,8 +3,12 @@
 
 #include "Export_Function.h"
 
+#include "MainFrm.h"
+#include "MapToolMFCView.h"
+
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CCamera(pGraphicDev)
+	, m_bFix(false)
 {
 
 }
@@ -25,6 +29,11 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye, const _vec3* pAt, const 
 	m_fNear = fNear;
 	m_fFar = fFar;
 
+	CMainFrame* main = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CMapToolMFCView* view = dynamic_cast<CMapToolMFCView*>(main->m_MainSplitter.GetPane(0, 1));
+
+	m_hwnd = view->m_hWnd;
+
 	FAILED_CHECK_RETURN(CCamera::Ready_Object(), E_FAIL);
 
 
@@ -35,11 +44,11 @@ Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
 	Key_Input(fTimeDelta, 10.f);
 
-	/*if (true == m_bFix)
+	if (true == m_bFix)
 	{
 		Mouse_Fix();
 		Mouse_Move(fTimeDelta);
-	}	*/
+	}	
 
 	_int	iExit = CCamera::Update_Object(fTimeDelta);
 
@@ -159,7 +168,7 @@ void CDynamicCamera::Mouse_Fix(void)
 {
 	POINT		ptMouse{ WINCX >> 1, WINCY >> 1 };
 
-	ClientToScreen(g_hWnd, &ptMouse);
+	ClientToScreen(m_hwnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
 
 

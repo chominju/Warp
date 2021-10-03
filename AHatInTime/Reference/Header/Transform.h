@@ -23,6 +23,8 @@ public:
 	void					Move_PickingPos(const _vec3* pPos, const _float& fSpeed, const _float& fTimeDelta);
 	void					Rotation(ROTATION eType, const _float& fAngle);
 
+	void					Get_Rotation(_vec3* pRot);
+
 	void					Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
 	const _matrix*			Compute_LookAtTarget(const _vec3* pTargetPos);
 	void					Set_Scale(const _float& fX, const _float& fY, const _float& fZ);

@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+class CStage;
 class CMainFrame : public CFrameWnd
 {
 	
@@ -38,6 +38,8 @@ protected:  // 컨트롤 모음이 포함된 멤버입니다.
 
 	CGraphicDev*			m_pDeviceClass;
 	LPDIRECT3DDEVICE9		m_pGraphicDev;
+	CManagement*			m_pManagementClass;
+	CStage* m_pScene;
 
 // 생성된 메시지 맵 함수
 protected:

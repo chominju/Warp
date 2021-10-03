@@ -226,65 +226,65 @@ void CTerrainTool::OnBnClickedButtonAdd()
 	if (nullptr == getTexture)
 		return;*/
 
-	//CComponent*			pComponent = nullptr;
+	CComponent*			pComponent = nullptr;
 
-	//// texture
-	//CTerrain * newTerrain = CTerrain::Create(m_pGraphicDev);
-	//pComponent = newTerrain->m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(m_textureNameVector[m_textureListIndex]));;
-	//newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Texture");
+	// texture
+	CTerrain * newTerrain = CTerrain::Create(m_pGraphicDev);
+	pComponent = newTerrain->m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(m_textureNameVector[m_textureListIndex]));;
+	newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Texture");
 
-	//// buffer
-	//Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, m_countX, m_countZ, VTXITV));// , E_FAIL);
-	//pComponent = newTerrain->m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
-	//newTerrain->m_pBufferCom->Set_Index(m_countX,m_countZ);
-	//newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Buffer");
-	////newTerrain->m_pIndex = new INDEX32[newTerrain->m_pBufferCom->Get_TriCnt()];
+	// buffer
+	Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, m_countX, m_countZ, VTXITV));// , E_FAIL);
+	pComponent = newTerrain->m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
+	newTerrain->m_pBufferCom->Set_Index(m_countX,m_countZ);
+	newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Buffer");
+	//newTerrain->m_pIndex = new INDEX32[newTerrain->m_pBufferCom->Get_TriCnt()];
 
-	//// Transform
-	//pComponent = newTerrain->m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
-	//newTerrain->Add_MapComponent(pComponent, ID_DYNAMIC, L"Com_Transform");
+	// Transform
+	pComponent = newTerrain->m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
+	newTerrain->Add_MapComponent(pComponent, ID_DYNAMIC, L"Com_Transform");
 
-	//// renderer
-	//pComponent = newTerrain->m_pRendererCom = Get_Renderer();
-	//pComponent->AddRef();
-	//newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Renderer");
+	// renderer
+	pComponent = newTerrain->m_pRendererCom = Get_Renderer();
+	pComponent->AddRef();
+	newTerrain->Add_MapComponent(pComponent, ID_STATIC, L"Com_Renderer");
 
-	////// Optimization
-	////pComponent = newTerrain->m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
-	////newTerrain->Add_MapComponent(pComponent,ID_STATIC,L"Com_Optimization");
-	//
-	//m_addList.AddString(m_textureNameVector[m_textureListIndex]);
-	//m_addTextureVector.push_back(newTerrain);
+	//// Optimization
+	//pComponent = newTerrain->m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
+	//newTerrain->Add_MapComponent(pComponent,ID_STATIC,L"Com_Optimization");
+	
+	m_addList.AddString(m_textureNameVector[m_textureListIndex]);
+	m_addTextureVector.push_back(newTerrain);
 
-	//m_pDeviceClass->Render_Begin(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.f));
+	m_pDeviceClass->Render_Begin(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.f));
 
-	//auto textureTemp = getTexture->Get_TextureInfo(m_textureNameVector[m_textureListIndex].operator LPCWSTR());
+	auto textureTemp = getTexture->Get_TextureInfo(m_textureNameVector[m_textureListIndex].operator LPCWSTR());
 
-	//D3DXMATRIX matScale, matTrans, matWorld;
-	//float ratioX = float(WINCX) / textureTemp->imageInfo.Width;
-	//float ratioY = float(WINCY) / textureTemp->imageInfo.Height;
-	//D3DXMatrixScaling(&matScale, ratioX, ratioY, 0.f);
-	//D3DXMatrixTranslation(&matTrans, WINCX / 2, WINCY / 2, 0.f);
-	//matWorld = matScale * matTrans;
+	D3DXMATRIX matScale, matTrans, matWorld;
+	float ratioX = float(WINCX) / textureTemp->imageInfo.Width;
+	float ratioY = float(WINCY) / textureTemp->imageInfo.Height;
+	D3DXMatrixScaling(&matScale, ratioX, ratioY, 0.f);
+	D3DXMatrixTranslation(&matTrans, WINCX / 2, WINCY / 2, 0.f);
+	matWorld = matScale * matTrans;
 
-	//float centerX = textureTemp->imageInfo.Width >> 1;
-	//float centerY = textureTemp->imageInfo.Height >> 1;
-
-
+	float centerX = textureTemp->imageInfo.Width >> 1;
+	float centerY = textureTemp->imageInfo.Height >> 1;
 
 
 
 
 
-	////getTexture->Render_Texture();
-	////getTexture->Get_TextureInfo(m_textureName[index].operator LPCWSTR())->texture;
-	//m_pDeviceClass->Get_Sprite()->SetTransform(&matWorld);
-	//m_pDeviceClass->Get_Sprite()->Draw(textureTemp->texture, nullptr, &D3DXVECTOR3(centerX, centerY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	////CGraphicDev::GetInstance()->Get_Device()->SetTexture(0, getTexture);
-	//m_pDeviceClass->Render_End(m_pictureControl.m_hWnd);
-	////CGraphic_Device::Get_Instance()->Render_End(m_picture.m_hWnd);
-	//UpdateData(FALSE);
+
+	//getTexture->Render_Texture();
+	//getTexture->Get_TextureInfo(m_textureName[index].operator LPCWSTR())->texture;
+	m_pDeviceClass->Get_Sprite()->SetTransform(&matWorld);
+	m_pDeviceClass->Get_Sprite()->Draw(textureTemp->texture, nullptr, &D3DXVECTOR3(centerX, centerY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	//CGraphicDev::GetInstance()->Get_Device()->SetTexture(0, getTexture);
+	m_pDeviceClass->Render_End(m_pictureControl.m_hWnd);
+	//CGraphic_Device::Get_Instance()->Render_End(m_picture.m_hWnd);
+	UpdateData(FALSE);
 
 
 }

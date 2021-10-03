@@ -20,6 +20,8 @@ public:
 		const _tchar* pComponentTag,
 		COMPONENTID eID);
 
+	CScene * Get_Scene() { return m_pScene; }
+
 public:
 	HRESULT			Set_Scene(CScene* pScene);
 	_int			Update_Scene(const _float& fTimeDelta);

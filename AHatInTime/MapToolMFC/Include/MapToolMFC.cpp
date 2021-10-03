@@ -17,6 +17,7 @@
 
 HWND	g_hWnd;
 HINSTANCE g_hInst;
+int g_index;
 // CMapToolMFCApp
 
 BEGIN_MESSAGE_MAP(CMapToolMFCApp, CWinAppEx)

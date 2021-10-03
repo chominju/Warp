@@ -30,6 +30,9 @@ public:
 										const _float& fFov, const _float& fAspect, 
 										const _float& fNear, const _float& fFar);
 
+	HWND m_hwnd;
+
+
 private:
 	virtual void		Free(void);
 };

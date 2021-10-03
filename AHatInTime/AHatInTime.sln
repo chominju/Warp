@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Header", "02. Header", 
 		Engine\Header\Engine_Macro.h = Engine\Header\Engine_Macro.h
 		Engine\Header\Engine_Struct.h = Engine\Header\Engine_Struct.h
 		Engine\Header\Engine_Typedef.h = Engine\Header\Engine_Typedef.h
+		Engine\Header\Export_Function.h = Engine\Header\Export_Function.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. MapTool", "02. MapTool", "{79450327-399B-4DA0-A9C4-2A4E15A0EEF7}"

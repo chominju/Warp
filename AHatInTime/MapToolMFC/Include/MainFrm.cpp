@@ -9,6 +9,8 @@
 #include "MapToolMFCView.h"
 
 #include "Tab.h"
+#include "Tool_Stage.h"
+
 
 
 #ifdef _DEBUG
@@ -113,6 +115,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 
 	g_hWnd = m_hWnd;
+	g_index = -1;
 	Ready_GraphicDev(g_hWnd, MODE_WIN, WINCX, WINCY, &m_pDeviceClass);
 
 	m_pDeviceClass->AddRef();
