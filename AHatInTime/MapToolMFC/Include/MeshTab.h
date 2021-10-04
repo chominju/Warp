@@ -1,5 +1,6 @@
 #pragma once
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CMeshTab 대화 상자입니다.
@@ -37,7 +38,6 @@ public:
 	CManagement*			m_pManagementClass;
 
 	CListBox m_meshList;
-	CStatic m_pictureControl;
 	CListBox m_addMeshList;
 	float m_posX;
 	float m_posY;
@@ -50,4 +50,7 @@ public:
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnBnClickedButtonApply();
 	afx_msg void OnLbnSelchangeListAdd();
+	CTreeCtrl m_tree;
+	afx_msg void OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult);
+	void InitTreeCtrl();
 };

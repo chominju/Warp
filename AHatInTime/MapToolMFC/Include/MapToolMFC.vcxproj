@@ -96,6 +96,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../Code;../../Base;../../Reference/Header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessKeepComments>true</PreprocessKeepComments>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

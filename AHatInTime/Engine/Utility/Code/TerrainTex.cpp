@@ -57,16 +57,16 @@ HRESULT Engine::CTerrainTex::Ready_Buffer(const _ulong& dwCntX, const _ulong& dw
 
 	_ulong		dwByte = 0;
 
-	m_hFile = CreateFile(L"../Bin/Resource/Texture/Terrain/Height.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	//m_hFile = CreateFile(L"../Bin/Resource/Texture/Terrain/Height.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-	ReadFile(m_hFile, &m_fH, sizeof(BITMAPFILEHEADER), &dwByte, NULL);
-	ReadFile(m_hFile, &m_iH, sizeof(BITMAPINFOHEADER), &dwByte, NULL);
+	//ReadFile(m_hFile, &m_fH, sizeof(BITMAPFILEHEADER), &dwByte, NULL);
+	//ReadFile(m_hFile, &m_iH, sizeof(BITMAPINFOHEADER), &dwByte, NULL);
 
-	_ulong*		pPixel = new _ulong[m_iH.biWidth * m_iH.biHeight];
+	//_ulong*		pPixel = new _ulong[m_iH.biWidth * m_iH.biHeight];
 
-	ReadFile(m_hFile, pPixel, sizeof(_ulong) * m_iH.biWidth * m_iH.biHeight, &dwByte, NULL);
+	//ReadFile(m_hFile, pPixel, sizeof(_ulong) * m_iH.biWidth * m_iH.biHeight, &dwByte, NULL);
 
-	CloseHandle(m_hFile);
+	//CloseHandle(m_hFile);
 	
 	VTXTEX*			pVertex = NULL;
 
@@ -81,7 +81,7 @@ HRESULT Engine::CTerrainTex::Ready_Buffer(const _ulong& dwCntX, const _ulong& dw
 			dwIndex = i * dwCntX + j;
 
 			pVertex[dwIndex].vPos = _vec3(_float(j * dwVtxItv), 
-				(pPixel[dwIndex] & 0x000000ff) / 20.f,
+				/*(pPixel[dwIndex] & 0x000000ff) / 20.f*/0,
 				_float(i * dwVtxItv));
 
 			pVertex[dwIndex].vTexUV = _vec2((_float(j) / (dwCntX - 1)) * 20.f, 
@@ -175,7 +175,7 @@ void CTerrainTex::Reset_Buffer(const _ulong & dwCntX, const _ulong & dwCntZ)
 
 	_ulong		dwByte = 0;
 
-	m_hFile = CreateFile(L"../Bin/Resource/Texture/Terrain/Height.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	/*m_hFile = CreateFile(L"../Bin/Resource/Texture/Terrain/Height.bmp", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	ReadFile(m_hFile, &m_fH, sizeof(BITMAPFILEHEADER), &dwByte, NULL);
 	ReadFile(m_hFile, &m_iH, sizeof(BITMAPINFOHEADER), &dwByte, NULL);
@@ -184,7 +184,7 @@ void CTerrainTex::Reset_Buffer(const _ulong & dwCntX, const _ulong & dwCntZ)
 
 	ReadFile(m_hFile, pPixel, sizeof(_ulong) * m_iH.biWidth * m_iH.biHeight, &dwByte, NULL);
 
-	CloseHandle(m_hFile);
+	CloseHandle(m_hFile);*/
 
 	VTXTEX*			pVertex = NULL;
 
@@ -199,7 +199,7 @@ void CTerrainTex::Reset_Buffer(const _ulong & dwCntX, const _ulong & dwCntZ)
 			dwIndex = i * dwCntX + j;
 
 			pVertex[dwIndex].vPos = _vec3(_float(j * 1),
-				(pPixel[dwIndex] & 0x000000ff) / 20.f,
+				/*(pPixel[dwIndex] & 0x000000ff) / 20.f*/0,
 				_float(i * 1));
 
 			pVertex[dwIndex].vTexUV = _vec2((_float(j) / (dwCntX - 1)) * 20.f,

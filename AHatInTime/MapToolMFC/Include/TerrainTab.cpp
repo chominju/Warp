@@ -47,7 +47,6 @@ void CTerrainTab::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT7, m_countX);
 	DDX_Text(pDX, IDC_EDIT8, m_countZ);
 	DDX_Text(pDX, IDC_EDIT3, m_posZ);
-	DDX_Control(pDX, IDC_TREE, m_tree);
 }
 
 
@@ -57,7 +56,6 @@ BEGIN_MESSAGE_MAP(CTerrainTab, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTerrainTab::OnBnClickedButtonDelete)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CTerrainTab::OnLbnSelchangeListAdd)
 	ON_BN_CLICKED(IDC_BUTTON1, &CTerrainTab::OnBnClickedButtonApply)
-	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE, &CTerrainTab::OnTvnSelchangedTree)
 END_MESSAGE_MAP()
 
 
@@ -127,59 +125,11 @@ void CTerrainTab::OnLbnSelchangeList1()
 BOOL CTerrainTab::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	InitTreeCtrl();
-	// 1.1 C드라이브의 폴더목록을 TreeView에 보여준다.
-	//HTREEITEM hItem = m_tree.InsertItem(_T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2", hItem));
-
-	////  1.1.1 CFileFind를 이용하여 "C:\\*.*"의 파일 또는 폴더를 찾는다.
-	//CFileFind finder;
-	//BOOL bWorking = finder.FindFile(_T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*"));
-	////  1.1.2 C드라이브의 모든 파일을 하나씩 검사하면서 폴더만 Tree의 아이템으로 삽입한다.
-	//while (bWorking) {
-	//	//   1.1.2.1 "C:\\*.*"의 NextFile(C드라이브의 첫번째)부터 아래 검사를 시작한다.
-	//	bWorking = finder.FindNextFile();
-	//	//   1.1.2.2 현재 검사하고 있는 것이 Directory일 경우만 Tree의 아이템으로 삽입한다.
-	//	if (finder.IsDirectory()) {
-	//		m_tree.InsertItem(finder.GetFileName(), hItem);
-	//	}
-	//}
-	////  1.1.3 삽입한 모든 트리아이템을 보이도록 한다.
-	//m_tree.EnsureVisible(hItem);
-
-	//HTREEITEM hItem = m_tree.InsertItem(_T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2", hItem));
-
-	//CFileFind finder;
-	//CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*");
-	//bool isWorking = finder.FindFile(path);
-
-	//while (isWorking)
-	//{
-	//	isWorking = finder.FindNextFileW();
-
-	//	if (finder.IsDirectory() || finder.IsDots())
-	//		continue;
-
-	//	cData = finder.GetFileName();
-	//	/*_tchar * str = (wchar_t*)(const wchar_t*)cData;*/
-	//	m_textureNameVector.push_back(cData);
-	//	CString pathFull = relativePath + "\\" + cData;
-
-	//	CTexture * instance = CTexture::Create(m_pGraphicDev, pathFull, TYPE_NORMAL, 1);
-	//	instance->Insert_Texture(m_pGraphicDev, pathFull.operator LPCWSTR(), m_textureNameVector[i].operator LPCWSTR());
-	//	Ready_Proto(m_textureNameVector[i], instance/*CTexture::Create(m_pGraphicDev, pathFull, TYPE_NORMAL, 1)*/);// , E_FAIL);
-	//	m_textureListBox.AddString(cData);
-	//	i++;
-	//}
-
-
-
-
-
-
+	
 	m_spriteDev = CSpriteDev::Create(m_pGraphicDev);
 	
 	//CString path = _T("..\\Bin\Resource2\\Textures\\Terrain");
-	CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\Textures\\Terrain");
+	CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource3\\Texture\\Terrain");
 	CString wstrRelativePath = L"";
 	wstrRelativePath = CFileInfo::ConvertRelativePath(path);
 	CString relativePath = wstrRelativePath;
@@ -375,117 +325,4 @@ void CTerrainTab::OnBnClickedButtonApply()
 	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
 	//
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-}
-
-
-
-void CTerrainTab::InitTreeCtrl()
-{
-	HTREEITEM hItem = m_tree.InsertItem(_T("Resource2", hItem));
-
-	//  1.1.1 CFileFind를 이용하여 "C:\\*.*"의 파일 또는 폴더를 찾는다.
-	CFileFind finder;
-
-	CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*");
-	CString wstrRelativePath = L"";
-	wstrRelativePath = CFileInfo::ConvertRelativePath(path);
-	CString relativePath = wstrRelativePath;
-
-	BOOL bWorking = finder.FindFile(/*_T(*//*"D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*"*/wstrRelativePath/*)*/);
-	//  1.1.2 C드라이브의 모든 파일을 하나씩 검사하면서 폴더만 Tree의 아이템으로 삽입한다.
-	while (bWorking) 
-	{
-		//   1.1.2.1 "C:\\*.*"의 NextFile(C드라이브의 첫번째)부터 아래 검사를 시작한다.
-		bWorking = finder.FindNextFile();
-
-		if (finder.IsDots())
-			continue;
-		//   1.1.2.2 현재 검사하고 있는 것이 Directory일 경우만 Tree의 아이템으로 삽입한다.
-		if (finder.IsDirectory()) 
-		{
-			m_tree.InsertItem(finder.GetFileName(), hItem);
-		}
-	}
-	//  1.1.3 삽입한 모든 트리아이템을 보이도록 한다.
-	m_tree.EnsureVisible(hItem);
-}
-
-
-void CTerrainTab::OnTvnSelchangedTree(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
-
-	// 1.2 TreeView의 폴더를 마우스로 클릭하면, 하위폴더 목록을 TreeView에 보여준다.
-	HTREEITEM hSelected = pNMTreeView->itemNew.hItem; // 현재 선택한 아이템
-
-
-													  // (나중을 위해 먼저 실행)
-													  // 1.2.2.1 선택된 아이템의 하위 목록을 트리컨트롤에 추가한다.
-													  // 1.2.2.1.1 선택된 아이템의 경로를 읽어온다. 
-
-	CString pathSelected; //최종으로 얻어올 경로 pathSelected를 선언한다.
-
-
-	HTREEITEM hParentItem = hSelected; // 현재 선택된 아이템을 첫번째 시작으로 한다.
-	while (hParentItem != NULL)
-	{ // 최상의 부모가 없을 때 까지
-		pathSelected = _T("\\") + pathSelected;
-		pathSelected = m_tree.GetItemText(hParentItem) + pathSelected;
-		hParentItem = m_tree.GetParentItem(hParentItem);
-	}
-
-	CString temp = L"..\\Bin\\";
-
-	// 완성된 경로의 뒤에 "*.*"를 붙여주어서 최종으로 선택된 아이템의 경로를 완성한다.
-	pathSelected = temp+ pathSelected + _T("*.*");
-
-	// 1.2.2.1.2 CFileFind를 이용하여 읽어온 경로의 파일 또는 폴더를 찾는다.
-	CFileFind finder;
-	BOOL bWorking = finder.FindFile(pathSelected);
-
-	// 1.2.1 선택한 아이템이 선택적이 있는지 없는지 검사한다.
-	// 1.2.2 선택된 적이 없는 경우, 
-	//       => 해당 아이템의 GetItemData()는 0으로 초기화 되어있음.
-	if (m_tree.GetItemData(hSelected) == 0)
-	{
-		// 1.2.2.1.3 선택한 아이템의 하위목록을 하나씩 검사하면서 폴더의 경우만 Tree 아이템으로 삽입한다. (. or ..는 예외)
-		while (bWorking)
-		{
-			bWorking = finder.FindNextFile();
-			if (finder.IsDots())
-				continue;
-			if (finder.IsDirectory()) 
-			{
-				m_tree.InsertItem(finder.GetFileName(), hSelected);
-			}
-
-
-		}
-
-		// 1.2.2.2 해당 아이템은 선택된 적이 있음을 SetItemData() 함수로 표시한다.
-		m_tree.SetItemData(hSelected, 1);
-
-		// 1.2.3 선택된 적이 있는 경우, 아무 작업도 하지 않는다. (이미 하위 목록은 트리에 추가되어 있으므로)
-		// 1.2.4 여태까지 삽입한 트리아이템을 TreeView에 보여지게 한다.
-		m_tree.EnsureVisible(hSelected);
-	}
-
-	//  추가 된 코드------------------------------------------------------------------------
-	//  2.1 TreeView의 폴더를 마우스로 클릭하면, ListCtrl에 담겨있던 아이템을 비운다.
-	if (pNMTreeView->itemNew.hItem != pNMTreeView->itemOld.hItem)
-	{
-		m_textureListBox.ResetContent();// DeleteAllItems();
-	}
-	//  2.2 트리뷰에서 선택한 아이템의 하위폴더와 파일을 ListView에 보여준다.
-	bWorking = finder.FindFile(pathSelected);
-	while (bWorking) {
-		bWorking = finder.FindNextFile();
-		if (finder.IsDots()) continue;
-
-		CString ttemp = finder.GetFileName();
-		m_textureListBox.AddString(finder.GetFileName());// InsertItem(1, finder.GetFileName());
-
-	}
-	//  -----------------------------------------------------------------------------------
-	*pResult = 0;
 }

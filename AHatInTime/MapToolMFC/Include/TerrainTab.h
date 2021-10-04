@@ -59,7 +59,4 @@ public:
 	afx_msg void OnLbnSelchangeListAdd();
 	afx_msg void OnBnClickedButtonApply();
 	int m_posZ;
-	CTreeCtrl m_tree;
-	void InitTreeCtrl();
-	afx_msg void OnTvnSelchangedTree(NMHDR *pNMHDR, LRESULT *pResult);
 };
