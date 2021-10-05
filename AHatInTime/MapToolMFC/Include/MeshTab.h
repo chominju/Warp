@@ -4,7 +4,7 @@
 
 
 // CMeshTab 대화 상자입니다.
-
+class CMapToolMFCView;
 class CMeshTab : public CDialogEx
 {
 	DECLARE_DYNAMIC(CMeshTab)
@@ -23,6 +23,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+
+	CMapToolMFCView* m_mfcView;
 
 	BYTE m_meshListIndex;
 	BYTE m_addMeshListIndex;
@@ -53,4 +55,9 @@ public:
 	CTreeCtrl m_tree;
 	afx_msg void OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult);
 	void InitTreeCtrl();
+	float m_sizeX;
+	float m_sizeY;
+	float m_sizeZ;
+	afx_msg void OnBnClickedButtonSave();
+	afx_msg void OnBnClickedButtonLoad();
 };

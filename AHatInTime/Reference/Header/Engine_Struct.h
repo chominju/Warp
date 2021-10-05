@@ -76,6 +76,33 @@ namespace Engine
 		LPDIRECT3DTEXTURE9 texture; // 텍스쳐 한장을 보관하기 위한 컴객체
 		D3DXIMAGE_INFO imageInfo;
 	}Texture_Info;
+
+
+	typedef struct tagTerrainData
+	{
+		_tchar m_terrainTextureName[128];
+		_vec3 m_pos[INFO_END];
+		_vec3 m_vAngle;
+		_ulong	m_cntX;
+		_ulong	m_cntZ;
+		int m_terrainIndex;
+
+	}Terrain_Data;
+
+	typedef struct tagObjectData
+	{
+		_tchar m_objectTextureName[128];
+		_vec3 m_pos[INFO_END];
+		_vec3 m_vScale;
+		_vec3 m_vAngle;
+		int m_objectIndex;
+
+	}Object_Data;
+
+
+
+
+
 }
 
 

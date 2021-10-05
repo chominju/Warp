@@ -5,9 +5,10 @@
 #include "MapToolMFC.h"
 #include "MeshTab.h"
 #include "afxdialogex.h"
+#include "MapToolMFCView.h"
+#include "MainFrm.h"
 #include "FileInfo.h"
-#include "Tool_Stone.h"
-#include "Tool_Stone.h"
+#include "Tool_Object.h"
 
 
 // CMeshTab 대화 상자입니다.
@@ -25,6 +26,9 @@ CMeshTab::CMeshTab(CWnd* pParent /*=NULL*/)
 	, m_rotX(0)
 	, m_rotY(0)
 	, m_rotZ(0)
+	, m_sizeX(0)
+	, m_sizeY(0)
+	, m_sizeZ(0)
 {
 
 }
@@ -46,6 +50,9 @@ void CMeshTab::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT6, m_rotZ);
 	//DDX_Control(pDX, IDC_TREE1, m_tree);
 	DDX_Control(pDX, IDC_TREE1, m_tree);
+	DDX_Text(pDX, IDC_EDIT7, m_sizeX);
+	DDX_Text(pDX, IDC_EDIT8, m_sizeY);
+	DDX_Text(pDX, IDC_EDIT9, m_sizeZ);
 }
 
 
@@ -56,6 +63,8 @@ BEGIN_MESSAGE_MAP(CMeshTab, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CMeshTab::OnLbnSelchangeListAdd)
 	//ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMeshTab::OnTvnSelchangedTree1)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMeshTab::OnTvnSelchangedTree1)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMeshTab::OnBnClickedButtonSave)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMeshTab::OnBnClickedButtonLoad)
 END_MESSAGE_MAP()
 
 
@@ -67,6 +76,9 @@ BOOL CMeshTab::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	InitTreeCtrl();
+
+	CMainFrame* main = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
+	m_mfcView = dynamic_cast<CMapToolMFCView*>(main->m_MainSplitter.GetPane(0, 1));
 	//m_spriteDev = CSpriteDev::Create(m_pGraphicDev);
 
 	////CString path = _T("..\\Bin\Resource2\\Textures\\Terrain");
@@ -114,112 +126,72 @@ BOOL CMeshTab::OnInitDialog()
 
 void CMeshTab::OnBnClickedButtonAdd()
 {
+	CString strPosX, strPosY, strPosZ;
 
-	m_posX = GetDlgItemInt(IDC_EDIT1);
-	m_posY = GetDlgItemInt(IDC_EDIT2);
+	GetDlgItemText(IDC_EDIT1, strPosX);
+	m_posX = _tstof(strPosX);
 
-	m_rotX = GetDlgItemInt(IDC_EDIT4);
-	m_rotY = GetDlgItemInt(IDC_EDIT5);
-	m_rotZ = GetDlgItemInt(IDC_EDIT6);
+	GetDlgItemText(IDC_EDIT2, strPosY);
+	m_posY = _tstof(strPosY);
+
+	GetDlgItemText(IDC_EDIT3, strPosZ);
+	m_posZ = _tstof(strPosZ);
+
+	CString strRotX, strRotY, strRotZ;
+
+	GetDlgItemText(IDC_EDIT4, strRotX);
+	m_rotX = _tstof(strRotX);
+
+	GetDlgItemText(IDC_EDIT5, strRotY);
+	m_rotY = _tstof(strRotY);
+
+	GetDlgItemText(IDC_EDIT6, strRotZ);
+	m_rotZ = _tstof(strRotZ);
+
+
+
+	CString strSizeX, strSizeY, strSizeZ;
+
+	GetDlgItemText(IDC_EDIT7, strSizeX);
+	m_sizeX = _tstof(strSizeX);
+
+	GetDlgItemText(IDC_EDIT8, strSizeY);
+	m_sizeY = _tstof(strSizeY);
+
+	GetDlgItemText(IDC_EDIT9, strSizeZ);
+	m_sizeZ = _tstof(strSizeZ);
+
+
+	//m_posX = GetDlgItemInt(IDC_EDIT1);
+	//m_posY = GetDlgItemInt(IDC_EDIT2);
+
+	//m_rotX = GetDlgItemInt(IDC_EDIT4);
+	//m_rotY = GetDlgItemInt(IDC_EDIT5);
+	//m_rotZ = GetDlgItemInt(IDC_EDIT6);
+
+
+	CLayer*		pLayer = CLayer::Create();
+	CObjects*			pObjects = CObjects::Create(m_pGraphicDev);
+	CComponent*			pComponent = nullptr;
 
 	g_index++;
 
-	CLayer*		pLayer = CLayer::Create();
-	CGameObject*			pGameObject = nullptr;
-	// Stone
-	pGameObject = CStone::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	pLayer->Add_GameObject(L"Stone", pGameObject);
-	pGameObject->Set_Index(g_index);
-	CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"Stone", pGameObject);
+	CString m_name = L"Proto_Mesh_";
+	m_name = m_name + m_meshNameVector[m_meshListIndex];
+
+	// StaticMesh
+	pComponent = pObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(m_name));
+	pObjects->Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+
+	pObjects->Set_Index(g_index);
+	pLayer->Add_GameObject(m_meshNameVector[m_meshListIndex], pObjects);
+	CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"StaticMesh", pObjects);
 
 	m_addMeshList.AddString(m_meshNameVector[m_meshListIndex]);
 
 	m_meshIndexVector.push_back(g_index);
 
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
-	//CTexture* getTexture = dynamic_cast<CTexture*>(Clone_Proto(m_textureNameVector[m_textureListIndex]));
-	//if (nullptr == getTexture)
-	//	return;
-
-	//CComponent*			pComponent = nullptr;
-
-	//// 트랜스폼
-	//CTerrain* newTerrain = CTerrain::Create(m_pGraphicDev);
-	//pComponent = newTerrain->m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
-	//newTerrain->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posZ);
-
-	//if (m_rotX)
-	//	newTerrain->m_pTransformCom->Rotation(ROT_X, m_rotX);
-	//if (m_rotY)
-	//	newTerrain->m_pTransformCom->Rotation(ROT_Y, m_rotY);
-	//if (m_rotZ)
-	//	newTerrain->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
-	//newTerrain->Add_Component(L"Com_Transform", ID_DYNAMIC, pComponent);
-
-
-
-	//// 텍스쳐
-	//pComponent = newTerrain->m_pTextureCom = getTexture;
-	//newTerrain->Add_Component(L"Com_Texture", ID_STATIC, pComponent);
-
-	//// renderer
-	//pComponent = newTerrain->m_pRendererCom = Get_Renderer();
-	//pComponent->AddRef();
-	//newTerrain->Add_Component(L"Com_Renderer", ID_STATIC, pComponent);
-
-	//// buffer
-	//Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, m_countX, m_countZ, VTXITV));// , E_FAIL);
-	//pComponent = newTerrain->m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
-	//newTerrain->Add_Component(L"Com_Buffer", ID_STATIC, pComponent);
-
-	//m_addTextureList.AddString(m_textureNameVector[m_textureListIndex]);
-	//m_addTextureVector.push_back(newTerrain);
-
-	//CLayer*		pLayer = CLayer::Create();
-	//pLayer->Add_GameObject(L"Terrain", newTerrain);
-	//CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"Terrain", newTerrain);
-
-
-
-	//CComponent*			pComponent = nullptr;
-
-	//// StaticMesh
-	//pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Stone"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
-
-	//// Transform
-	//pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
-
-	//// renderer
-	//pComponent = m_pRendererCom = Get_Renderer();
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//pComponent->AddRef();
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
-
-	//// Calculator
-	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
-
-	//// Collider
-	//pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
-
-	//// Optimization
-	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
-
-
-
-
-
+	m_mfcView->Render_View();
 }
 
 
@@ -230,6 +202,7 @@ void CMeshTab::OnLbnSelchangeList1()
 	UpdateData(TRUE);
 	m_meshListIndex = m_meshList.GetCurSel();
 
+
 	UpdateData(FALSE);
 }
 
@@ -239,28 +212,64 @@ void CMeshTab::OnBnClickedButtonApply()
 	if (m_meshNameVector.size() == 0 /*|| m_addListIndex==NULL*/)
 		return;
 
-	m_posX = GetDlgItemInt(IDC_EDIT1);
-	m_posY = GetDlgItemInt(IDC_EDIT2);
-	m_posZ = GetDlgItemInt(IDC_EDIT3);
+	//m_posX = GetDlgItemInt(IDC_EDIT1);
+	//m_posY = GetDlgItemInt(IDC_EDIT2);
+	//m_posZ = GetDlgItemInt(IDC_EDIT3);
 
-	m_rotX = GetDlgItemInt(IDC_EDIT4);
-	m_rotY = GetDlgItemInt(IDC_EDIT5);
-	m_rotZ = GetDlgItemInt(IDC_EDIT6);
+	//m_rotX = GetDlgItemInt(IDC_EDIT4);
+	//m_rotY = GetDlgItemInt(IDC_EDIT5);
+	//m_rotZ = GetDlgItemInt(IDC_EDIT6);
+
+	CString strPosX, strPosY, strPosZ;
+
+	GetDlgItemText(IDC_EDIT1, strPosX);
+	m_posX = _tstof(strPosX);
+
+	GetDlgItemText(IDC_EDIT2, strPosY);
+	m_posY = _tstof(strPosY);
+
+	GetDlgItemText(IDC_EDIT3, strPosZ);
+	m_posZ = _tstof(strPosZ);
+
+	CString strRotX, strRotY, strRotZ;
+
+	GetDlgItemText(IDC_EDIT4, strRotX);
+	m_rotX = _tstof(strRotX);
+
+	GetDlgItemText(IDC_EDIT5, strRotY);
+	m_rotY = _tstof(strRotY);
+
+	GetDlgItemText(IDC_EDIT6, strRotZ);
+	m_rotZ = _tstof(strRotZ);
 
 
+
+	CString strSizeX, strSizeY, strSizeZ;
+
+	GetDlgItemText(IDC_EDIT7, strSizeX);
+	m_sizeX = _tstof(strSizeX);
+
+	GetDlgItemText(IDC_EDIT8, strSizeY);
+	m_sizeY = _tstof(strSizeY);
+
+	GetDlgItemText(IDC_EDIT9, strSizeZ);
+	m_sizeZ = _tstof(strSizeZ);
+
+	m_mfcView->Render_View();
 	//  m_pMeshCom
 	//	m_pTransformCom
 	//	m_pRendererCom
 
-	CGameObject* getObject = CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic", L"Stone",m_meshIndexVector[m_addMeshListIndex]);
-	dynamic_cast<CStone*>(getObject)->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posZ);
+	CGameObject* getObject = CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic", m_meshNameVector[m_meshListIndex],m_meshIndexVector[m_addMeshListIndex]);
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posZ);
 
-	dynamic_cast<CStone*>(getObject)->m_pTransformCom->Rotation(ROT_X, m_rotX);
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_X, m_rotX);
 
-	dynamic_cast<CStone*>(getObject)->m_pTransformCom->Rotation(ROT_Y, m_rotY);
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_Y, m_rotY);
 
-	dynamic_cast<CStone*>(getObject)->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
 
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Set_Scale(m_sizeX, m_sizeY, m_sizeZ);
 	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posY);
 	//
 	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_X, m_rotX);
@@ -276,7 +285,27 @@ void CMeshTab::OnBnClickedButtonApply()
 void CMeshTab::OnLbnSelchangeListAdd()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
 	m_addMeshListIndex = m_addMeshList.GetCurSel();
+	//m_addMeshList.str
+	CGameObject* getObject = CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic", L"StaticMesh", m_meshIndexVector[m_addMeshListIndex]);
+
+	_vec3 pos, rot, size;
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Get_Info(INFO_POS, &pos);
+	m_posX = pos.x;
+	m_posY = pos.y;
+	m_posZ = pos.z;
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Get_Rotation(&rot);
+	m_rotX = rot.x;
+	m_rotY = rot.y;
+	m_rotZ = rot.z;
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Get_Scale(&size);
+	m_sizeX = size.x;
+	m_sizeY = size.y;
+	m_sizeZ = size.z;
+
+	UpdateData(FALSE);
 }
 
 
@@ -293,7 +322,7 @@ void CMeshTab::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 													  // 1.2.2.1.1 선택된 아이템의 경로를 읽어온다. 
 
 	CString pathSelected; //최종으로 얻어올 경로 pathSelected를 선언한다.
-
+	CString pathSelectedX;
 
 	HTREEITEM hParentItem = hSelected; // 현재 선택된 아이템을 첫번째 시작으로 한다.
 	while (hParentItem != NULL)
@@ -306,11 +335,15 @@ void CMeshTab::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	CString temp = L"..\\Bin\\";
 
 	// 완성된 경로의 뒤에 "*.*"를 붙여주어서 최종으로 선택된 아이템의 경로를 완성한다.
+	pathSelectedX = temp + pathSelected + _T("*.X");
 	pathSelected = temp + pathSelected + _T("*.*");
 
 	// 1.2.2.1.2 CFileFind를 이용하여 읽어온 경로의 파일 또는 폴더를 찾는다.
 	CFileFind finder;
+	CFileFind finderX;
 	BOOL bWorking = finder.FindFile(pathSelected);
+	BOOL bWorkingX = finderX.FindFile(pathSelectedX);
+
 
 	// 1.2.1 선택한 아이템이 선택적이 있는지 없는지 검사한다.
 	// 1.2.2 선택된 적이 없는 경우, 
@@ -348,17 +381,27 @@ void CMeshTab::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	//  2.2 트리뷰에서 선택한 아이템의 하위폴더와 파일을 ListView에 보여준다.
 	bWorking = finder.FindFile(pathSelected);
-	while (bWorking) 
+	while (bWorking)
 	{
+		while (bWorkingX)
+		{
+			bWorkingX = finderX.FindNextFile();
+			if (finderX.IsDots())
+				continue;
 
+			CString ttemp2 = finderX.GetFileName();
 
-
+			m_meshList.AddString(finderX.GetFileName());// InsertItem(1, finder.GetFileName());
+			m_meshNameVector.push_back(finderX.GetFileName());
+		}
 		bWorking = finder.FindNextFile();
+
 		if (finder.IsDots()) 
 			continue;
 
 		CString ttemp = finder.GetFileName();
-		m_meshList.AddString(finder.GetFileName());// InsertItem(1, finder.GetFileName());
+
+		//m_meshList.AddString(finder.GetFileName());// InsertItem(1, finder.GetFileName());
 
 	}
 	//  -----------------------------------------------------------------------------------
@@ -395,4 +438,16 @@ void CMeshTab::InitTreeCtrl()
 	//}
 	////  1.1.3 삽입한 모든 트리아이템을 보이도록 한다.
 	m_tree.EnsureVisible(hItem);
+}
+
+
+void CMeshTab::OnBnClickedButtonSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMeshTab::OnBnClickedButtonLoad()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

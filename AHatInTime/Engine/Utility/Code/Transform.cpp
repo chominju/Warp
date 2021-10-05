@@ -211,3 +211,8 @@ void Engine::CTransform::Set_Scale(const _float& fX, const _float& fY, const _fl
 	m_vScale.y = fY;
 	m_vScale.z = fZ;
 }
+
+void CTransform::Get_Scale(_vec3 * pSize)
+{
+	memcpy(pSize, &m_vScale, sizeof(_vec3));
+}

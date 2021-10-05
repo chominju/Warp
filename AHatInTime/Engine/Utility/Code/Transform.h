@@ -29,6 +29,7 @@ public:
 	const _matrix*			Compute_LookAtTarget(const _vec3* pTargetPos);
 	void					Set_Scale(const _float& fX, const _float& fY, const _float& fZ);
 
+	void					Get_Scale(_vec3* pSize);
 
 	void					Set_ParentMatrix(const _matrix* pParentMatrix);
 	void					Set_WorldMatrix(const _matrix* pWorld);

@@ -25,14 +25,19 @@ public:
 
 	HRESULT					SetUp_Material(void);
 
+	void Set_TerrainData(Terrain_Data terrainData);
+	Terrain_Data Get_TerrainData() { return m_terrainData; }
+
 private:
-	//HRESULT					Add_Component(void);
+	HRESULT					Add_Component(void);
 
 public:
 	CTerrainTex*				m_pBufferCom = nullptr;
 	CTexture*					m_pTextureCom = nullptr;
 	CTransform*					m_pTransformCom = nullptr;
 	CRenderer*					m_pRendererCom = nullptr;
+
+	Terrain_Data				m_terrainData;
 
 
 public:

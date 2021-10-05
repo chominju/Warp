@@ -6,12 +6,14 @@
 // CTerrainTab 대화 상자입니다.
 
 class CTerrain;
+class CMapToolMFCView;
 
 class CTerrainTab : public CDialogEx
 {
 	DECLARE_DYNAMIC(CTerrainTab)
 
 public:
+	//CTerrainTab();
 	CTerrainTab(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CTerrainTab();
 
@@ -25,6 +27,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	CMapToolMFCView* m_mfcView;
+
 	CListBox m_textureListBox;
 	CListBox m_addTextureList;
 	CStatic m_pictureControl;
@@ -59,4 +63,6 @@ public:
 	afx_msg void OnLbnSelchangeListAdd();
 	afx_msg void OnBnClickedButtonApply();
 	int m_posZ;
+	afx_msg void OnBnClickedButtonSave();
+	afx_msg void OnBnClickedButtonLoad();
 };

@@ -208,6 +208,7 @@
     <ClInclude Include="TerrainTab.h" />
     <ClInclude Include="Tool_Define.h" />
     <ClInclude Include="Tool_DynamicCamera.h" />
+    <ClInclude Include="Tool_Object.h" />
     <ClInclude Include="Tool_Stage.h" />
     <ClInclude Include="Tool_Stone.h" />
     <ClInclude Include="Tool_Terrain.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="Tab.cpp" />
     <ClCompile Include="TerrainTab.cpp" />
     <ClCompile Include="Tool_DynamicCamera.cpp" />
+    <ClCompile Include="Tool_Object.cpp" />
     <ClCompile Include="Tool_Stage.cpp" />
     <ClCompile Include="Tool_Stone.cpp" />
     <ClCompile Include="Tool_Terrain.cpp" />

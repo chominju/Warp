@@ -31,8 +31,11 @@
 #define IDC_EDIT7                       1018
 #define IDC_EDIT8                       1019
 #define IDC_SPIN7                       1020
+#define IDC_EDIT9                       1020
 #define IDC_SPIN8                       1021
 #define IDC_BUTTON2                     1022
+#define IDC_SPIN9                       1022
+#define IDC_SPIN10                      1023
 #define IDC_PICTURE                     1026
 #define IDC_BUTTON3                     1027
 #define IDC_BUTTON4                     1028
@@ -40,6 +43,7 @@
 #define IDC_BUTTON5                     1030
 #define IDC_TREE                        1031
 #define IDC_TREE1                       1033
+#define IDC_BUTTON6                     1034
 #define AFX_IDS_APP_TITLE               0xE000
 #define AFX_IDS_IDLEMESSAGE             0xE001
 #define ID_FILE_CLOSE                   0xE102
@@ -91,7 +95,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        320
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1034
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

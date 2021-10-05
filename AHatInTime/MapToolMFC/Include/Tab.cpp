@@ -66,7 +66,7 @@ void CTab::OnInitialUpdate()
 	
 	m_Tab.InsertItem(0, _T("TerrainTool"));
 	m_Tab.InsertItem(1, _T("MeshTool"));
-	m_Tab.InsertItem(2, _T("EffectTool"));
+	m_Tab.InsertItem(2, _T("ColliderTool"));
 	m_Tab.InsertItem(3, _T("NaviMeshTool"));
 
 	m_Tab.SetCurSel(0);

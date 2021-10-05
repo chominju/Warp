@@ -71,7 +71,7 @@ CComponent* Engine::CGameObject::Get_Component(const _tchar* pComponentTag, COMP
 	return pComponent;
 }
 
-void CGameObject::Add_Component(const _tchar * pComponentTag, COMPONENTID eID, CComponent * component)
+void CGameObject::Add_AddComponent(const _tchar * pComponentTag, COMPONENTID eID, CComponent * component)
 {
 	CComponent*		pComponent = Find_Component(pComponentTag, eID);
 

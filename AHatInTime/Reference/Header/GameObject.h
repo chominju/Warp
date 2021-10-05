@@ -15,7 +15,7 @@ protected:
 public:
 	CComponent*		Get_Component(const _tchar* pComponentTag, COMPONENTID eID);
 	_float			Get_ViewZ(void) { return m_fViewZ; }
-	void			Add_Component(const _tchar* pComponentTag, COMPONENTID eID, CComponent* component);
+	void			Add_AddComponent(const _tchar* pComponentTag, COMPONENTID eID, CComponent* component);
 
 	void			Set_Index(int index) { m_index = index; }
 	int				Get_Index() { return m_index; }
@@ -33,6 +33,7 @@ protected:
 	map<const _tchar*, CComponent*>		m_mapComponent[ID_END];
 	_float								m_fViewZ;
 	int									m_index;
+
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
 

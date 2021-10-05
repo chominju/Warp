@@ -22,7 +22,7 @@ CTerrain::~CTerrain(void)
 
 HRESULT CTerrain::Ready_Object(void)
 {
-	//FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	return S_OK;
@@ -55,33 +55,33 @@ void CTerrain::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
-//HRESULT CTerrain::Add_Component(void)
-//{
-//	CComponent*			pComponent = nullptr;
-//
-//	// buffer
-//	pComponent = m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
-//	NULL_CHECK_RETURN(pComponent, E_FAIL);
-//	m_mapComponent[ID_STATIC].emplace(L"Com_Buffer", pComponent);
-//	
-//	// texture
-//	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_Texture_Terrain"));
-//	NULL_CHECK_RETURN(pComponent, E_FAIL);
-//	m_mapComponent[ID_STATIC].emplace(L"Com_Texture", pComponent);
-//
-//	// Transform
-//	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
-//	NULL_CHECK_RETURN(pComponent, E_FAIL);
-//	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
-//
-//	// renderer
-//	pComponent = m_pRendererCom = Get_Renderer();
-//	NULL_CHECK_RETURN(pComponent, E_FAIL);
-//	pComponent->AddRef();
-//	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
-//	
-//	return S_OK;
-//}
+HRESULT CTerrain::Add_Component(void)
+{
+	CComponent*			pComponent = nullptr;
+
+	// buffer
+	pComponent = m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Buffer", pComponent);
+	
+	//// texture
+	//pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_Texture_Terrain"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_STATIC].emplace(L"Com_Texture", pComponent);
+
+	// Transform
+	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
+
+	// renderer
+	pComponent = m_pRendererCom = Get_Renderer();
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	pComponent->AddRef();
+	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
+	
+	return S_OK;
+}
 
 HRESULT CTerrain::SetUp_Material(void)
 {
@@ -97,6 +97,24 @@ HRESULT CTerrain::SetUp_Material(void)
 	m_pGraphicDev->SetMaterial(&tMtrl);
 
 	return S_OK;
+}
+
+void CTerrain::Set_TerrainData(Terrain_Data terrainData)
+{
+	_tcscpy_s(m_terrainData.m_terrainTextureName, _countof(m_terrainData.m_terrainTextureName), terrainData.m_terrainTextureName);
+
+	m_terrainData.m_pos[INFO_POS].x = terrainData.m_pos[INFO_POS].x;
+	m_terrainData.m_pos[INFO_POS].y = terrainData.m_pos[INFO_POS].y;
+	m_terrainData.m_pos[INFO_POS].z = terrainData.m_pos[INFO_POS].z;
+
+	m_terrainData.m_cntX = terrainData.m_cntX;
+	m_terrainData.m_cntZ = terrainData.m_cntZ;
+
+	m_terrainData.m_vAngle.x = terrainData.m_vAngle.x;
+	m_terrainData.m_vAngle.y = terrainData.m_vAngle.y;
+	m_terrainData.m_vAngle.z = terrainData.m_vAngle.z;
+
+	//m_terrainData.
 }
 
 CTerrain* CTerrain::Create(LPDIRECT3DDEVICE9 pGraphicDev)

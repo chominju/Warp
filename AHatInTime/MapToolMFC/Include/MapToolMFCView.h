@@ -57,6 +57,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual void OnInitialUpdate();
+	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+
+
+	void Render_View();
 };
 
 #ifndef _DEBUG  // MapToolMFCView.cpp의 디버그 버전

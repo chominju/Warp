@@ -1,5 +1,5 @@
-#ifndef Wall_h__
-#define Wall_h__
+#ifndef Object_h__
+#define Object_h__
 
 #include "GameObject.h"
 //#include "Define.h"
@@ -14,12 +14,12 @@ class CCollider;
 class COptimization;
 
 END
-class CWall1 : public CGameObject
+class CObjects : public CGameObject
 {
 private:
-	explicit CWall1(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CWall1(const CWall1& rhs);
-	virtual ~CWall1(void);
+	explicit CObjects(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CObjects(const CObjects& rhs);
+	virtual ~CObjects(void);
 
 public:
 	virtual HRESULT Ready_Object(void) override;
@@ -38,6 +38,9 @@ public:
 	//CCalculator*			m_pCalculatorCom	= nullptr;
 	//CCollider*				m_pColliderCom		= nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
+
+	Object_Data				m_objectData;
+
 private:	
 	
 	_bool					m_bColl = false;
@@ -46,7 +49,7 @@ private:
 
 
 public:
-	static CWall1*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CObjects*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void		Free(void);
