@@ -323,6 +323,7 @@ void CMeshTab::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 			bWorking = finder.FindNextFile();
 			if (finder.IsDots())
 				continue;
+
 			if (finder.IsDirectory())
 			{
 				m_tree.InsertItem(finder.GetFileName(), hSelected);
@@ -343,16 +344,21 @@ void CMeshTab::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 	//  2.1 TreeView의 폴더를 마우스로 클릭하면, ListCtrl에 담겨있던 아이템을 비운다.
 	if (pNMTreeView->itemNew.hItem != pNMTreeView->itemOld.hItem)
 	{
-		//m_textureListBox.ResetContent();// DeleteAllItems();
+		m_meshList.ResetContent();// DeleteAllItems();
 	}
 	//  2.2 트리뷰에서 선택한 아이템의 하위폴더와 파일을 ListView에 보여준다.
 	bWorking = finder.FindFile(pathSelected);
-	while (bWorking) {
+	while (bWorking) 
+	{
+
+
+
 		bWorking = finder.FindNextFile();
-		if (finder.IsDots()) continue;
+		if (finder.IsDots()) 
+			continue;
 
 		CString ttemp = finder.GetFileName();
-		//m_textureListBox.AddString(finder.GetFileName());// InsertItem(1, finder.GetFileName());
+		m_meshList.AddString(finder.GetFileName());// InsertItem(1, finder.GetFileName());
 
 	}
 	//  -----------------------------------------------------------------------------------
@@ -365,28 +371,28 @@ void CMeshTab::InitTreeCtrl()
 	HTREEITEM hItem = m_tree.InsertItem(_T("Resource3", hItem));
 
 	//  1.1.1 CFileFind를 이용하여 "C:\\*.*"의 파일 또는 폴더를 찾는다.
-	CFileFind finder;
+	//CFileFind finder;
 
-	CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource3\\*.*");
-	CString wstrRelativePath = L"";
-	wstrRelativePath = CFileInfo::ConvertRelativePath(path);
-	CString relativePath = wstrRelativePath;
+	//CString path = _T("D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource3\\*.*");
+	//CString wstrRelativePath = L"";
+	//wstrRelativePath = CFileInfo::ConvertRelativePath(path);
+	//CString relativePath = wstrRelativePath;
 
-	BOOL bWorking = finder.FindFile(/*_T(*//*"D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*"*/wstrRelativePath/*)*/);
+	//BOOL bWorking = finder.FindFile(/*_T(*//*"D:\\Jusin\\AHatInTime\\AHatInTime\\MapToolMFC\\Bin\\Resource2\\*.*"*/relativePath/*)*/);
 	//  1.1.2 C드라이브의 모든 파일을 하나씩 검사하면서 폴더만 Tree의 아이템으로 삽입한다.
-	while (bWorking)
-	{
-		//   1.1.2.1 "C:\\*.*"의 NextFile(C드라이브의 첫번째)부터 아래 검사를 시작한다.
-		bWorking = finder.FindNextFile();
+	//while (bWorking)
+	//{
+	//	//   1.1.2.1 "C:\\*.*"의 NextFile(C드라이브의 첫번째)부터 아래 검사를 시작한다.
+	//	bWorking = finder.FindNextFile();
 
-		if (finder.IsDots())
-			continue;
-		//   1.1.2.2 현재 검사하고 있는 것이 Directory일 경우만 Tree의 아이템으로 삽입한다.
-		if (finder.IsDirectory())
-		{
-			m_tree.InsertItem(finder.GetFileName(), hItem);
-		}
-	}
-	//  1.1.3 삽입한 모든 트리아이템을 보이도록 한다.
+	//	if (finder.IsDots())
+	//		continue;
+	//	//   1.1.2.2 현재 검사하고 있는 것이 Directory일 경우만 Tree의 아이템으로 삽입한다.
+	//	if (finder.IsDirectory())
+	//	{
+	//		m_tree.InsertItem(finder.GetFileName(), hItem);
+	//	}
+	//}
+	////  1.1.3 삽입한 모든 트리아이템을 보이도록 한다.
 	m_tree.EnsureVisible(hItem);
 }

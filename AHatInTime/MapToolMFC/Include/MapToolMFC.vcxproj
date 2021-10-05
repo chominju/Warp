@@ -211,6 +211,7 @@
     <ClInclude Include="Tool_Stage.h" />
     <ClInclude Include="Tool_Stone.h" />
     <ClInclude Include="Tool_Terrain.h" />
+    <ClInclude Include="Tool_Wall1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColliderTab.cpp" />
@@ -233,6 +234,7 @@
     <ClCompile Include="Tool_Stage.cpp" />
     <ClCompile Include="Tool_Stone.cpp" />
     <ClCompile Include="Tool_Terrain.cpp" />
+    <ClCompile Include="Tool_Wall1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MapToolMFC.rc" />

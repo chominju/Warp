@@ -162,7 +162,33 @@ void CMapToolMFCView::OnInitialUpdate()
 	Ready_Proto(L"Proto_Buffer_RcTex", CRcTex::Create(m_pGraphicDev));// , E_FAIL);
 
 	Ready_Proto(L"Proto_Transform", CTransform::Create(m_pGraphicDev));// , E_FAIL);
-	//Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X"));
+
+
+
+
+
+	Ready_Proto(L"Proto_Mesh_Bed", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Bed.X"));
+	Ready_Proto(L"Proto_Mesh_Conveyor", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Conveyor.X"));
+	Ready_Proto(L"Proto_Mesh_Desk1", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Desk1.X"));
+	Ready_Proto(L"Proto_Mesh_Door3", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Door3.X"));
+	Ready_Proto(L"Proto_Mesh_Door4", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Door4.X"));
+	Ready_Proto(L"Proto_Mesh_DoorClearFin", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"DoorClearFin.X"));
+	Ready_Proto(L"Proto_Mesh_DoorClearLeft", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"DoorClearLeft.X"));
+	Ready_Proto(L"Proto_Mesh_DoorClearRight", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"DoorClearRight.X"));
+	Ready_Proto(L"Proto_Mesh_Drawer1", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Drawer1.X"));
+	Ready_Proto(L"Proto_Mesh_Drawer2", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Drawer2.X"));
+	Ready_Proto(L"Proto_Mesh_Skeleton_Ball", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Skeleton_Ball.X"));
+	Ready_Proto(L"Proto_Mesh_Table1", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Table1.X"));
+	Ready_Proto(L"Proto_Mesh_Table2", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Table2.X"));
+	Ready_Proto(L"Proto_Mesh_Table11", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Table11.X"));
+	Ready_Proto(L"Proto_Mesh_Wall1", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Wall1.X"));
+	Ready_Proto(L"Proto_Mesh_Wall2", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Wall2.X"));
+	Ready_Proto(L"Proto_Mesh_Wall4", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Wall4.X"));
+	Ready_Proto(L"Proto_Mesh_Wall6", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Wall6.X"));
+	Ready_Proto(L"Proto_Mesh_Wall44", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Wall44.X"));
+	Ready_Proto(L"Proto_Mesh_WallClear1", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"WallClear1.X"));
+	Ready_Proto(L"Proto_Mesh_WallClear6", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"WallClear6.X"));
+	Ready_Proto(L"Proto_Mesh_WallClear15", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"WallClear15.X"));
 	//Ready_Proto(L"Proto_Texture_Player", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Player/Ma.jpg", TYPE_NORMAL));// , E_FAIL);
 
 	/*Create_Management(&m_pManagementClass);

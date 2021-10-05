@@ -37,6 +37,30 @@
     <Filter Include="01. View\01. Tab">
       <UniqueIdentifier>{1dacf96a-c897-40c9-9364-e4896318bce1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Object\00. DynamicCamera">
+      <UniqueIdentifier>{41826182-58e6-42c4-8f61-8c92a74e5a56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\01. Terrain">
+      <UniqueIdentifier>{9bf004a0-6932-4894-aef3-a2c47fd538be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\02. Stone">
+      <UniqueIdentifier>{e2dc19c6-54d5-47c7-945b-29198575afc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\03.Wall">
+      <UniqueIdentifier>{b71eb5d9-8efd-49dd-94de-04e36de9724c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\03.Wall\00. Wall1">
+      <UniqueIdentifier>{df4df8e6-9654-465b-a82f-173cbf013a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\04. Door">
+      <UniqueIdentifier>{02f9a960-0c1c-477d-8d79-2517d7397bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\04. Door\00. LeftDoor">
+      <UniqueIdentifier>{eb0d4bb0-8846-4f27-a005-f69040478e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Object\04. Door\01. RightDoor">
+      <UniqueIdentifier>{597e3c1d-0a05-4ec8-bbcf-5caeb8aaa149}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -75,22 +99,25 @@
     <ClInclude Include="Tab.h">
       <Filter>01. View\01. Tab</Filter>
     </ClInclude>
-    <ClInclude Include="Tool_DynamicCamera.h">
-      <Filter>04. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Tool_Terrain.h">
-      <Filter>04. Object</Filter>
-    </ClInclude>
     <ClInclude Include="FileInfo.h">
       <Filter>09. FileInfo</Filter>
     </ClInclude>
     <ClInclude Include="Tool_Stage.h">
       <Filter>03. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Tool_Stone.h">
-      <Filter>04. Object</Filter>
-    </ClInclude>
     <ClInclude Include="NaviMeshTab.h" />
+    <ClInclude Include="Tool_DynamicCamera.h">
+      <Filter>04. Object\00. DynamicCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Terrain.h">
+      <Filter>04. Object\01. Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Stone.h">
+      <Filter>04. Object\02. Stone</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Wall1.h">
+      <Filter>04. Object\03.Wall\00. Wall1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -120,22 +147,25 @@
     <ClCompile Include="Tab.cpp">
       <Filter>01. View\01. Tab</Filter>
     </ClCompile>
-    <ClCompile Include="Tool_DynamicCamera.cpp">
-      <Filter>04. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Tool_Terrain.cpp">
-      <Filter>04. Object</Filter>
-    </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>09. FileInfo</Filter>
     </ClCompile>
     <ClCompile Include="Tool_Stage.cpp">
       <Filter>03. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Tool_Stone.cpp">
-      <Filter>04. Object</Filter>
-    </ClCompile>
     <ClCompile Include="NaviMeshTab.cpp" />
+    <ClCompile Include="Tool_DynamicCamera.cpp">
+      <Filter>04. Object\00. DynamicCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Terrain.cpp">
+      <Filter>04. Object\01. Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Stone.cpp">
+      <Filter>04. Object\02. Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Wall1.cpp">
+      <Filter>04. Object\03.Wall\00. Wall1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MapToolMFC.ico">
