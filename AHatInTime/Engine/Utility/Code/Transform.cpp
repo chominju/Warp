@@ -65,6 +65,13 @@ void CTransform::Get_Rotation(_vec3 * pRot)
 	memcpy(pRot, &m_vAngle, sizeof(_vec3));
 }
 
+void CTransform::Set_Rotation(const _float& fRotX, const _float& fRotY, const _float& fRotZ)
+{
+	m_vAngle.x = fRotX;
+	m_vAngle.y = fRotY;
+	m_vAngle.z = fRotZ;
+}
+
 
 void Engine::CTransform::Move_Pos(const _vec3* pDir, const _float& fSpeed, const _float& fTimeDelta)
 {

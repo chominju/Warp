@@ -21,11 +21,11 @@ public:
 
 // 작업입니다.
 public:
-
+	bool m_isUpdate;
 
 // 재정의입니다.
 public:
-	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
+	virtual void OnDraw(CDC* pDC = nullptr);  // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);

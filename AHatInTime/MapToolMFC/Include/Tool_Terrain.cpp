@@ -114,6 +114,7 @@ void CTerrain::Set_TerrainData(Terrain_Data terrainData)
 	m_terrainData.m_vAngle.y = terrainData.m_vAngle.y;
 	m_terrainData.m_vAngle.z = terrainData.m_vAngle.z;
 
+	m_terrainData.m_terrainIndex = terrainData.m_terrainIndex;
 	//m_terrainData.
 }
 

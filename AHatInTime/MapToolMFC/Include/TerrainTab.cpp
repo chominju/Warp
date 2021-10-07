@@ -233,16 +233,6 @@ void CTerrainTab::OnBnClickedButtonAdd()
 	pComponent = newTerrain->m_pTextureCom = getTexture;
 	newTerrain->Add_AddComponent(L"Com_Texture", ID_STATIC, pComponent);
 
-	//// renderer
-	//pComponent = newTerrain->m_pRendererCom = Get_Renderer();
-	//pComponent->AddRef();
-	//newTerrain->Add_AddComponent(L"Com_Renderer", ID_STATIC, pComponent);
-
-	//// buffer
-	////Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, m_countX, m_countZ, VTXITV));// , E_FAIL);
-	//pComponent = newTerrain->m_pBufferCom = dynamic_cast<CTerrainTex*>(Clone_Proto(L"Proto_Buffer_TerrainTex"));
-	//newTerrain->Add_AddComponent(L"Com_Buffer", ID_STATIC, pComponent);
-
 	newTerrain->Set_TerrainData(terrainData);
 
 	m_addTextureList.AddString(m_textureNameVector[m_textureListIndex]);
@@ -253,32 +243,6 @@ void CTerrainTab::OnBnClickedButtonAdd()
 	CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"Terrain", newTerrain);
 	
 	m_mfcView->Render_View();
-
-	//D3DXMATRIX matScale, matTrans, matWorld;
-	//float ratioX = float(WINCX) / textureTemp->imageInfo.Width;
-	//float ratioY = float(WINCY) / textureTemp->imageInfo.Height;
-	//D3DXMatrixScaling(&matScale, ratioX, ratioY, 0.f);
-	//D3DXMatrixTranslation(&matTrans, WINCX / 2, WINCY / 2, 0.f);
-	//matWorld = matScale * matTrans;
-
-	//float centerX = textureTemp->imageInfo.Width >> 1;
-	//float centerY = textureTemp->imageInfo.Height >> 1;
-
-
-
-
-
-
-
-	////getTexture->Render_Texture();
-	////getTexture->Get_TextureInfo(m_textureName[index].operator LPCWSTR())->texture;
-	//m_pDeviceClass->Get_Sprite()->SetTransform(&matWorld);
-	//m_pDeviceClass->Get_Sprite()->Draw(textureTemp->texture, nullptr, &D3DXVECTOR3(centerX, centerY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	////CGraphicDev::GetInstance()->Get_Device()->SetTexture(0, getTexture);
-	//m_pDeviceClass->Render_End(m_pictureControl.m_hWnd);
-	////CGraphic_Device::Get_Instance()->Render_End(m_picture.m_hWnd);
-	//UpdateData(FALSE);
 }
 
 
@@ -320,6 +284,8 @@ void CTerrainTab::OnLbnSelchangeListAdd()
 
 void CTerrainTab::OnBnClickedButtonApply()
 {
+	Terrain_Data tempTerrainData;
+
 	if (m_addTextureVector.size() == 0 /*|| m_addListIndex==NULL*/)
 		return;
 
@@ -337,30 +303,35 @@ void CTerrainTab::OnBnClickedButtonApply()
 	CGameObject* getObject = CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic",L"Terrain", m_addTextrueIndexVector[m_addListIndex]);
 	dynamic_cast<CTerrain*>(getObject)->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posZ);
 
-	dynamic_cast<CTerrain*>(getObject)->m_pTransformCom->Rotation(ROT_X, m_rotX);
-
-	dynamic_cast<CTerrain*>(getObject)->m_pTransformCom->Rotation(ROT_Y, m_rotY);
-
-	dynamic_cast<CTerrain*>(getObject)->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
+	dynamic_cast<CTerrain*>(getObject)->m_pTransformCom->Set_Rotation(m_rotX, m_rotY, m_rotZ);
 
 	dynamic_cast<CTerrain*>(getObject)->m_pBufferCom->Reset_Buffer(m_countX, m_countZ);
 
+	Terrain_Data getTerrainData = dynamic_cast<CTerrain*>(getObject)->Get_TerrainData();
+
+	tempTerrainData.m_pos[INFO_POS].x = m_posX;
+	tempTerrainData.m_pos[INFO_POS].y = m_posY;
+	tempTerrainData.m_pos[INFO_POS].z = m_posZ;
+	tempTerrainData.m_vAngle.x = m_rotX;
+	tempTerrainData.m_vAngle.y = m_rotY;
+	tempTerrainData.m_vAngle.z = m_rotZ;
+	tempTerrainData.m_cntX = m_countX;
+	tempTerrainData.m_cntZ = m_countZ;
+	tempTerrainData.m_terrainIndex = getTerrainData.m_terrainIndex;
+	_tcscpy_s(tempTerrainData.m_terrainTextureName, _countof(tempTerrainData.m_terrainTextureName), getTerrainData.m_terrainTextureName);
+
+	dynamic_cast<CTerrain*>(getObject)->Set_TerrainData(tempTerrainData);
+
 	m_mfcView->Render_View();
 
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posY);
-	//
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_X, m_rotX);
-
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_Y, m_rotY);
-
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
-	//
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
 
 void CTerrainTab::OnBnClickedButtonSave()
 {
+	m_mfcView->m_isUpdate = false;
+
 	CString m_strPath;
 	CStdioFile file;
 	// CFile file;
@@ -384,7 +355,11 @@ void CTerrainTab::OnBnClickedButtonSave()
 		CString wstrFilePath = Dlg.GetPathName();
 		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (INVALID_HANDLE_VALUE == hFile)
+		{
+			m_mfcView->m_isUpdate = true;
+			m_mfcView->OnDraw();
 			return;
+		}
 
 		DWORD dwByte = 0;
 		DWORD dwStringSize = 0;
@@ -404,53 +379,13 @@ void CTerrainTab::OnBnClickedButtonSave()
 			WriteFile(hFile, &temp.m_vAngle.x, sizeof(float), &dwByte, nullptr);
 			WriteFile(hFile, &temp.m_vAngle.y, sizeof(float), &dwByte, nullptr);
 			WriteFile(hFile, &temp.m_vAngle.z, sizeof(float), &dwByte, nullptr);
-			
-
-			//WriteFile(file, &temp, sizeof(Terrain_Data), &dwByte, nullptr);
-
-
-
-		/*	dwStringSize = sizeof(wchar_t) * (rPair.second->strName.GetLength() + 1);
-			WriteFile(hFile, &dwStringSize, sizeof(DWORD), &dwByte, nullptr);
-			WriteFile(hFile, rPair.second->strName.GetString(), dwStringSize, &dwByte, nullptr);
-			WriteFile(hFile, &rPair.second->iAtt, sizeof(int), &dwByte, nullptr);
-			WriteFile(hFile, &rPair.second->iDef, sizeof(int), &dwByte, nullptr);
-			WriteFile(hFile, &rPair.second->byItem, sizeof(BYTE), &dwByte, nullptr);
-			WriteFile(hFile, &rPair.second->byJop, sizeof(BYTE), &dwByte, nullptr);*/
 		}
 
 		CloseHandle(hFile);
 	}
 
-
-
-
-
-
-	////// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	//CFileDialog dig(FALSE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
-	//	L"dat",// 디폴트 확장자 
-	//	L"*.dat",// 디폴트 파일 이름 
-	//	OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
-	//TCHAR szCurDir[MAX_PATH]{};
-	//GetCurrentDirectory(MAX_PATH, szCurDir);
-	////D:\박병건\118C\D2D\Framework_v1
-	//PathRemoveFileSpec(szCurDir);
-	//lstrcat(szCurDir, L"\\Data");
-	//dig.m_ofn.lpstrInitialDir = szCurDir;
-	//if (IDOK == dig.DoModal())
-	//{
-	//	CString filePath = dig.GetPathName();
-	//	HANDLE file = CreateFile(filePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-	//	if (INVALID_HANDLE_VALUE == file)
-	//		return;
-
-	//	DWORD byte = 0;
-	//	for (auto& pTile : m_addTextureVector)
-	//		WriteFile(file, pTile, sizeof(CTerrain), &byte, nullptr);
-
-	//	CloseHandle(file);
-	//}
+	m_mfcView->m_isUpdate = true;
+	m_mfcView->OnDraw();
 
 }
 
@@ -460,6 +395,8 @@ void CTerrainTab::OnBnClickedButtonSave()
 
 void CTerrainTab::OnBnClickedButtonLoad()
 {
+	m_mfcView->m_isUpdate = false;
+
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CFileDialog dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
 		L"dat",// 디폴트 확장자 
@@ -479,7 +416,11 @@ void CTerrainTab::OnBnClickedButtonLoad()
 		CString filePath = dlg.GetPathName();
 		HANDLE hFile = CreateFile(filePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (INVALID_HANDLE_VALUE == hFile)
+		{
+			m_mfcView->m_isUpdate = true;
+			m_mfcView->OnDraw();
 			return;
+		}
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		g_index = -1;
@@ -487,11 +428,6 @@ void CTerrainTab::OnBnClickedButtonLoad()
 		_tchar* szBuf = nullptr;
 		while (true)
 		{
-			//Terrain_Data* temp=new Terrain_Data;
-			//terrain = CTerrain::Create(m_pGraphicDev);
-			//ReadFile(hFile, temp, sizeof(Terrain_Data), &dwByte, nullptr);
-			//terrain->Set_TerrainData(temp);
-
 			Terrain_Data tempTerrainData;
 			ReadFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
 			if (0 == dwByte)
@@ -521,13 +457,11 @@ void CTerrainTab::OnBnClickedButtonLoad()
 			CComponent*			pComponent = nullptr;
 			CTerrain* newTerrain = CTerrain::Create(m_pGraphicDev);
 			newTerrain->m_pTransformCom->Set_Pos(tempTerrainData.m_pos[INFO_POS].x, tempTerrainData.m_pos[INFO_POS].y, tempTerrainData.m_pos[INFO_POS].z);
-			newTerrain->m_pTransformCom->Rotation(ROT_X, tempTerrainData.m_vAngle.x);
-			newTerrain->m_pTransformCom->Rotation(ROT_Y, tempTerrainData.m_vAngle.y);
-			newTerrain->m_pTransformCom->Rotation(ROT_Z, tempTerrainData.m_vAngle.z);
+			newTerrain->m_pTransformCom->Set_Rotation(tempTerrainData.m_vAngle.x, tempTerrainData.m_vAngle.y, tempTerrainData.m_vAngle.z);
 			newTerrain->m_pBufferCom->Reset_Buffer(tempTerrainData.m_cntX, tempTerrainData.m_cntZ);
 			newTerrain->Set_Index(tempTerrainData.m_terrainIndex);
 
-			m_addTextrueIndexVector.push_back(g_index);
+			m_addTextrueIndexVector.push_back(tempTerrainData.m_terrainIndex);
 
 			// 텍스쳐
 			pComponent = newTerrain->m_pTextureCom = getTexture;
@@ -545,29 +479,16 @@ void CTerrainTab::OnBnClickedButtonLoad()
 
 			newTerrain->Set_TerrainData(tempTerrainData);
 
-			m_addTextureList.AddString(m_textureNameVector[m_textureListIndex]);
+			m_addTextureList.AddString(tempTerrainData.m_terrainTextureName);
 			m_addTextureVector.push_back(newTerrain);
 
 			CLayer*		pLayer = CLayer::Create();
 			//pLayer->Add_GameObject(L"Terrain",newTerrain);
 			CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"Terrain", newTerrain);
-
-
-			//ReadFile(hFile, &pUnitInfo->iAtt, sizeof(int), &dwByte, nullptr);
-			//ReadFile(hFile, &pUnitInfo->iDef, sizeof(int), &dwByte, nullptr);
-			//ReadFile(hFile, &pUnitInfo->byJob, sizeof(BYTE), &dwByte, nullptr);
-			//ReadFile(hFile, &pUnitInfo->byItem, sizeof(BYTE), &dwByte, nullptr);
-
-			//m_mapUnitInfo.emplace(pUnitInfo->wstrName, pUnitInfo);
-			//m_ListBox.AddString(pUnitInfo->wstrName);
-
-
-			//if (0 == dwByte)
-			//{
-			//	Safe_Release(terrain);
-			//	break;
-			//}
 		}
 		m_mfcView->Render_View();
 	}
+
+	m_mfcView->m_isUpdate = true;
+	m_mfcView->OnDraw();
 }

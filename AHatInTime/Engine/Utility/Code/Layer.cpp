@@ -83,8 +83,6 @@ CGameObject * CLayer::Get_GameObject(const _tchar * mapTag, int index)
 		else
 			iter++;
 	}
-
-	// return iter->second->Get_Index second->Get_Component(pComponentTag, eID);
 }
 
 CGameObject* CLayer::Get_GameObjectVector(int index)

@@ -26,6 +26,9 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
+	void Set_ObjectData(Object_Data objectData);
+	Object_Data Get_ObjectData() { return m_objectData; }
+
 private:
 	HRESULT					Add_Component(void);
 	void					SetUp_OnTerrain(void);

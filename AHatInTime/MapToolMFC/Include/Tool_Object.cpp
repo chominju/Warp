@@ -63,13 +63,32 @@ void CObjects::Render_Object(void)
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
 
+void CObjects::Set_ObjectData(Object_Data objectData)
+{
+	_tcscpy_s(m_objectData.m_objectTextureName, _countof(m_objectData.m_objectTextureName), objectData.m_objectTextureName);
+
+	m_objectData.m_pos[INFO_POS].x = objectData.m_pos[INFO_POS].x;
+	m_objectData.m_pos[INFO_POS].y = objectData.m_pos[INFO_POS].y;
+	m_objectData.m_pos[INFO_POS].z = objectData.m_pos[INFO_POS].z;
+
+	m_objectData.m_vAngle.x = objectData.m_vAngle.x;
+	m_objectData.m_vAngle.y = objectData.m_vAngle.y;
+	m_objectData.m_vAngle.z = objectData.m_vAngle.z;
+
+	m_objectData.m_vScale.x = objectData.m_vScale.x;
+	m_objectData.m_vScale.y = objectData.m_vScale.y;
+	m_objectData.m_vScale.z = objectData.m_vScale.z;
+
+	m_objectData.m_objectIndex = objectData.m_objectIndex;
+}
+
 HRESULT CObjects::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
-	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
+	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 

@@ -161,13 +161,16 @@ void CMeshTab::OnBnClickedButtonAdd()
 	GetDlgItemText(IDC_EDIT9, strSizeZ);
 	m_sizeZ = _tstof(strSizeZ);
 
-
-	//m_posX = GetDlgItemInt(IDC_EDIT1);
-	//m_posY = GetDlgItemInt(IDC_EDIT2);
-
-	//m_rotX = GetDlgItemInt(IDC_EDIT4);
-	//m_rotY = GetDlgItemInt(IDC_EDIT5);
-	//m_rotZ = GetDlgItemInt(IDC_EDIT6);
+	Object_Data objectData;
+	objectData.m_pos[INFO_POS].x = m_posX;
+	objectData.m_pos[INFO_POS].y = m_posY;
+	objectData.m_pos[INFO_POS].z = m_posZ;
+	objectData.m_vAngle.x = m_rotX;
+	objectData.m_vAngle.y = m_rotY;
+	objectData.m_vAngle.z = m_rotZ;
+	objectData.m_vScale.x = m_sizeX;
+	objectData.m_vScale.y = m_sizeY;
+	objectData.m_vScale.z = m_sizeZ;
 
 
 	CLayer*		pLayer = CLayer::Create();
@@ -179,17 +182,25 @@ void CMeshTab::OnBnClickedButtonAdd()
 	CString m_name = L"Proto_Mesh_";
 	m_name = m_name + m_meshNameVector[m_meshListIndex];
 
+	_tcscpy_s(objectData.m_objectTextureName, _countof(objectData.m_objectTextureName), m_name);
+	
 	// StaticMesh
 	pComponent = pObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(m_name));
 	pObjects->Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
 	pObjects->Set_Index(g_index);
+	objectData.m_objectIndex = g_index;
+	pObjects->Set_ObjectData(objectData);
+	
+
 	pLayer->Add_GameObject(m_meshNameVector[m_meshListIndex], pObjects);
 	CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"StaticMesh", pObjects);
 
 	m_addMeshList.AddString(m_meshNameVector[m_meshListIndex]);
 
 	m_meshIndexVector.push_back(g_index);
+	m_addMeshVector.push_back(pObjects);
+
 
 	m_mfcView->Render_View();
 }
@@ -202,23 +213,16 @@ void CMeshTab::OnLbnSelchangeList1()
 	UpdateData(TRUE);
 	m_meshListIndex = m_meshList.GetCurSel();
 
-
 	UpdateData(FALSE);
 }
 
 
 void CMeshTab::OnBnClickedButtonApply()
 {
-	if (m_meshNameVector.size() == 0 /*|| m_addListIndex==NULL*/)
+	Object_Data tempObjectData;
+
+	if (m_addMeshVector.size() == 0 /*|| m_addListIndex==NULL*/)
 		return;
-
-	//m_posX = GetDlgItemInt(IDC_EDIT1);
-	//m_posY = GetDlgItemInt(IDC_EDIT2);
-	//m_posZ = GetDlgItemInt(IDC_EDIT3);
-
-	//m_rotX = GetDlgItemInt(IDC_EDIT4);
-	//m_rotY = GetDlgItemInt(IDC_EDIT5);
-	//m_rotZ = GetDlgItemInt(IDC_EDIT6);
 
 	CString strPosX, strPosY, strPosZ;
 
@@ -255,7 +259,6 @@ void CMeshTab::OnBnClickedButtonApply()
 	GetDlgItemText(IDC_EDIT9, strSizeZ);
 	m_sizeZ = _tstof(strSizeZ);
 
-	m_mfcView->Render_View();
 	//  m_pMeshCom
 	//	m_pTransformCom
 	//	m_pRendererCom
@@ -263,21 +266,27 @@ void CMeshTab::OnBnClickedButtonApply()
 	CGameObject* getObject = CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic", m_meshNameVector[m_meshListIndex],m_meshIndexVector[m_addMeshListIndex]);
 	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posZ);
 
-	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_X, m_rotX);
-
-	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_Y, m_rotY);
-
-	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
+	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Set_Rotation(m_rotX, m_rotY, m_rotZ);
 
 	dynamic_cast<CObjects*>(getObject)->m_pTransformCom->Set_Scale(m_sizeX, m_sizeY, m_sizeZ);
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Set_Pos(m_posX, m_posY, m_posY);
-	//
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_X, m_rotX);
 
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_Y, m_rotY);
+	Object_Data getObjectData = dynamic_cast<CObjects*>(getObject)->Get_ObjectData();
 
-	//m_addTextureVector[m_addListIndex]->m_pTransformCom->Rotation(ROT_Z, m_rotZ);
-	
+	tempObjectData.m_pos[INFO_POS].x = m_posX;
+	tempObjectData.m_pos[INFO_POS].y = m_posY;
+	tempObjectData.m_pos[INFO_POS].z = m_posZ;
+	tempObjectData.m_vAngle.x = m_rotX;
+	tempObjectData.m_vAngle.y = m_rotY;
+	tempObjectData.m_vAngle.z = m_rotZ;
+	tempObjectData.m_vScale.x = m_sizeX;
+	tempObjectData.m_vScale.y = m_sizeY;
+	tempObjectData.m_vScale.z = m_sizeZ;
+	tempObjectData.m_objectIndex = getObjectData.m_objectIndex;
+	_tcscpy_s(tempObjectData.m_objectTextureName, _countof(tempObjectData.m_objectTextureName), getObjectData.m_objectTextureName);
+
+	dynamic_cast<CObjects*>(getObject)->Set_ObjectData(tempObjectData);
+
+	m_mfcView->Render_View();
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -443,11 +452,146 @@ void CMeshTab::InitTreeCtrl()
 
 void CMeshTab::OnBnClickedButtonSave()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_mfcView->m_isUpdate = false;
+
+	CString m_strPath;
+	CStdioFile file;
+	// CFile file;
+	CFileException ex;
+
+	CFileDialog Dlg(FALSE,
+		L"dat",
+		L"*.dat",
+		OFN_OVERWRITEPROMPT,
+		L"Data File(*.dat) | *.dat||",
+		this);
+
+	TCHAR szPath[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szPath);
+	PathRemoveFileSpec(szPath);
+	lstrcat(szPath, L"\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szPath;
+
+	if (Dlg.DoModal())
+	{
+		CString wstrFilePath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(wstrFilePath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+		{
+			m_mfcView->m_isUpdate = true;
+			m_mfcView->OnDraw();
+			return;
+		}
+
+		DWORD dwByte = 0;
+		DWORD dwStringSize = 0;
+		for (auto& pObjects : m_addMeshVector)
+		{
+			Object_Data temp = pObjects->Get_ObjectData();
+			dwStringSize = (_tcslen(temp.m_objectTextureName) + 1) * sizeof(wchar_t);
+			WriteFile(hFile, &dwStringSize, sizeof(DWORD), &dwByte, nullptr);
+			WriteFile(hFile, temp.m_objectTextureName, dwStringSize, &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_objectIndex, sizeof(int), &dwByte, nullptr);
+
+			WriteFile(hFile, &temp.m_pos[INFO_POS].x, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_pos[INFO_POS].y, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_pos[INFO_POS].z, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vAngle.x, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vAngle.y, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vAngle.z, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vScale.x, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vScale.y, sizeof(float), &dwByte, nullptr);
+			WriteFile(hFile, &temp.m_vScale.z, sizeof(float), &dwByte, nullptr);
+		}
+
+		CloseHandle(hFile);
+	}
+
+	m_mfcView->m_isUpdate = true;
+	m_mfcView->OnDraw();
 }
 
 
 void CMeshTab::OnBnClickedButtonLoad()
 {
+	m_mfcView->m_isUpdate = false;
+
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog dlg(TRUE, // 다른이름으로 저장. 만약 TRUE 파일 열기. 
+		L"dat",// 디폴트 확장자 
+		L"*.dat",// 디폴트 파일 이름 
+		OFN_OVERWRITEPROMPT);// 덮어쓸때 경고 메시지 띄어주겠다. 
+	TCHAR szCurDir[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	//D:\박병건\118C\D2D\Framework_v1
+	PathRemoveFileSpec(szCurDir);
+	lstrcat(szCurDir, L"\\Data");
+	dlg.m_ofn.lpstrInitialDir = szCurDir;
+
+	m_addMeshVector.clear();
+
+	if (IDOK == dlg.DoModal())
+	{
+		CString filePath = dlg.GetPathName();
+		HANDLE hFile = CreateFile(filePath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+		{
+			m_mfcView->m_isUpdate = true;
+			m_mfcView->OnDraw();
+			return;
+		}
+		DWORD dwByte = 0;
+		DWORD dwStringCount = 0;
+		m_meshIndexVector.clear();
+		_tchar* szBuf = nullptr;
+		while (true)
+		{
+			Object_Data tempObjectData;
+			ReadFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
+			if (0 == dwByte)
+				break;
+			szBuf = new _tchar[dwStringCount];
+			ReadFile(hFile, szBuf, dwStringCount, &dwByte, nullptr);
+
+			_tcscpy_s(tempObjectData.m_objectTextureName, _countof(tempObjectData.m_objectTextureName), szBuf);
+			Safe_Delete_Array(szBuf);
+
+			ReadFile(hFile, &tempObjectData.m_objectIndex, sizeof(int), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_pos[INFO_POS].x, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_pos[INFO_POS].y, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_pos[INFO_POS].z, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vAngle.x, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vAngle.y, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vAngle.z, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vScale.x, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vScale.y, sizeof(float), &dwByte, nullptr);
+			ReadFile(hFile, &tempObjectData.m_vScale.z, sizeof(float), &dwByte, nullptr);
+
+			g_index++;
+			CComponent*			pComponent = nullptr;
+			CObjects* newObjects = CObjects::Create(m_pGraphicDev);
+			newObjects->m_pTransformCom->Set_Pos(tempObjectData.m_pos[INFO_POS].x, tempObjectData.m_pos[INFO_POS].y, tempObjectData.m_pos[INFO_POS].z);
+			newObjects->m_pTransformCom->Set_Rotation(tempObjectData.m_vAngle.x, tempObjectData.m_vAngle.y, tempObjectData.m_vAngle.z);
+			newObjects->Set_Index(tempObjectData.m_objectIndex);
+
+			m_meshIndexVector.push_back(tempObjectData.m_objectIndex);
+
+			// 메쉬
+			pComponent = newObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(tempObjectData.m_objectTextureName));
+			newObjects->Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+
+			newObjects->Set_ObjectData(tempObjectData);
+
+			m_addMeshList.AddString(tempObjectData.m_objectTextureName);
+			m_addMeshVector.push_back(newObjects);
+
+			CLayer*		pLayer = CLayer::Create();
+			//pLayer->Add_GameObject(L"Terrain",newTerrain);
+			CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"StaticMesh", newObjects);
+		}
+		m_mfcView->Render_View();
+	}
+
+	m_mfcView->m_isUpdate = true;
+	m_mfcView->OnDraw();
 }

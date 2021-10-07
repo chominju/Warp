@@ -39,6 +39,7 @@ END_MESSAGE_MAP()
 CMapToolMFCView::CMapToolMFCView()
 	:m_pDeviceClass(CGraphicDev::GetInstance())
 	, m_pGraphicDev(CGraphicDev::GetInstance()->Get_Device())
+	, m_isUpdate(true)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	m_pManagementClass = CManagement::GetInstance();
@@ -66,7 +67,7 @@ void CMapToolMFCView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
-	/*Update_TimeDelta(L"Timer_Immediate");
+	Update_TimeDelta(L"Timer_Immediate");
 	_float fTimeImmediate = Get_TimeDelta(L"Timer_Immediate");
 
 	if (IsPermit_Call(L"Frame60", fTimeImmediate))
@@ -85,7 +86,8 @@ void CMapToolMFCView::OnDraw(CDC* /*pDC*/)
 		m_pDeviceClass->Render_End(m_hWnd);
 
 	}
-	Invalidate(FALSE);*/
+	if (m_isUpdate)
+		Invalidate(FALSE);
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }

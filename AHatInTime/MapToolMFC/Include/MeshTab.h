@@ -5,6 +5,7 @@
 
 // CMeshTab 대화 상자입니다.
 class CMapToolMFCView;
+class CObjects;
 class CMeshTab : public CDialogEx
 {
 	DECLARE_DYNAMIC(CMeshTab)
@@ -35,7 +36,7 @@ public:
 
 	vector<CString> m_meshNameVector;
 	vector<int> m_meshIndexVector;
-	//vector<CTerrain*> m_addMeshVector;
+	vector<CObjects*> m_addMeshVector;
 
 	CManagement*			m_pManagementClass;
 
