@@ -576,9 +576,11 @@ void CMeshTab::OnBnClickedButtonLoad()
 			CObjects* newObjects = CObjects::Create(m_pGraphicDev);
 			newObjects->m_pTransformCom->Set_Pos(tempObjectData.m_pos[INFO_POS].x, tempObjectData.m_pos[INFO_POS].y, tempObjectData.m_pos[INFO_POS].z);
 			newObjects->m_pTransformCom->Set_Rotation(tempObjectData.m_vAngle.x, tempObjectData.m_vAngle.y, tempObjectData.m_vAngle.z);
+			newObjects->m_pTransformCom->Set_Scale(tempObjectData.m_vScale.x, tempObjectData.m_vScale.y, tempObjectData.m_vScale.z);
 			newObjects->Set_Index(tempObjectData.m_objectIndex);
 
 			m_meshIndexVector.push_back(tempObjectData.m_objectIndex);
+			newObjects->Set_ObjectData(tempObjectData);
 
 			// ¸Þ½¬
 			pComponent = newObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(tempObjectData.m_objectTextureName));
@@ -587,7 +589,6 @@ void CMeshTab::OnBnClickedButtonLoad()
 			pComponent = newObjects->m_pColliderCom = CCollider::Create(m_pGraphicDev, newObjects->m_pMeshCom->Get_VtxPos(), newObjects->m_pMeshCom->Get_NumVtx(), newObjects->m_pMeshCom->Get_VtxSize());
 			newObjects->Add_AddComponent(L"Com_Collider", ID_DYNAMIC, pComponent);
 
-			newObjects->Set_ObjectData(tempObjectData);
 
 			m_addMeshList.AddString(tempObjectData.m_objectTextureName);
 			m_addMeshVector.push_back(newObjects);
