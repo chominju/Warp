@@ -100,6 +100,12 @@
     <Filter Include="04. Component\10. Shader\hpp">
       <UniqueIdentifier>{9692f30a-7855-4ff5-9d14-b8d3c448119a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Component\07. Collider\00. Collider">
+      <UniqueIdentifier>{e29ee6f8-14ca-41b9-918b-8657123735a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\07. Collider\01. SphereCollider">
+      <UniqueIdentifier>{72d57b5b-b404-4c58-b460-57f1913f9364}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Management.cpp">
@@ -162,9 +168,6 @@
     <ClCompile Include="..\Code\StaticMesh.cpp">
       <Filter>04. Component\05. StaticMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Collider.cpp">
-      <Filter>04. Component\07. Collider</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\DynamicMesh.cpp">
       <Filter>04. Component\06. DynamicMesh</Filter>
     </ClCompile>
@@ -191,6 +194,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Cell.cpp">
       <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Collider.cpp">
+      <Filter>04. Component\07. Collider\00. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereCollider.cpp">
+      <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +266,6 @@
     <ClInclude Include="..\Code\StaticMesh.h">
       <Filter>04. Component\05. StaticMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Collider.h">
-      <Filter>04. Component\07. Collider</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\DynamicMesh.h">
       <Filter>04. Component\06. DynamicMesh</Filter>
     </ClInclude>
@@ -289,6 +295,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\Shader_Sample.hpp">
       <Filter>04. Component\10. Shader\hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Collider.h">
+      <Filter>04. Component\07. Collider\00. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SphereCollider.h">
+      <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@ Engine::CTransform::CTransform(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CComponent(pGraphicDev)
 	, m_vScale(1.f, 1.f, 1.f)
 	, m_vAngle(0.f, 0.f, 0.f)
+	, m_vRadian(0.f,0.f, 0.f)
 {
 
 }
@@ -14,6 +15,7 @@ Engine::CTransform::CTransform(const CTransform& rhs)
 	: CComponent(rhs)
 	, m_vScale(rhs.m_vScale)
 	, m_vAngle(rhs.m_vAngle)
+	, m_vRadian(rhs.m_vRadian)
 	, m_matWorld(rhs.m_matWorld)
 	, m_matNRotWorld(rhs.m_matNRotWorld)
 {
@@ -70,6 +72,10 @@ void CTransform::Set_Rotation(const _float& fRotX, const _float& fRotY, const _f
 	m_vAngle.x = fRotX;
 	m_vAngle.y = fRotY;
 	m_vAngle.z = fRotZ;
+
+	m_vRadian.x = m_vAngle.x * 3.141592 / 180.f;
+	m_vRadian.y = m_vAngle.y * 3.141592 / 180.f;
+	m_vRadian.z = m_vAngle.z * 3.141592 / 180.f;
 }
 
 
@@ -121,9 +127,9 @@ Engine::_int Engine::CTransform::Update_Component(const _float& fTimeDelta)
 	// 회전 변환
 	_matrix			matRot[ROT_END];
 
-	D3DXMatrixRotationX(&matRot[ROT_X], m_vAngle.x);
-	D3DXMatrixRotationY(&matRot[ROT_Y], m_vAngle.y);
-	D3DXMatrixRotationZ(&matRot[ROT_Z], m_vAngle.z);
+	D3DXMatrixRotationX(&matRot[ROT_X], m_vRadian.x);
+	D3DXMatrixRotationY(&matRot[ROT_Y], m_vRadian.y);
+	D3DXMatrixRotationZ(&matRot[ROT_Z], m_vRadian.z);
 
 	for (_int i = 0; i < INFO_POS; ++i)
 	{

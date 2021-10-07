@@ -188,6 +188,10 @@ void CMeshTab::OnBnClickedButtonAdd()
 	pComponent = pObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(m_name));
 	pObjects->Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
+	pComponent = pObjects->m_pColliderCom = CCollider::Create(m_pGraphicDev, pObjects->m_pMeshCom->Get_VtxPos(), pObjects->m_pMeshCom->Get_NumVtx(), pObjects->m_pMeshCom->Get_VtxSize());
+	pObjects->Add_AddComponent(L"Com_Collider", ID_DYNAMIC,pComponent);
+
+
 	pObjects->Set_Index(g_index);
 	objectData.m_objectIndex = g_index;
 	pObjects->Set_ObjectData(objectData);
@@ -579,6 +583,9 @@ void CMeshTab::OnBnClickedButtonLoad()
 			// ¸Þ½¬
 			pComponent = newObjects->m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(tempObjectData.m_objectTextureName));
 			newObjects->Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+
+			pComponent = newObjects->m_pColliderCom = CCollider::Create(m_pGraphicDev, newObjects->m_pMeshCom->Get_VtxPos(), newObjects->m_pMeshCom->Get_NumVtx(), newObjects->m_pMeshCom->Get_VtxSize());
+			newObjects->Add_AddComponent(L"Com_Collider", ID_DYNAMIC, pComponent);
 
 			newObjects->Set_ObjectData(tempObjectData);
 
