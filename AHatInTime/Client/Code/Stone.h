@@ -35,13 +35,13 @@ private:
 	CStaticMesh*			m_pMeshCom			= nullptr;
 	CTransform*				m_pTransformCom		= nullptr;
 	CRenderer*				m_pRendererCom		= nullptr;
-	CCalculator*			m_pCalculatorCom	= nullptr;
-	CCollider*				m_pColliderCom		= nullptr;
-	COptimization*			m_pOptimizationCom	= nullptr;
+	//CCalculator*			m_pCalculatorCom	= nullptr;
+	//CCollider*				m_pColliderCom		= nullptr;
+	//COptimization*			m_pOptimizationCom	= nullptr;
 	
 	_bool					m_bColl = false;
 	_uint					m_iFlag;
-	_bool					m_bDraw = false;
+	_bool					m_bDraw = true;
 
 
 public:

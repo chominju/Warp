@@ -1,3 +1,4 @@
+#include "..\..\Client\Code\Terrain.h"
 #include "stdafx.h"
 #include "Tool_Terrain.h"
 
@@ -117,6 +118,13 @@ void CTerrain::Set_TerrainData(Terrain_Data terrainData)
 	m_terrainData.m_terrainIndex = terrainData.m_terrainIndex;
 	//m_terrainData.
 }
+
+//void CTerrain::Set_TextureComponent(const _tchar * pTextureProtoTag)
+//{
+//	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_Texture_Terrain"));
+//	NULL_CHECK_RETURN(pComponent, E_FAIL);
+//	m_mapComponent[ID_STATIC].emplace(L"Com_Texture", pComponent);
+//}
 
 CTerrain* CTerrain::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {

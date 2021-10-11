@@ -25,11 +25,11 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
-	m_pTransformCom->Set_Scale(0.01f, 0.01f, 0.01f);
-	m_pTransformCom->Set_Pos(0.f, 0.f, 0.f);
+	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
+	m_pTransformCom->Set_Pos(38.f, 0.f, 70.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
-	m_pMeshCom->Set_AnimationIndex(57);
+	m_pMeshCom->Set_AnimationIndex(11);
 
 	return S_OK;
 }
@@ -53,7 +53,7 @@ void CPlayer::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
-	m_pNaviCom->Render_NaviMesh();
+	//m_pNaviCom->Render_NaviMesh();
 
 	m_pMeshCom->Render_Meshes();
 
@@ -69,10 +69,10 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
 
-	// NaviMesh
-	pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
+	//// NaviMesh
+	//pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -85,10 +85,10 @@ HRESULT CPlayer::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	// Calculator
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+	//// Calculator
+	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	return S_OK;
 
@@ -106,8 +106,8 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
 
-		m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
-		m_pMeshCom->Set_AnimationIndex(54);
+	/*	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+		m_pMeshCom->Set_AnimationIndex(11);*/
 	}
 	
 
@@ -117,30 +117,36 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
 	}
 
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		D3DXVec3Normalize(&m_vDir, &m_vDir);
+		m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+	}
+
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
+		//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
+		//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
 	}	
 
-	if (Get_DIMouseState(DIM_LB) & 0X80)
+	/*if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
 		_vec3	vPos = PickUp_OnTerrain();
 
 		m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
-	}
+	}*/
 
 	if (Get_DIMouseState(DIM_RB) & 0X80)
 	{
-		m_pMeshCom->Set_AnimationIndex(30);
+		m_pMeshCom->Set_AnimationIndex(11);
 	}
 
 	if(true == m_pMeshCom->Is_AnimationsetFinish())
-		m_pMeshCom->Set_AnimationIndex(57);
+		m_pMeshCom->Set_AnimationIndex(11);
 }
 
 void CPlayer::SetUp_OnTerrain(void)
@@ -154,9 +160,9 @@ void CPlayer::SetUp_OnTerrain(void)
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
 
 
-	_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
+	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
 
-	m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
+	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
 
 Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
@@ -167,8 +173,9 @@ Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
 	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
 	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
 
-
-	return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
+	_vec3 temp{};
+	return temp;
+	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)

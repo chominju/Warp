@@ -29,6 +29,7 @@
 #include <functional>
 #include <unordered_map>
 #include <ctime>
+#include <string.h>
 
 #include <process.h>
 

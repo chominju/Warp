@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Stage.h"
+#include "Load_Manager.h"
 
 #include "Export_Function.h"
 
@@ -64,8 +65,8 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 
 	// DynamicCamera
 	pGameObject = CDynamicCamera::Create(m_pGraphicDev, 
-		&_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 1.f), &_vec3(0.f, 1.f, 0.f), 
-		D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
+		&_vec3(35.f, 70.f, 0.f), &_vec3(35.f, 0.f, 80.f), &_vec3(0.f, 5.f, 0.f), 
+		D3DXToRadian(30.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 
@@ -87,45 +88,47 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
+	CLoad_Manager::Load_Terrain_Data(L"../Data/terrain3.dat" , pLayer,m_pGraphicDev);
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh37.dat", pLayer,m_pGraphicDev);
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	CGameObject*			pGameObject = nullptr;
-
-	// Terrain
-	pGameObject = CTerrain::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
-
-#pragma region PLAYER
+//
+//	// Terrain
+//	pGameObject = CTerrain::Create(m_pGraphicDev);
+//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+//
+//#pragma region PLAYER
 	// Player
 	pGameObject = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-
-	// Sword
-	pGameObject = CSword::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
-#pragma endregion PLAYER
-
-
+//
+//	// Sword
+//	pGameObject = CSword::Create(m_pGraphicDev);
+//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
+//#pragma endregion PLAYER
+//
+//
 	// Stone
 	pGameObject = CStone::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
-
-	// Tree
-	pGameObject = CTree::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Tree", pGameObject), E_FAIL);
-
-	for (_ulong i = 0; i < 150; ++i)
-	{
-		// effect
-		pGameObject = CEffect::Create(m_pGraphicDev);
-		NULL_CHECK_RETURN(pGameObject, E_FAIL);
-		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
-	}
+//
+//	// Tree
+//	pGameObject = CTree::Create(m_pGraphicDev);
+//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Tree", pGameObject), E_FAIL);
+//
+//	for (_ulong i = 0; i < 150; ++i)
+//	{
+//		// effect
+//		pGameObject = CEffect::Create(m_pGraphicDev);
+//		NULL_CHECK_RETURN(pGameObject, E_FAIL);
+//		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
+//	}
 	
 	m_mapLayer.emplace(pLayerTag, pLayer);
 

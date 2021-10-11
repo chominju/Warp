@@ -24,7 +24,9 @@ HRESULT CStone::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransformCom->Set_Pos(5.f, 0.f, 5.f);
+	m_pTransformCom->Set_Pos(50.f, 0.f, 70.f);
+	m_pTransformCom->Set_Scale(2.f, 2.f, 2.f);
+	//m_pTransformCom->Set_Rotation(0, 90, 0);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
 
 	return S_OK;
@@ -41,7 +43,7 @@ Engine::_int CStone::Update_Object(const _float& fTimeDelta)
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
+	//m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -50,12 +52,19 @@ Engine::_int CStone::Update_Object(const _float& fTimeDelta)
 
 void CStone::Render_Object(void)
 {
-	if (false == m_bDraw)
-		return;
-
-
+	//if (false == m_bDraw)
+	//	return;
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xc0);
+
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pMeshCom->Render_Meshes();
+
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
@@ -82,20 +91,20 @@ HRESULT CStone::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	// Calculator
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+	//// Calculator
+	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+	//// Collider
+	//pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
-	// Optimization
-	pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
+	//// Optimization
+	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
 	
 	return S_OK;
 
@@ -112,9 +121,9 @@ void CStone::SetUp_OnTerrain(void)
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
 
 
-	_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
+	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
 
-	m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
+	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
 
 Engine::_bool CStone::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
@@ -125,8 +134,9 @@ Engine::_bool CStone::Collision_ToObject(const _tchar* pLayerTag, const _tchar* 
 	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
 											m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
-	return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-		m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());
+	return false;
+	/*return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
+		m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
 }
 

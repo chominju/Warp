@@ -67,11 +67,11 @@
     <Filter Include="02. GameObject\10. UI">
       <UniqueIdentifier>{72d28c05-ff9e-49d2-8638-7cf79cd08eb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. FileInfo">
-      <UniqueIdentifier>{96d29b06-d1ef-45a3-bb6a-8b388ecb2705}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\11. StaticObject">
       <UniqueIdentifier>{5b1f754f-3e10-4ca5-a12a-9dbbb00209b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. LoadData">
+      <UniqueIdentifier>{96d29b06-d1ef-45a3-bb6a-8b388ecb2705}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,11 +138,11 @@
     <ClInclude Include="..\Code\UI.h">
       <Filter>02. GameObject\10. UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\FileInfo.h">
-      <Filter>03. FileInfo</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Static_Object.h">
       <Filter>02. GameObject\11. StaticObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Load_Manager.h">
+      <Filter>03. LoadData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,11 +197,11 @@
     <ClCompile Include="..\Code\UI.cpp">
       <Filter>02. GameObject\10. UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\FileInfo.cpp">
-      <Filter>03. FileInfo</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Static_Object.cpp">
       <Filter>02. GameObject\11. StaticObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Load_Manager.cpp">
+      <Filter>03. LoadData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

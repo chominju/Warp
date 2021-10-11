@@ -26,6 +26,8 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
+	
+
 private:
 	HRESULT					Add_Component(void);
 	void					Key_Input(const _float& fTimeDelta);
@@ -34,10 +36,10 @@ private:
 
 private:
 	CDynamicMesh*			m_pMeshCom = nullptr;
-	CNaviMesh*				m_pNaviCom = nullptr;
+	//CNaviMesh*				m_pNaviCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
-	CCalculator*			m_pCalculatorCom = nullptr;
+	//CCalculator*			m_pCalculatorCom = nullptr;
 	_vec3					m_vDir;
 
 public:

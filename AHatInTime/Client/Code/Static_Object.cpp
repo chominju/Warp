@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "Tool_Object.h"
+#include "Static_Object.h"
 
 #include "Export_Function.h"
 
-CObjects::CObjects(LPDIRECT3DDEVICE9 pGraphicDev)
+CStatic_Objects::CStatic_Objects(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 	, m_bDraw(true)
 {
 
 }
 
-CObjects::CObjects(const CObjects& rhs)
+CStatic_Objects::CStatic_Objects(const CStatic_Objects& rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-CObjects::~CObjects(void)
+CStatic_Objects::~CStatic_Objects(void)
 {
 
 }
 
-HRESULT CObjects::Ready_Object(void)
+HRESULT CStatic_Objects::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
@@ -31,7 +31,7 @@ HRESULT CObjects::Ready_Object(void)
 	return S_OK;
 }
 
-Engine::_int CObjects::Update_Object(const _float& fTimeDelta)
+Engine::_int CStatic_Objects::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
@@ -49,21 +49,36 @@ Engine::_int CObjects::Update_Object(const _float& fTimeDelta)
 	return 0;
 }
 
-void CObjects::Render_Object(void)
+void CStatic_Objects::Render_Object(void)
 {
 	if (false == m_bDraw)
 		return;
 
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-	m_pMeshCom->Render_Meshes();
 	
-	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xff);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
+	m_pMeshCom->Render_Meshes();
+
+	
+	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
 
-void CObjects::Set_ObjectData(Object_Data objectData)
+void CStatic_Objects::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)
+{
+	// ¸Þ½¬
+	CComponent*			pComponent = nullptr;
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(pMeshProtoTag));
+	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+}
+
+void CStatic_Objects::Set_Static_Objects_Data(Object_Data objectData)
 {
 	_tcscpy_s(m_objectData.m_objectTextureName, _countof(m_objectData.m_objectTextureName), objectData.m_objectTextureName);
 
@@ -82,7 +97,7 @@ void CObjects::Set_ObjectData(Object_Data objectData)
 	m_objectData.m_objectIndex = objectData.m_objectIndex;
 }
 
-HRESULT CObjects::Add_Component(void)
+HRESULT CStatic_Objects::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
@@ -117,7 +132,7 @@ HRESULT CObjects::Add_Component(void)
 
 }
 
-void CObjects::SetUp_OnTerrain(void)
+void CStatic_Objects::SetUp_OnTerrain(void)
 {
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
@@ -133,7 +148,7 @@ void CObjects::SetUp_OnTerrain(void)
 	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 }
 
-Engine::_bool CObjects::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+Engine::_bool CStatic_Objects::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
 	CCollider*		pPlayerColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
 	NULL_CHECK_RETURN(pPlayerColliderCom, false);
@@ -147,9 +162,9 @@ Engine::_bool CObjects::Collision_ToObject(const _tchar* pLayerTag, const _tchar
 
 }
 
-CObjects* CObjects::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CStatic_Objects* CStatic_Objects::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CObjects*	pInstance = new CObjects(pGraphicDev);
+	CStatic_Objects*	pInstance = new CStatic_Objects(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -157,7 +172,7 @@ CObjects* CObjects::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CObjects::Free(void)
+void CStatic_Objects::Free(void)
 {
 	CGameObject::Free();
 }
