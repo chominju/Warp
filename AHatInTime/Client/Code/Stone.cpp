@@ -25,8 +25,8 @@ HRESULT CStone::Ready_Object(void)
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
 	m_pTransformCom->Set_Pos(50.f, 0.f, 70.f);
-	m_pTransformCom->Set_Scale(2.f, 2.f, 2.f);
-	//m_pTransformCom->Set_Rotation(0, 90, 0);
+	m_pTransformCom->Set_Scale(0.1f, 0.1f, 0.1f);
+	m_pTransformCom->Set_Rotation(0, 90, 0);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
 
 	return S_OK;

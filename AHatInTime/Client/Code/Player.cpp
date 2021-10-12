@@ -26,7 +26,8 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
-	m_pTransformCom->Set_Pos(38.f, 0.f, 70.f);
+	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
+	m_pTransformCom->Set_Rotation(0, 90, 0);
 	
 	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(11);

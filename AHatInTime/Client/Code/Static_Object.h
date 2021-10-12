@@ -44,7 +44,7 @@ private:
 	CTransform*				m_pTransformCom		= nullptr;
 	CRenderer*				m_pRendererCom		= nullptr;
 	//CCalculator*			m_pCalculatorCom	= nullptr;
-	//CCollider*				m_pColliderCom		= nullptr;
+	CCollider*				m_pColliderCom		= nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
 	Object_Data				m_objectData;

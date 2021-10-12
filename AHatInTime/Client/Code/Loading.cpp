@@ -32,7 +32,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 {
 	lstrcpy(m_szLoading, L"Texture Loading.................");
 	// 버퍼
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_CubeTex", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 	
 	// 텍스쳐
@@ -45,7 +45,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 	// 메쉬
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Tree", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/Tree/", L"Tree01.X")), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone",CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X")), E_FAIL);
+	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone",CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource/Mesh/StaticMesh/TombStone/", L"TombStone.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Navi", CNaviMesh::Create(m_pGraphicDev)), E_FAIL);
 
 #pragma region PLAYER
@@ -58,7 +58,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Optimization", COptimization::Create(m_pGraphicDev, true, VTXCNTX, VTXCNTZ)), E_FAIL);
 
 
-	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"WallClear6.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"WallClear6.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Mesh/DynamicMesh/Player/", L"Player.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Rectangle_White.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/Rectangle_White.jpg", TYPE_NORMAL, 1)), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Transform", CTransform::Create(m_pGraphicDev)) , E_FAIL);

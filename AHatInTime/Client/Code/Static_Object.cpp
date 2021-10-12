@@ -54,18 +54,37 @@ void CStatic_Objects::Render_Object(void)
 	if (false == m_bDraw)
 		return;
 
-
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	
+	if (!_tcscmp(m_objectData.m_objectTextureName , L"Proto_Mesh_WallClear6.x")||
+		!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear_Corner2.x") || 
+		!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear_Corner3.x") || 
+		!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear1.x") || 
+		!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear6.x") || 
+		!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear15.x"))
+	{
+		m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+		m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xc0);
+
+		//m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+		m_pMeshCom->Render_Meshes();
+
+		m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+		//m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	}
+	else
+		m_pMeshCom->Render_Meshes();
 	
 	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xff);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
-	m_pMeshCom->Render_Meshes();
+	//m_pMeshCom->Render_Meshes();
 
 	
-	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
@@ -75,7 +94,12 @@ void CStatic_Objects::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)
 	// ¸Þ½¬
 	CComponent*			pComponent = nullptr;
 	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(pMeshProtoTag));
+	NULL_CHECK_RETURN(pComponent);
 	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	NULL_CHECK_RETURN(pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 }
 
 void CStatic_Objects::Set_Static_Objects_Data(Object_Data objectData)
@@ -119,9 +143,9 @@ HRESULT CStatic_Objects::Add_Component(void)
 	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	//pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+	/*pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);*/
 
 	//// Optimization
 	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));

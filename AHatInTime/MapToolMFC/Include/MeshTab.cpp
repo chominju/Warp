@@ -571,6 +571,9 @@ void CMeshTab::OnBnClickedButtonLoad()
 			ReadFile(hFile, &tempObjectData.m_vScale.y, sizeof(float), &dwByte, nullptr);
 			ReadFile(hFile, &tempObjectData.m_vScale.z, sizeof(float), &dwByte, nullptr);
 
+			tempObjectData.m_pos[INFO_POS].x += 40.f;
+			tempObjectData.m_pos[INFO_POS].z += 50.f;
+
 			g_index++;
 			CComponent*			pComponent = nullptr;
 			CObjects* newObjects = CObjects::Create(m_pGraphicDev);

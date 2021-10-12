@@ -23,13 +23,14 @@ HRESULT CLoad_Manager::Load_Terrain_Data(const wstring & filePath , CLayer*		pLa
 
 	g_index = -1;
 
+	//for(int i=0; i<1; i++)
 	while (true)
 	{
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		_tchar* szBuf = nullptr;
 
-		Terrain_Data newTerrain_Data;
+		Terrain_Data newTerrain_Data{};
 		//Terrain_Data tile;
 		//tile = new Tile_Info;
 		ReadFile(hFile, &dwStringCount, sizeof(DWORD), &dwByte, nullptr);
@@ -52,68 +53,22 @@ HRESULT CLoad_Manager::Load_Terrain_Data(const wstring & filePath , CLayer*		pLa
 		ReadFile(hFile, &newTerrain_Data.m_vAngle.y, sizeof(float), &dwByte, nullptr);
 		ReadFile(hFile, &newTerrain_Data.m_vAngle.z, sizeof(float), &dwByte, nullptr);
 
-		CTexture* getTexture = dynamic_cast<CTexture*>(Clone_Proto(newTerrain_Data.m_terrainTextureName));
-		if (nullptr == getTexture)
-			return E_FAIL;
+		//CTexture* getTexture = dynamic_cast<CTexture*>(Clone_Proto(newTerrain_Data.m_terrainTextureName));
+		//if (nullptr == getTexture)
+		//	return E_FAIL;
 
 		g_index++;
 		//CComponent*			pComponent = nullptr;
+		FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ, VTXITV)), E_FAIL);
 		CTerrain* newTerrain = CTerrain::Create(m_pGraphicDev);
 		newTerrain->Get_Transform_Component()->Set_Pos(newTerrain_Data.m_pos[INFO_POS].x, newTerrain_Data.m_pos[INFO_POS].y, newTerrain_Data.m_pos[INFO_POS].z);
 		newTerrain->Get_Transform_Component()->Set_Rotation(newTerrain_Data.m_vAngle.x, newTerrain_Data.m_vAngle.y, newTerrain_Data.m_vAngle.z);
-		newTerrain->Get_TerrainTex_Component()->Reset_Buffer(newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ);
+		//newTerrain->Get_TerrainTex_Component()->Reset_Buffer(newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ);
 		newTerrain->Set_Index(newTerrain_Data.m_terrainIndex);
 		newTerrain->Set_TextureComponent(newTerrain_Data.m_terrainTextureName);
 
 		pLayer->Add_GameObject(L"Terrain", newTerrain);
 
-		//CLayer*		pLayer = CLayer::Create();
-		////pLayer->Add_GameObject(L"Terrain",newTerrain);
-		//CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"GameLogic", pLayer, L"Terrain", newTerrain);
-
-	/*	newStatic_Object->m_pTransformCom->Set_Pos(newTerrain_Data.m_pos[INFO_POS].x, newTerrain_Data.m_pos[INFO_POS].y, newTerrain_Data.m_pos[INFO_POS].z);
-		newStatic_Object->m_pTransformCom->Set_Rotation(newTerrain_Data.m_vAngle.x, newTerrain_Data.m_vAngle.y, newTerrain_Data.m_vAngle.z);
-		newStatic_Object->m_pBufferCom->Reset_Buffer(newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ);
-		newStatic_Object->Set_Index(newTerrain_Data.m_terrainIndex);*/
-
-		//m_addTextrueIndexVector.push_back(newTerrain_Data.m_terrainIndex);
-
-		//// ÅØ½ºÃÄ
-		//pComponent = newStatic_Object->m_pTextureCom = getTexture;
-		//newStatic_Object->Add_AddComponent(L"Com_Texture", ID_STATIC, pComponent);
-
-		/*newObject = new
-
-		CGameObject* object;
-		switch (terrain.objectKey)
-		{
-		case SCENE_OBJECT_ID::TILE:
-		object = new CTile;
-		object->Set_RenderID(RENDER_ID::RENDER_TILE);
-		dynamic_cast<CTerrain*>(object)->Set_Terrain_Info(tile);
-		dynamic_cast<CTerrain*>(object)->Set_Info_Pos();
-		if (dynamic_cast<CTerrain*>(object)->Get_Terrain_Info().drawID == 1)
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJECT_ID::RESPAWN_TILE, object);
-		else
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJECT_ID::SCENE_TILE, object);
-		break;
-
-		case SCENE_OBJECT_ID::BOX:
-		object = new CBox;
-		dynamic_cast<CTerrain*>(object)->Set_Terrain_Info(tile);
-		dynamic_cast<CTerrain*>(object)->Set_Info_Pos();
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJECT_ID::OBEJCT, object);
-		break;
-
-		case SCENE_OBJECT_ID::WALL:
-		object = new CWall;
-		dynamic_cast<CTerrain*>(object)->Set_Terrain_Info(tile);
-		dynamic_cast<CTerrain*>(object)->Set_Info_Pos();
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJECT_ID::OBEJCT, object);
-		break;
-		default:
-		break;
-		};*/
 	}
 	CloseHandle(hFile);
 	return S_OK;

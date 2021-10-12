@@ -65,7 +65,7 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 
 	// DynamicCamera
 	pGameObject = CDynamicCamera::Create(m_pGraphicDev, 
-		&_vec3(35.f, 70.f, 0.f), &_vec3(35.f, 0.f, 80.f), &_vec3(0.f, 5.f, 0.f), 
+		&_vec3(75.f, 70.f, 60.f), &_vec3(75.f, 0.f, 120.f), &_vec3(0.f, 5.f, 0.f), 
 		D3DXToRadian(30.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
@@ -88,8 +88,8 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
-	CLoad_Manager::Load_Terrain_Data(L"../Data/terrain3.dat" , pLayer,m_pGraphicDev);
-	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh37.dat", pLayer,m_pGraphicDev);
+	CLoad_Manager::Load_Terrain_Data(L"../Data/terrain5.dat" , pLayer,m_pGraphicDev);
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer,m_pGraphicDev);
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	CGameObject*			pGameObject = nullptr;
@@ -112,10 +112,10 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 //#pragma endregion PLAYER
 //
 //
-	// Stone
-	pGameObject = CStone::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
+	//// Stone
+	//pGameObject = CStone::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
 //
 //	// Tree
 //	pGameObject = CTree::Create(m_pGraphicDev);
@@ -137,19 +137,19 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 
 HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
 {
-	CLayer*		pLayer = CLayer::Create();
-	NULL_CHECK_RETURN(pLayer, E_FAIL);
+	//CLayer*		pLayer = CLayer::Create();
+	//NULL_CHECK_RETURN(pLayer, E_FAIL);
 
-	CGameObject*			pGameObject = nullptr;
-
-
-	// UI
-	pGameObject = CUI::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+	//CGameObject*			pGameObject = nullptr;
 
 
-	m_mapLayer.emplace(pLayerTag, pLayer);
+	//// UI
+	//pGameObject = CUI::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
+
+
+	//m_mapLayer.emplace(pLayerTag, pLayer);
 
 	return S_OK;
 }
