@@ -56,8 +56,10 @@ private:
 	void		Set_Axis(OBB* pObb);
 
 private:
-	vector<CGameObject*>	m_collisionCGameObject;
-	vector<CGameObject*>	m_collisionCGameObjectAfter;
+	vector<CGameObject*>	m_collisionCGameObjectCurrnet;
+	vector<CGameObject*>	m_collisionCGameObjectPrev;
+
+	vector<CGameObject*>	m_collisionCGameObjectCompare;
 public:
 	static CCalculator*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual CComponent*		Clone(void);

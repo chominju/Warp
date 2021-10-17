@@ -101,8 +101,8 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
-	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);
-	
+	/*CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);*/
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh400.dat", pLayer, m_pGraphicDev);
 	CGameObject*			pGameObject = nullptr;
 
 	//pGameObject = CStone::Create(m_pGraphicDev);

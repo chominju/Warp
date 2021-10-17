@@ -306,9 +306,12 @@ _bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDes
 	bool isCollision = false;
 	int distNum = 4;
 
+	m_collisionCGameObjectCurrnet.clear();
+	m_collisionCGameObjectCompare.clear();
+
 	for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
 	{
-		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName,L"Proto_Mesh_DoorClearFin.x"))
+		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_DoorClearFin.x"))
 			continue;
 		CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
 		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
@@ -345,47 +348,260 @@ _bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDes
 
 		float radius = playerCollider->Get_Radius();
 		//radius = sqrt(radius);
-		if (distance < 2)
+
+		int sensor = 2;
+		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_Maze_Wall1.x"))
+			sensor = 5;
+
+		if (distance < sensor)
 		{
 			iter->second->Set_IsColl(true);
 			isCollision = true;
 
-			bool isVecPush = false;
-			int vecSize = m_collisionCGameObject.size();
-			for (int i = 0; i < vecSize; i++)
+			//iter->second->Set_StopPlayer(pushKey);
+			m_collisionCGameObjectCurrnet.push_back(iter->second);
+		}
+		else
+			iter->second->Set_IsColl(false);
+	}
+
+	bool isVecPush = false;
+	bool isDifferent = false;
+
+	// 지금 현재 충돌체크 갯수
+	int vecSize = m_collisionCGameObjectCurrnet.size();
+
+	// 이전 충돌체크 충돌체크 갯수
+	int vecSizeAfter = m_collisionCGameObjectPrev.size();
+
+	if (vecSize == 2 && vecSizeAfter == 1)
+	{
+		int i;
+		i = 10;
+	}
+
+	// 현재 <= 이전
+	if (vecSize <= vecSizeAfter)
+	{
+		for (int i = 0; i < vecSizeAfter; i++)
+		{
+			isVecPush = false;
+			for (int j = 0; j < vecSize; j++)
 			{
-				if (m_collisionCGameObject[i] == iter->second)
+				if (m_collisionCGameObjectCurrnet[j] == m_collisionCGameObjectPrev[i])
 					isVecPush = true;
 			}
 			if (!isVecPush)
-			{
-				m_collisionCGameObject.push_back(iter->second);
-				for (int i = 0; i < KEY_END; i++)
-				{
-					if (pushKey[i])
-						isKeyStop[i] = pushKey[i];
-				}
-			}
-
-			//m_collisionCGameObject = iter->second;
+				m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectPrev[i]);
 		}
-		else
+
+		int compareLength = m_collisionCGameObjectCompare.size();
+		for (int i = 0; i < compareLength; i++)
 		{
-			iter->second->Set_IsColl(false);
+			bool * getStopPlayer = m_collisionCGameObjectCompare[i]->Get_StopPlayer();
+			for (int j = 0; j < KEY_END; j++)
+			{
+				if (getStopPlayer[j])
+					isKeyStop[j] = false;
+			}
+			m_collisionCGameObjectCompare[i]->Reset_StopPlayer();
 		}
 
-		//return distance < radius;
 	}
-	if (!isCollision)
+	// 현재 > 이전
+	else
 	{
-		m_collisionCGameObject.clear();
+		for (int i = 0; i < vecSize; i++)
+		{
+			isVecPush = false;
+			for (int j = 0; j < vecSizeAfter; j++)
+			{
+				if (m_collisionCGameObjectCurrnet[i] == m_collisionCGameObjectPrev[j])
+					isVecPush = true;
+			}
+			if (!isVecPush)
+				m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectCurrnet[i]);
+		}
+
+		int compareLength = m_collisionCGameObjectCompare.size();
+		for (int i = 0; i < compareLength; i++)
+		{
+			m_collisionCGameObjectCompare[i]->Set_StopPlayer(pushKey);
+			for (int j = 0; j < KEY_END; j++)
+			{
+				if (pushKey[j])
+					isKeyStop[j] = true;
+			}
+		}
+	}
+
+	m_collisionCGameObjectPrev.clear();
+	for (int i = 0; i < vecSize; i++)
+		m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
+	/*{
+		bool * getStopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
 		for (int i = 0; i < KEY_END; i++)
 		{
-			isKeyStop[i] = false;
+			if (getStopPlayer[i])
+				isKeyStop[i] = true;
 		}
-	}
+		m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
+	}*/
 
-	return isCollision;
+	return true;
+
+	//		for (int i = 0; i < vecSize; i++)
+	//		{
+	//			if (m_collisionCGameObject[i] == iter->second)
+	//				isVecPush = true;
+	//		}
+	//		if (!isVecPush)
+	//		{
+	//			m_collisionCGameObject.push_back(iter->second);
+	//			for (int i = 0; i < KEY_END; i++)
+	//			{
+	//				if (pushKey[i])
+	//					isKeyStop[i] = pushKey[i];
+	//			}
+	//		}
+
+	//		//m_collisionCGameObject = iter->second;
+	//	}
+	//	else
+	//	{
+	//		iter->second->Set_IsColl(false);
+	//	}
+
+	//	//return distance < radius;
+	//}
+	//if (!isCollision)
+	//{
+	//	m_collisionCGameObjectCurrnet.clear();
+	//	for (int i = 0; i < KEY_END; i++)
+	//	{
+	//		isKeyStop[i] = false;
+	//	}
+	//}
+
+	//return isCollision;
+
+
+
+
+
+
+
+
+//	 최근코드
+	//auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+
+	//bool isCollision = false;
+	//int distNum = 4;
+
+	//for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
+	//{
+	//	if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_DoorClearFin.x"))
+	//		continue;
+	//	CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
+	//	const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
+	//	const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
+	//	const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
+	//	_vec3		vDestMin, vDestMax;
+	//	_float		fMin, fMax;
+	//	float dist = 0.f;
+
+	//	D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+	//	D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+
+	//	// x축에서 바라봤을 때
+
+	//	const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+	//	_matrix		matWorld;
+	//	D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+	//	float ridius = playerCollider->Get_Radius();
+	//	_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+	//	_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+	//	float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+	//	float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+	//	float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+	//	float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+	//	// this is the same as isPointInsideSphere
+	//	float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+	//		(y - playerVec3.y) * (y - playerVec3.y) +
+	//		(z - playerVec3.z) * (z - playerVec3.z));
+
+	//	float radius = playerCollider->Get_Radius();
+	//	//radius = sqrt(radius);
+	//	if (distance < 2)
+	//	{
+	//		iter->second->Set_IsColl(true);
+	//		isCollision = true;
+
+	//		bool isVecPush = false;
+	//		int vecSize = m_collisionCGameObject.size();
+	//		for (int i = 0; i < vecSize; i++)
+	//		{
+	//			if (m_collisionCGameObject[i] == iter->second)
+	//				isVecPush = true;
+	//		}
+	//		if (!isVecPush)
+	//		{
+	//			m_collisionCGameObject.push_back(iter->second);
+	//			for (int i = 0; i < KEY_END; i++)
+	//			{
+	//				if (pushKey[i])
+	//					isKeyStop[i] = pushKey[i];
+	//			}
+	//		}
+
+	//		//m_collisionCGameObject = iter->second;
+	//	}
+	//	else
+	//	{
+	//		iter->second->Set_IsColl(false);
+	//	}
+
+	//	//return distance < radius;
+	//}
+	//if (!isCollision)
+	//{
+	//	m_collisionCGameObject.clear();
+	//	for (int i = 0; i < KEY_END; i++)
+	//	{
+	//		isKeyStop[i] = false;
+	//	}
+	//}
+
+	//return isCollision;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
 

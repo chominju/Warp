@@ -21,6 +21,11 @@ public:
 	int				Get_Index() { return m_index; }
 	void			Set_IsColl(_bool coll) { m_bColl = coll; }
 
+	void			Set_StopPlayer(KEY keyType, bool stopPlayer) { m_stopPlayer[keyType] = stopPlayer; }
+	void			Set_StopPlayer(_bool stopPlayer[]);
+	void			Reset_StopPlayer();
+	_bool*			Get_StopPlayer() { return m_stopPlayer; }
+
 public:
 	virtual		HRESULT		Ready_Object(void);
 	virtual		_int		Update_Object(const _float& fTimeDelta);
@@ -35,6 +40,8 @@ protected:
 	_float								m_fViewZ;
 	int									m_index;
 	_bool								m_bColl;
+
+	_bool								m_stopPlayer[KEY_END];
 
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);

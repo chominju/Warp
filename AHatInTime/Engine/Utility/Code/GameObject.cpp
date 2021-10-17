@@ -5,6 +5,7 @@ USING(Engine)
 Engine::CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev)
 	, m_bColl(false)
+	, m_stopPlayer{ false,false ,false ,false }
 {
 	m_pGraphicDev->AddRef();
 }
@@ -18,6 +19,18 @@ Engine::CGameObject::CGameObject(const CGameObject& rhs)
 Engine::CGameObject::~CGameObject(void)
 {
 
+}
+
+void CGameObject::Set_StopPlayer(_bool stopPlayer[])
+{
+	for (int i = 0; i < KEY_END; i++)
+		m_stopPlayer[i] = stopPlayer[i];
+}
+
+void CGameObject::Reset_StopPlayer()
+{
+	for (int i = 0; i < KEY_END; i++)
+		m_stopPlayer[i] = false;
 }
 
 HRESULT Engine::CGameObject::Ready_Object(void)
