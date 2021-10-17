@@ -5,6 +5,8 @@
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
+	, m_pushKey{false,false,false,false,}
+	, m_isKeyStop{ false,false,false,false }
 {
 
 }
@@ -27,7 +29,7 @@ HRESULT CPlayer::Ready_Object(void)
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
 	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
-	m_pTransformCom->Set_Rotation(0, 90, 0);
+	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(11);
@@ -38,6 +40,30 @@ HRESULT CPlayer::Ready_Object(void)
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
+	//Collision_ToObject();
+	if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
+	{
+		int a;
+		m_isKeyStop[KEY_DOWN];
+		m_isKeyStop[KEY_UP];
+		m_isKeyStop[KEY_LEFT];
+		m_isKeyStop[KEY_RIGHT];
+		a = 10;
+	}
+	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
+	//{
+	//	for (int i = 0; i < KEY_END; i++)
+	//	{
+	//		m_isKeyStop[i] = m_pushKey[i];
+	//	}
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < KEY_END; i++)
+	//	{
+	//		m_isKeyStop[i] = false;
+	//	}
+	//}
 
 	SetUp_OnTerrain();
 
@@ -58,7 +84,11 @@ void CPlayer::Render_Object(void)
 
 	m_pMeshCom->Render_Meshes();
 
-
+	const _matrix* getTemp = m_pTransformCom->Get_WorldMatrix();
+	_matrix newWorldMatrix = *getTemp;
+	newWorldMatrix._42 += 3;
+	
+	m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix/*m_pTransformCom->Get_WorldMatrix()*/);
 }
 
 HRESULT CPlayer::Add_Component(void)
@@ -86,10 +116,15 @@ HRESULT CPlayer::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	//// Calculator
-	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+
+	// Collider
+	pComponent = m_pSphereColliderCom = CSphereCollider::Create(m_pGraphicDev, 30);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_SphereCollider", pComponent);
 
 	return S_OK;
 
@@ -97,43 +132,101 @@ HRESULT CPlayer::Add_Component(void)
 
 void CPlayer::Key_Input(const _float& fTimeDelta)
 {
-	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+	//m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 
 
-	if (Get_DIKeyState(DIK_UP) & 0x80)
-	{
-		_vec3	vPos, vDir;
-		m_pTransformCom->Get_Info(INFO_POS, &vPos);
-		m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
-		D3DXVec3Normalize(&vDir, &vDir);
+	//if (Get_DIKeyState(DIK_UP) & 0x80)
+	//{
+	//	_vec3	vPos, vDir;
+	//	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+	//	m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
+	//	D3DXVec3Normalize(&vDir, &vDir);
 
-	/*	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
-		m_pMeshCom->Set_AnimationIndex(11);*/
-	}
+	///*	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
+	//	m_pMeshCom->Set_AnimationIndex(11);*/
+	//}
 	
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
+		m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		m_pTransformCom->Move_Pos(&m_vDir, -10.f, fTimeDelta);
+		if (!m_isKeyStop[KEY_DOWN])
+		{
+			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_isKeyStop[KEY_UP] = false;
+		}
+		m_pushKey[KEY_DOWN] = true;
+		m_pushKey[KEY_UP] = false;
+		m_pushKey[KEY_LEFT] = false;
+		m_pushKey[KEY_RIGHT] = false;
+		m_pMeshCom->Set_AnimationIndex(11);
 	}
+	//else
+	//	m_pushKey[KEY_DOWN] = false;
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	else if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
+		m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+		if (!m_isKeyStop[KEY_UP])
+		{
+			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_isKeyStop[KEY_DOWN] = false;
+		}
+		m_pushKey[KEY_DOWN] = false;
+		m_pushKey[KEY_UP] = true;
+		m_pushKey[KEY_LEFT] = false;
+		m_pushKey[KEY_RIGHT] = false;
+		m_pMeshCom->Set_AnimationIndex(11);
 	}
+	//else
+	//	m_pushKey[KEY_UP] = false;
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * -fTimeDelta);
+		m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+		D3DXVec3Normalize(&m_vDir, &m_vDir);
+		if (!m_isKeyStop[KEY_LEFT])
+		{
+			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_isKeyStop[KEY_RIGHT] = false;
+		}
+		m_pushKey[KEY_DOWN] = false;
+		m_pushKey[KEY_UP] = false;
+		m_pushKey[KEY_LEFT] = true;
+		m_pushKey[KEY_RIGHT] = false;
+		m_pMeshCom->Set_AnimationIndex(11);
 	}
+	/*else
+		m_pushKey[KEY_LEFT] = false;*/
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(180) * fTimeDelta);
+		m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+		D3DXVec3Normalize(&m_vDir, &m_vDir);
+		if (!m_isKeyStop[KEY_RIGHT])
+		{
+			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_isKeyStop[KEY_LEFT] = false;
+		}
+		m_pushKey[KEY_DOWN] = false;
+		m_pushKey[KEY_UP] = false;
+		m_pushKey[KEY_LEFT] = false;
+		m_pushKey[KEY_RIGHT] = true;
+		m_pMeshCom->Set_AnimationIndex(11);
 	}	
+	else
+		m_pMeshCom->Set_AnimationIndex(23);
+	//else
+	//	m_pushKey[KEY_RIGHT] = false;
 
+	//if(m_pushKey[0]|| m_pushKey[1]|| m_pushKey[2]|| m_pushKey[3])
+	//	m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
 	/*if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
 		_vec3	vPos = PickUp_OnTerrain();
@@ -155,7 +248,7 @@ void CPlayer::SetUp_OnTerrain(void)
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic_Layer", L"Terrain", L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
 
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
@@ -166,18 +259,31 @@ void CPlayer::SetUp_OnTerrain(void)
 	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
 
-Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
+_bool CPlayer::Collision_ToObject(/*const _tchar * pLayerTag, const _tchar * pObjTag*/)
 {
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
+	/*CCollider*		pObjectColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
+	NULL_CHECK_RETURN(pObjectColliderCom, false);*/
 
-	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
-	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
+	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
+	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
-	_vec3 temp{};
-	return temp;
-	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
+	return m_pCalculatorCom->Collision_Object(/*pObjectColliderCom->Get_Min(), pObjectColliderCom->Get_Max(), pObjectColliderCom->Get_CollWorldMatrix(),*/
+		m_pSphereColliderCom , m_pushKey,m_isKeyStop);
+
 }
+
+//Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
+//{
+//	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+//	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
+//
+//	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
+//	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
+//
+//	_vec3 temp{};
+//	return temp;
+//	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
+//}
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {

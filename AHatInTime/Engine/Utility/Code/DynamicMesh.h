@@ -23,6 +23,8 @@ public:
 	HRESULT		Ready_Meshes(const _tchar* pFilePath, const _tchar* pFileName);
 	void		Render_Meshes(void);
 
+	D3DXMATRIX* Get_TransformationMatrix() { return &m_pRootFrame->TransformationMatrix; }
+
 private:
 	// 매 프레임마다 모든 뼈들을 순회하면서 뼈들이 가지고 있는 행렬을 변환하기 위한 함수
 	void		Update_FrameMatrices(D3DXFRAME_DERIVED* pFrame, const _matrix* pParentMatrix);

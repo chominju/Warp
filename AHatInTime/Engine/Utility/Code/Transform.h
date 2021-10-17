@@ -23,6 +23,8 @@ public:
 	void					Move_PickingPos(const _vec3* pPos, const _float& fSpeed, const _float& fTimeDelta);
 	void					Rotation(ROTATION eType, const _float& fAngle);
 
+	void					Set_Direction(DIRECTION dir);
+
 	void					Get_Rotation(_vec3* pRot);
 	void					Set_Rotation(const _float& fRotX, const _float& fRotY, const _float& fRotZ);
 

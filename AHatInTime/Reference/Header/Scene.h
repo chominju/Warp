@@ -21,6 +21,10 @@ public:
 
 	CGameObject* Get_MapLayer(const _tchar* pLayerTag, const _tchar * pObjTag, int index);
 
+	multimap<const _tchar*, CGameObject*>* Get_Layer_GameObjects(const _tchar* pLayerTag);
+
+	//CGameObject* Get_Player(const _tchar* pLayerTag, const _tchar * pObjTag);
+
 public:
 	virtual HRESULT		Ready_Scene(void);
 	virtual _int		Update_Scene(const _float& fTimeDelta);

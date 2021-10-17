@@ -53,6 +53,30 @@ CGameObject* CScene::Get_MapLayer(const _tchar * pLayerTag , const _tchar * pObj
 	}
 }
 
+multimap<const _tchar*, CGameObject*>* CScene::Get_Layer_GameObjects(const _tchar * pLayerTag)
+{
+	auto iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	
+	if (iter == m_mapLayer.end())
+		return nullptr;
+	else
+	{
+		return iter->second->Get_LayerObject();
+	}
+}
+
+//CGameObject * CScene::Get_Player(const _tchar * pLayerTag, const _tchar * pObjTag)
+//{
+//	auto iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+//
+//	if (iter == m_mapLayer.end())
+//		return nullptr;
+//	else
+//	{
+//		return iter->second->Get_GameObjectVector(index);// Get_GameObject(pObjTag, index);// Get_GameObjectVector(index);
+//	}
+//}
+
 HRESULT Engine::CScene::Ready_Scene(void)
 {
 	return S_OK;

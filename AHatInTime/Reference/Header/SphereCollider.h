@@ -14,29 +14,35 @@ private:
 
 public:
 	const _matrix*			Get_CollWorldMatrix(void) { return &m_matCollWorld; }
-	const _vec3*			Get_Min(void) { return &m_vMin; }
-	const _vec3*			Get_Max(void) { return &m_vMax; }
+	//const _vec3*			Get_Min(void) { return &m_vMin; }
+	//const _vec3*			Get_Max(void) { return &m_vMax; }
+	
+	const int			Get_Radius() { return m_radius; }
 
 public:
-	HRESULT			Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize);
-	void			Render_Collider(COLLTYPE eType, const _matrix* pColliderMatrix);
+	HRESULT			Ready_SphereCollider(int radius/*const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize*/);
+	void			Render_SphereCollider(/*COLLTYPE eType, *//*const*/ _matrix* pColliderMatrix);
 
 private:
-	_vec3						m_vMin, m_vMax;
+	LPD3DXMESH					m_pSphereMesh;
+	//_vec3						m_vMin, m_vMax;
+	//LPD3DXBUFFER*				m_pBuffer;
 
-#ifdef _DEBUG
-	LPDIRECT3DVERTEXBUFFER9		m_pVB;
-	LPDIRECT3DINDEXBUFFER9		m_pIB;
-	LPDIRECT3DTEXTURE9			m_pTexture[COL_END];
-#endif
+	int							m_radius;
+
+//#ifdef _DEBUG
+//	LPDIRECT3DVERTEXBUFFER9		m_pVB;
+//	LPDIRECT3DINDEXBUFFER9		m_pIB;
+//	LPDIRECT3DTEXTURE9			m_pTexture[COL_END];
+//#endif
 
 	_matrix						m_matCollWorld;
 
 public:
-	static CSphereCollider*	Create(LPDIRECT3DDEVICE9 pGraphicDev,
+	static CSphereCollider*	Create(LPDIRECT3DDEVICE9 pGraphicDev, int radius/*,
 		const _vec3* pPos,
 		const _ulong& dwNumVtx,
-		const _ulong& dwVtxSize);
+		const _ulong& dwVtxSize*/);
 
 	virtual CComponent* Clone(void);
 	virtual void Free(void);

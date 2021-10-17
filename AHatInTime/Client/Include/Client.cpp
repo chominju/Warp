@@ -54,7 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	FAILED_CHECK_RETURN(Ready_Timer(L"Timer_FPS60"), FALSE);	// FPS 60으로 제한한 이후부터 사용가능한 시간
 
 	// 프레임
-	FAILED_CHECK_RETURN(Ready_Frame(L"Frame60", 60.f), FALSE);
+	FAILED_CHECK_RETURN(Ready_Frame(L"Frame60", 10000.f), FALSE);
 
 
     // 기본 메시지 루프입니다.

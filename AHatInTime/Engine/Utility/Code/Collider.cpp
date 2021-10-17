@@ -193,7 +193,7 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 
 		m_pTexture[i]->LockRect(0, &LockRect, NULL, 0);
 
-		*((_ulong*)LockRect.pBits) = D3DXCOLOR(/*1.f * i, 1.f * (1.f - i)*/0.f,0.f, 1.f, 1.f);
+		*((_ulong*)LockRect.pBits) = D3DXCOLOR(1.f * i, 1.f * (1.f - i),0.f, 1.f);
 
 		m_pTexture[i]->UnlockRect(0);
 	}

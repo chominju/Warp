@@ -62,6 +62,7 @@ void Engine::CTransform::Rotation(ROTATION eType, const _float& fAngle)
 	*(((_float*)&m_vAngle) + eType) += fAngle;
 }
 
+
 void CTransform::Get_Rotation(_vec3 * pRot)
 {
 	memcpy(pRot, &m_vAngle, sizeof(_vec3));
@@ -87,6 +88,23 @@ void Engine::CTransform::Move_Pos(const _vec3* pDir, const _float& fSpeed, const
 void Engine::CTransform::Get_Info(INFO eType, _vec3* pInfo)
 {
 	memcpy(pInfo, &m_matWorld.m[eType][0], sizeof(_vec3));
+}
+
+void CTransform::Set_Direction(DIRECTION dir)
+{
+	switch (dir)
+	{
+	case Engine::DIR_X:
+		m_matWorld.m[INFO::INFO_LOOK][DIR_X] = 1.f;
+		m_matWorld.m[INFO::INFO_LOOK][DIR_Z] = 0.f;
+		break;
+	case Engine::DIR_Z:
+		m_matWorld.m[INFO::INFO_LOOK][DIR_X] = 0.f;
+		m_matWorld.m[INFO::INFO_LOOK][DIR_Z] = 1.f;
+		break;
+	default:
+		break;
+	}
 }
 
 HRESULT Engine::CTransform::Ready_Transform(void)

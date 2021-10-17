@@ -18,6 +18,9 @@ public:
 
 	CGameObject* Get_GameObjectVector(int index);
 	CGameObject* Get_GameObject(const _tchar* mapTag, int index);
+
+	multimap<const _tchar*, CGameObject*>* Get_LayerObject() { return &m_mapObject; }
+
 public:
 
 

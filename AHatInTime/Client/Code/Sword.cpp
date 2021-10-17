@@ -33,14 +33,14 @@ Engine::_int CSword::Update_Object(const _float& fTimeDelta)
 {
 	if (nullptr == m_pParentBoneMatrix)
 	{
-		CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Mesh", ID_STATIC));
+		CDynamicMesh*		pPlayerMeshCom = dynamic_cast<CDynamicMesh*>(Engine::Get_Component(L"GameLogic_Layer", L"Player", L"Com_Mesh", ID_STATIC));
 		NULL_CHECK_RETURN(pPlayerMeshCom, -1);
 
 		const D3DXFRAME_DERIVED*		pFrame = pPlayerMeshCom->Get_FrameByName("R_Hand");
 
 		m_pParentBoneMatrix = &pFrame->CombinedTransformMatrix;
 
-		CTransform*		pPlayerTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", ID_DYNAMIC));
+		CTransform*		pPlayerTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic_Layer", L"Player", L"Com_Transform", ID_DYNAMIC));
 		NULL_CHECK_RETURN(pPlayerTransCom, -1);
 
 		m_pParentWorldMatrix = pPlayerTransCom->Get_WorldMatrix();

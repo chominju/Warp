@@ -4,6 +4,7 @@ USING(Engine)
 
 Engine::CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev)
+	, m_bColl(false)
 {
 	m_pGraphicDev->AddRef();
 }

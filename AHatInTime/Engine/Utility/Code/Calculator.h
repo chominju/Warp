@@ -7,6 +7,8 @@ BEGIN(Engine)
 
 class CTerrainTex;
 class CTransform;
+class CSphereCollider;
+class CGameObject;
 
 class ENGINE_DLL CCalculator : public CComponent
 {
@@ -44,10 +46,18 @@ public:
 								const _vec3* pSourMax,
 								const _matrix* pSourWorld);
 
+	_bool			Collision_Object(/*const _vec3* pDestMin,
+										const _vec3* pDestMax,
+										const _matrix* pDestWorld,*/
+										 CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
+
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);
 	void		Set_Axis(OBB* pObb);
 
+private:
+	vector<CGameObject*>	m_collisionCGameObject;
+	vector<CGameObject*>	m_collisionCGameObjectAfter;
 public:
 	static CCalculator*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual CComponent*		Clone(void);

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Stone.h"
-
+#include "SphereCollider.h"
 #include "Export_Function.h"
 
 CStone::CStone(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -24,7 +24,7 @@ HRESULT CStone::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransformCom->Set_Pos(50.f, 0.f, 70.f);
+	m_pTransformCom->Set_Pos(80.f, 0.f, 130.f);
 	m_pTransformCom->Set_Scale(0.1f, 0.1f, 0.1f);
 	m_pTransformCom->Set_Rotation(0, 90, 0);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
@@ -38,7 +38,7 @@ Engine::_int CStone::Update_Object(const _float& fTimeDelta)
 
 	SetUp_OnTerrain();
 
-	//m_bColl = Collision_ToObject(L"GameLogic", L"Player");
+	//m_bColl = Collision_ToObject(L"GameLogic_Layer", L"Player");
 
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
@@ -66,7 +66,7 @@ void CStone::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	
-	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
@@ -91,15 +91,15 @@ HRESULT CStone::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	//// Calculator
-	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-	//// Collider
-	//pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+	// Collider
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 	//// Optimization
 	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
@@ -115,7 +115,7 @@ void CStone::SetUp_OnTerrain(void)
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic_Layer", L"Terrain", L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
 
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
@@ -128,15 +128,26 @@ void CStone::SetUp_OnTerrain(void)
 
 Engine::_bool CStone::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
-	CCollider*		pPlayerColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
+	CSphereCollider*		pPlayerColliderCom = dynamic_cast<CSphereCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_SphereCollider", ID_STATIC));
 	NULL_CHECK_RETURN(pPlayerColliderCom, false);
 
 	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-											m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
+	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
-	return false;
-	/*return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-		m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
+
+	//return m_pCalculatorCom->Collision_Object(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(),
+	//	pPlayerColliderCom/*m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix()*/);
+
+
+	//CCollider*		pPlayerColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
+	//NULL_CHECK_RETURN(pPlayerColliderCom, false);
+
+	///*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
+	//										m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
+
+	//return false;
+	///*return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
+	//	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
 }
 

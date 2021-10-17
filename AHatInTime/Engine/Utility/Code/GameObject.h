@@ -19,6 +19,7 @@ public:
 
 	void			Set_Index(int index) { m_index = index; }
 	int				Get_Index() { return m_index; }
+	void			Set_IsColl(_bool coll) { m_bColl = coll; }
 
 public:
 	virtual		HRESULT		Ready_Object(void);
@@ -33,6 +34,7 @@ protected:
 	map<const _tchar*, CComponent*>		m_mapComponent[ID_END];
 	_float								m_fViewZ;
 	int									m_index;
+	_bool								m_bColl;
 
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);

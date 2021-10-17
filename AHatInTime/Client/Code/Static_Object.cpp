@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Static_Object.h"
+#include "SphereCollider.h"
+#include "Player.h"
 
 #include "Export_Function.h"
 
@@ -35,9 +37,19 @@ Engine::_int CStatic_Objects::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-	SetUp_OnTerrain();
+	CGameObject* getPlayer= CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"GameLogic_Layer", L"Player", 0);
+	NULL_CHECK_RETURN(getPlayer);
 
-	//m_bColl = Collision_ToObject(L"GameLogic", L"Player");
+	SetUp_OnTerrain();
+	//m_bColl
+	//m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
+
+	//if (m_bColl)
+	//{
+	//	CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"Player_Layer", L"Player",0);
+	//	//CPlayer * getPlayer = CManagement::GetInstance()
+	//	// 플레이어 세팅
+	//}
 
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
@@ -137,10 +149,10 @@ HRESULT CStatic_Objects::Add_Component(void)
 	pComponent->AddRef();
 	m_mapComponent[ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	//// Calculator
-	//pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
+	// Calculator
+	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_Calculator"));
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
 	/*pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
@@ -161,7 +173,7 @@ void CStatic_Objects::SetUp_OnTerrain(void)
 	_vec3	vPos;
 	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
+	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic_Layer", L"Terrain", L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
 
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
@@ -172,13 +184,17 @@ void CStatic_Objects::SetUp_OnTerrain(void)
 	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 }
 
-Engine::_bool CStatic_Objects::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+Engine::_bool CStatic_Objects::Collision_ToPlayer(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
-	CCollider*		pPlayerColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
+	CSphereCollider*		pPlayerColliderCom = dynamic_cast<CSphereCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_SphereCollider", ID_STATIC));
 	NULL_CHECK_RETURN(pPlayerColliderCom, false);
 
 	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
 											m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
+
+
+	//return m_pCalculatorCom->Collision_Object(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(),
+	//	pPlayerColliderCom/*m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix()*/);
 
 	return true;
 	//return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),

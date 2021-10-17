@@ -33,17 +33,18 @@ public:
 
 	CStaticMesh* Get_StaticMesh_Component() { return m_pMeshCom; }
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
+	CCollider* Get_Collider_Component() { return m_pColliderCom; }
 
 private:
 	HRESULT					Add_Component(void);
 	void					SetUp_OnTerrain(void);
-	_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
+	_bool					Collision_ToPlayer(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
 	CStaticMesh*			m_pMeshCom			= nullptr;
 	CTransform*				m_pTransformCom		= nullptr;
 	CRenderer*				m_pRendererCom		= nullptr;
-	//CCalculator*			m_pCalculatorCom	= nullptr;
+	CCalculator*			m_pCalculatorCom	= nullptr;
 	CCollider*				m_pColliderCom		= nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
@@ -51,7 +52,7 @@ private:
 
 private:	
 	
-	_bool					m_bColl = false;
+	//_bool					m_bColl = false;
 	_uint					m_iFlag;
 	_bool					m_bDraw = false;
 

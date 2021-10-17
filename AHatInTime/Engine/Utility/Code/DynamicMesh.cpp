@@ -188,5 +188,6 @@ void Engine::CDynamicMesh::SetUp_FrameMatrixPointer(D3DXFRAME_DERIVED* pFrame)
 	if (nullptr != pFrame->pFrameFirstChild)
 		SetUp_FrameMatrixPointer((D3DXFRAME_DERIVED*)pFrame->pFrameFirstChild);
 
+
 }
 

@@ -19,9 +19,11 @@ HRESULT CStage::Ready_Scene(void)
 {
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
 
-	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic"), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment_Layer"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic_Layer"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_StaticObject_Layer(L"StaticObject_Layer"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Player_Layer(L"Player_Layer"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI_Layer"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
 
@@ -89,50 +91,42 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
 	CLoad_Manager::Load_Terrain_Data(L"../Data/terrain5.dat" , pLayer,m_pGraphicDev);
-	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer,m_pGraphicDev);
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
-
-	CGameObject*			pGameObject = nullptr;
-//
-//	// Terrain
-//	pGameObject = CTerrain::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
-//
-//#pragma region PLAYER
-	// Player
-	pGameObject = CPlayer::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-//
-//	// Sword
-//	pGameObject = CSword::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
-//#pragma endregion PLAYER
-//
-//
-	//// Stone
-	//pGameObject = CStone::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
-//
-//	// Tree
-//	pGameObject = CTree::Create(m_pGraphicDev);
-//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Tree", pGameObject), E_FAIL);
-//
-//	for (_ulong i = 0; i < 150; ++i)
-//	{
-//		// effect
-//		pGameObject = CEffect::Create(m_pGraphicDev);
-//		NULL_CHECK_RETURN(pGameObject, E_FAIL);
-//		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
-//	}
 	
 	m_mapLayer.emplace(pLayerTag, pLayer);
 
 	return S_OK;
+}
+
+HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
+{
+	CLayer*		pLayer = CLayer::Create();
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);
+	
+	CGameObject*			pGameObject = nullptr;
+
+	//pGameObject = CStone::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
+	
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	m_mapLayer.emplace(pLayerTag, pLayer);
+}
+
+HRESULT CStage::Ready_Player_Layer(const _tchar * pLayerTag)
+{
+	CLayer*		pLayer = CLayer::Create();
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	CGameObject*			pGameObject = nullptr;
+
+	pGameObject = CPlayer::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
+
+
+	m_mapLayer.emplace(pLayerTag, pLayer);
 }
 
 HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
