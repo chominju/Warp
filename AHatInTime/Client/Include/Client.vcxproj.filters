@@ -73,6 +73,18 @@
     <Filter Include="03. LoadData">
       <UniqueIdentifier>{96d29b06-d1ef-45a3-bb6a-8b388ecb2705}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject">
+      <UniqueIdentifier>{66abefb6-2394-4773-ad6b-582343f85964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject\00. InteractionObject">
+      <UniqueIdentifier>{35fd4a3b-b868-41e4-9253-86a96aa0bcd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject\01. LeftDoor">
+      <UniqueIdentifier>{44f8639b-1f72-4499-b670-f346e78d0410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject\02. RightDoor">
+      <UniqueIdentifier>{5e4737ba-6f7a-495c-90f4-0371d999052e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -144,6 +156,15 @@
     <ClInclude Include="..\Code\Load_Manager.h">
       <Filter>03. LoadData</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\LeftDoor.h">
+      <Filter>02. GameObject\11. InteractionObject\01. LeftDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\InteractionObject.h">
+      <Filter>02. GameObject\11. InteractionObject\00. InteractionObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\RightDoor.h">
+      <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -202,6 +223,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\Load_Manager.cpp">
       <Filter>03. LoadData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\LeftDoor.cpp">
+      <Filter>02. GameObject\11. InteractionObject\01. LeftDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\InteractionObject.cpp">
+      <Filter>02. GameObject\11. InteractionObject\00. InteractionObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RightDoor.cpp">
+      <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

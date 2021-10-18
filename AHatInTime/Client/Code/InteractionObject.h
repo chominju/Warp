@@ -1,5 +1,5 @@
-#ifndef Static_Objects_h__
-#define Static_Objects_h__
+#ifndef Interaction_Object_h__
+#define Interaction_Object_h__
 
 #include "GameObject.h"
 //#include "Define.h"
@@ -14,20 +14,20 @@ class CCollider;
 class COptimization;
 
 END
-class CStatic_Objects : public CGameObject
+class CInteractionObject : public CGameObject
 {
-private:
-	explicit CStatic_Objects(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CStatic_Objects(const CStatic_Objects& rhs);
-	virtual ~CStatic_Objects(void);
+protected:
+	explicit CInteractionObject(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CInteractionObject(const CInteractionObject& rhs);
+	virtual ~CInteractionObject(void);
 
 public:
 	virtual HRESULT Ready_Object(void) override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
-	void Set_Static_Objects_Data(Object_Data objectData);
-	Object_Data Get_Static_Objects_Data() { return m_objectData; }
+	//void Set_Static_Objects_Data(Object_Data objectData);
+	//Object_Data Get_Static_Objects_Data() { return m_objectData; }
 
 	void Set_StaticMesh_Component(const _tchar* pTextureProtoTag);
 
@@ -35,12 +35,12 @@ public:
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
 	CCollider* Get_Collider_Component() { return m_pColliderCom; }
 
-private:
-	HRESULT					Add_Component(void);
+protected:
+	virtual HRESULT			Add_Component(void);
 	void					SetUp_OnTerrain(void);
 	_bool					Collision_ToPlayer(const _tchar* pLayerTag, const _tchar* pObjTag);
 
-private:
+protected:
 	CStaticMesh*			m_pMeshCom			= nullptr;
 	CTransform*				m_pTransformCom		= nullptr;
 	CRenderer*				m_pRendererCom		= nullptr;
@@ -48,7 +48,7 @@ private:
 	CCollider*				m_pColliderCom		= nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
-	Object_Data				m_objectData;
+	//Object_Data				m_objectData;
 
 private:	
 	
@@ -56,7 +56,7 @@ private:
 
 
 public:
-	static CStatic_Objects*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CInteractionObject*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void		Free(void);

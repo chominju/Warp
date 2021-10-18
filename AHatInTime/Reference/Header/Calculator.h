@@ -46,10 +46,8 @@ public:
 								const _vec3* pSourMax,
 								const _matrix* pSourWorld);
 
-	_bool			Collision_Object(/*const _vec3* pDestMin,
-										const _vec3* pDestMax,
-										const _matrix* pDestWorld,*/
-										 CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
+	_bool			Collision_StaticObject(CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
+	_bool			Collision_InteractionObject(CSphereCollider* playerCollider, _bool pushKey[], _bool isKeyStop[]);
 
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);

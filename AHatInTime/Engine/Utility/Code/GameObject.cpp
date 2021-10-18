@@ -5,6 +5,7 @@ USING(Engine)
 Engine::CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev)
 	, m_bColl(false)
+	, m_bDraw(true)
 	, m_stopPlayer{ false,false ,false ,false }
 {
 	m_pGraphicDev->AddRef();

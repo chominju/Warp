@@ -2,9 +2,11 @@
 #include "DynamicCamera.h"
 
 #include "Export_Function.h"
+#include "Player.h"
 
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CCamera(pGraphicDev)
+	, m_speed(10.f)
 {
 
 }
@@ -33,6 +35,29 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye, const _vec3* pAt, const 
 
 Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
+
+//	m_vEye;
+//	m_vAt;
+
+
+	_matrix		matCamWorld;
+	D3DXMatrixInverse(&matCamWorld, NULL, &m_matView);
+
+	auto getPlayerMap = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer");
+	auto player = getPlayerMap->begin();
+
+	const _matrix* playerMatrix= dynamic_cast<CPlayer*>(player->second)->Get_Transform_Component()->Get_NRotWorldMatrix();
+
+	//m_vEye.x = playerMatrix->_41;
+	//m_vEye.y = playerMatrix->_42 + 70.f;
+	//m_vEye.z = playerMatrix->_43 - 60.f;
+
+
+	//m_vAt.x = playerMatrix->_41;
+	//m_vAt.y = playerMatrix->_42;
+	//m_vAt.z = playerMatrix->_43;
+
+
 	Key_Input(fTimeDelta, 10.f);
 
 	if (true == m_bFix)

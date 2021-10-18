@@ -23,6 +23,7 @@ private:
 private:
 	_bool			m_bClick	= false;
 	_bool			m_bFix		= false;
+	_float			m_speed;
 
 public:
 	static CDynamicCamera*		Create(LPDIRECT3DDEVICE9 pGraphicDev,

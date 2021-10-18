@@ -40,16 +40,19 @@ HRESULT CPlayer::Ready_Object(void)
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
+	
+	m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+	m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 	//Collision_ToObject();
-	if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
-	{
-		int a;
-		m_isKeyStop[KEY_DOWN];
-		m_isKeyStop[KEY_UP];
-		m_isKeyStop[KEY_LEFT];
-		m_isKeyStop[KEY_RIGHT];
-		a = 10;
-	}
+	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
+	//{
+	//	int a;
+	//	m_isKeyStop[KEY_DOWN];
+	//	m_isKeyStop[KEY_UP];
+	//	m_isKeyStop[KEY_LEFT];
+	//	m_isKeyStop[KEY_RIGHT];
+	//	a = 10;
+	//}
 	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
 	//{
 	//	for (int i = 0; i < KEY_END; i++)
@@ -155,7 +158,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (!m_isKeyStop[KEY_DOWN])
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-			m_isKeyStop[KEY_UP] = false;
+			//m_isKeyStop[KEY_UP] = false;
 		}
 		m_pushKey[KEY_DOWN] = true;
 		m_pushKey[KEY_UP] = false;
@@ -174,7 +177,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (!m_isKeyStop[KEY_UP])
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-			m_isKeyStop[KEY_DOWN] = false;
+			//m_isKeyStop[KEY_DOWN] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
 		m_pushKey[KEY_UP] = true;
@@ -193,7 +196,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (!m_isKeyStop[KEY_LEFT])
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-			m_isKeyStop[KEY_RIGHT] = false;
+			//m_isKeyStop[KEY_RIGHT] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
 		m_pushKey[KEY_UP] = false;
@@ -212,7 +215,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		if (!m_isKeyStop[KEY_RIGHT])
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-			m_isKeyStop[KEY_LEFT] = false;
+			//m_isKeyStop[KEY_LEFT] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
 		m_pushKey[KEY_UP] = false;
@@ -267,7 +270,7 @@ _bool CPlayer::Collision_ToObject(/*const _tchar * pLayerTag, const _tchar * pOb
 	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
 	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
 
-	return m_pCalculatorCom->Collision_Object(/*pObjectColliderCom->Get_Min(), pObjectColliderCom->Get_Max(), pObjectColliderCom->Get_CollWorldMatrix(),*/
+	return m_pCalculatorCom->Collision_StaticObject(/*pObjectColliderCom->Get_Min(), pObjectColliderCom->Get_Max(), pObjectColliderCom->Get_CollWorldMatrix(),*/
 		m_pSphereColliderCom , m_pushKey,m_isKeyStop);
 
 }

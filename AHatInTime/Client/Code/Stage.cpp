@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Stage.h"
 #include "Load_Manager.h"
+#include "LeftDoor.h"
+#include "RightDoor.h"
 
 #include "Export_Function.h"
 
@@ -22,6 +24,7 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_StaticObject_Layer(L"StaticObject_Layer"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_InteractionObject_Layer(L"InteractionObject_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Player_Layer(L"Player_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI_Layer"), E_FAIL);
 
@@ -103,12 +106,35 @@ HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
 	CLayer*		pLayer = CLayer::Create();
 	/*CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);*/
 	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh400.dat", pLayer, m_pGraphicDev);
+	//CGameObject*			pGameObject = nullptr;
+
+	//pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor", pGameObject), E_FAIL);
+	
+	NULL_CHECK_RETURN(pLayer, E_FAIL);
+
+	m_mapLayer.emplace(pLayerTag, pLayer);
+}
+
+HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
+{
+	CLayer*		pLayer = CLayer::Create();
 	CGameObject*			pGameObject = nullptr;
 
-	//pGameObject = CStone::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Stone", pGameObject), E_FAIL);
-	
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(89.f, -0.1f, 120.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor", pGameObject), E_FAIL);
+
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(89.f, -0.1f, 120.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor", pGameObject), E_FAIL);
+
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	m_mapLayer.emplace(pLayerTag, pLayer);

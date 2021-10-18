@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "SphereCollider.h"
 #include "..\Client\Code\Static_Object.h"
+#include "..\Client\Code\InteractionObject.h"
 #include "Management.h"
 #include "Scene.h"
 #include "Layer.h"
@@ -299,7 +300,7 @@ _bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax,
 	return true;
 }
 
-_bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDestMax, const _matrix * pDestWorld,*/ CSphereCollider * playerCollider, _bool pushKey[], _bool isKeyStop[])
+_bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 * pDestMax, const _matrix * pDestWorld,*/ CSphereCollider * playerCollider, _bool pushKey[], _bool isKeyStop[])
 {
 	auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
 
@@ -374,7 +375,7 @@ _bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDes
 	// 이전 충돌체크 충돌체크 갯수
 	int vecSizeAfter = m_collisionCGameObjectPrev.size();
 
-	if (vecSize == 2 && vecSizeAfter == 1)
+	if (vecSize == 1 && vecSizeAfter == 2)
 	{
 		int i;
 		i = 10;
@@ -432,6 +433,16 @@ _bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDes
 				if (pushKey[j])
 					isKeyStop[j] = true;
 			}
+		}
+	}
+
+	for (int i = 0; i < vecSize; i++)
+	{
+		auto stopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
+		for (int j = 0; j < KEY_END; j++)
+		{
+			if (stopPlayer[j])
+				isKeyStop[j] = true;
 		}
 	}
 
@@ -883,6 +894,159 @@ _bool CCalculator::Collision_Object(/*const _vec3 * pDestMin, const _vec3 * pDes
 	//	return true;
 	//else
 	//	return false;
+}
+
+_bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider, _bool pushKey[], _bool isKeyStop[])
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+	bool isCollision = false;
+	int distNum = 4;
+
+	m_collisionCGameObjectCurrnet.clear();
+	m_collisionCGameObjectCompare.clear();
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (!iter->second->Get_Draw())
+			continue;
+
+		CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
+		_vec3		vDestMin, vDestMax;
+		_float		fMin, fMax;
+		float dist = 0.f;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+
+		// x축에서 바라봤을 때
+
+		const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+		_matrix		matWorld;
+		D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+		float ridius = playerCollider->Get_Radius();
+		_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+		_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+		float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+		float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+		float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+		float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+		// this is the same as isPointInsideSphere
+		float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+			(y - playerVec3.y) * (y - playerVec3.y) +
+			(z - playerVec3.z) * (z - playerVec3.z));
+
+		float radius = playerCollider->Get_Radius();
+		//radius = sqrt(radius);
+
+		int sensor = 2;
+
+		if (distance < sensor)
+		{
+			iter->second->Set_IsColl(true);
+			isCollision = true;
+
+			//iter->second->Set_StopPlayer(pushKey);
+			m_collisionCGameObjectCurrnet.push_back(iter->second);
+		}
+		else
+			iter->second->Set_IsColl(false);
+	}
+
+	//bool isVecPush = false;
+	//bool isDifferent = false;
+
+	//// 지금 현재 충돌체크 갯수
+	//int vecSize = m_collisionCGameObjectCurrnet.size();
+
+	//// 이전 충돌체크 충돌체크 갯수
+	//int vecSizeAfter = m_collisionCGameObjectPrev.size();
+
+	//if (vecSize == 1 && vecSizeAfter == 2)
+	//{
+	//	int i;
+	//	i = 10;
+	//}
+
+	//// 현재 <= 이전
+	//if (vecSize <= vecSizeAfter)
+	//{
+	//	for (int i = 0; i < vecSizeAfter; i++)
+	//	{
+	//		isVecPush = false;
+	//		for (int j = 0; j < vecSize; j++)
+	//		{
+	//			if (m_collisionCGameObjectCurrnet[j] == m_collisionCGameObjectPrev[i])
+	//				isVecPush = true;
+	//		}
+	//		if (!isVecPush)
+	//			m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectPrev[i]);
+	//	}
+
+	//	int compareLength = m_collisionCGameObjectCompare.size();
+	//	for (int i = 0; i < compareLength; i++)
+	//	{
+	//		bool * getStopPlayer = m_collisionCGameObjectCompare[i]->Get_StopPlayer();
+	//		for (int j = 0; j < KEY_END; j++)
+	//		{
+	//			if (getStopPlayer[j])
+	//				isKeyStop[j] = false;
+	//		}
+	//		m_collisionCGameObjectCompare[i]->Reset_StopPlayer();
+	//	}
+
+	//}
+	//// 현재 > 이전
+	//else
+	//{
+	//	for (int i = 0; i < vecSize; i++)
+	//	{
+	//		isVecPush = false;
+	//		for (int j = 0; j < vecSizeAfter; j++)
+	//		{
+	//			if (m_collisionCGameObjectCurrnet[i] == m_collisionCGameObjectPrev[j])
+	//				isVecPush = true;
+	//		}
+	//		if (!isVecPush)
+	//			m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectCurrnet[i]);
+	//	}
+
+	//	int compareLength = m_collisionCGameObjectCompare.size();
+	//	for (int i = 0; i < compareLength; i++)
+	//	{
+	//		m_collisionCGameObjectCompare[i]->Set_StopPlayer(pushKey);
+	//		for (int j = 0; j < KEY_END; j++)
+	//		{
+	//			if (pushKey[j])
+	//				isKeyStop[j] = true;
+	//		}
+	//	}
+	//}
+
+	//for (int i = 0; i < vecSize; i++)
+	//{
+	//	auto stopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
+	//	for (int j = 0; j < KEY_END; j++)
+	//	{
+	//		if (stopPlayer[j])
+	//			isKeyStop[j] = true;
+	//	}
+	//}
+
+	//m_collisionCGameObjectPrev.clear();
+	//for (int i = 0; i < vecSize; i++)
+	//	m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
+
+
+	return true;
 }
 
 void CCalculator::Set_Point(OBB * pObb, const _vec3 * pMin, const _vec3 * pMax)

@@ -26,6 +26,9 @@ public:
 	void			Reset_StopPlayer();
 	_bool*			Get_StopPlayer() { return m_stopPlayer; }
 
+	void			Set_Draw(_bool setDraw) { m_bDraw = setDraw; }
+	_bool			Get_Draw() { return m_bDraw; }
+
 public:
 	virtual		HRESULT		Ready_Object(void);
 	virtual		_int		Update_Object(const _float& fTimeDelta);
@@ -40,7 +43,7 @@ protected:
 	_float								m_fViewZ;
 	int									m_index;
 	_bool								m_bColl;
-
+	_bool								m_bDraw;
 	_bool								m_stopPlayer[KEY_END];
 
 private:
