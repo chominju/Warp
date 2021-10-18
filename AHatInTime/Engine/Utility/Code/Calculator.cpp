@@ -4,6 +4,7 @@
 #include "SphereCollider.h"
 #include "..\Client\Code\Static_Object.h"
 #include "..\Client\Code\InteractionObject.h"
+#include "StaticMesh.h"
 #include "Management.h"
 #include "Scene.h"
 #include "Layer.h"
@@ -208,45 +209,161 @@ Engine::_vec3 Engine::CCalculator::Picking_OnTerrain(HWND hWnd,
 	return _vec3();
 }
 
-Engine::_bool Engine::CCalculator::Collision_AABB(const _vec3* pDestMin,
+Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3* pDestMin,
 													const _vec3* pDestMax, 
-													const _matrix* pDestWorld, 
-													const _vec3* pSourMin, 
-													const _vec3* pSourMax, 
-													const _matrix* pSourWorld)
+													const _matrix* pDestWorld, _vec3 playerRot)
 {
-	_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
-	_float		fMin, fMax;
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
 
-	D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+	bool isCollisionX = true;
+	bool isCollisionY = true;
+	bool isCollisionZ = true;
+	int distNum = 4;
 
-	D3DXVec3TransformCoord(&vSourMin, pSourMin, pSourWorld);
-	D3DXVec3TransformCoord(&vSourMax, pSourMax, pSourWorld);
+	m_collisionCGameObjectCurrnet.clear();
+	m_collisionCGameObjectCompare.clear();
 
-	// x축에서 바라봤을 때
-	
-	fMin = max(vDestMin.x, vSourMin.x);
-	fMax = min(vDestMax.x, vSourMax.x);
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (!iter->second->Get_Draw())
+			continue;
+		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
 
-	if (fMax < fMin)
-		return false;
+		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+		_float		fMin, fMax;
 
-	// y축에서 바라봤을 때
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
 
-	fMin = max(vDestMin.y, vSourMin.y);
-	fMax = min(vDestMax.y, vSourMax.y);
+		D3DXVec3TransformCoord(&vSourMin, getColl->Get_Min(), getColl->Get_CollWorldMatrix());
+		D3DXVec3TransformCoord(&vSourMax, getColl->Get_Max(), getColl->Get_CollWorldMatrix());
 
-	if (fMax < fMin)
-		return false;
-	
-	// z축에서 바라봤을 때
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
 
-	fMin = max(vDestMin.z, vSourMin.z);
-	fMax = min(vDestMax.z, vSourMax.z);
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
 
-	if (fMax < fMin)
-		return false;
+		_vec3 temp2 = vSourMin;
+		if (vSourMax.x < vSourMin.x)
+		{
+			vSourMin.x = vSourMax.x;
+			vSourMax.x = temp2.x;
+		}
+
+		if (vSourMax.z < vSourMin.z)
+		{
+			vSourMin.z = vSourMax.z;
+			vSourMax.z = temp2.z;
+		}
+
+		// x축에서 바라봤을 때
+		fMin = max(vDestMin.x, vSourMin.x);
+		fMax = min(vDestMax.x, vSourMax.x);
+
+		if (fMax < fMin)
+			isCollisionX = false;
+
+		//// y축에서 바라봤을 때
+
+		//fMin = max(vDestMin.y, vSourMin.y);
+		//fMax = min(vDestMax.y, vSourMax.y);
+
+		//if (fMax < fMin)
+		//	isCollisionY = false;
+
+		// z축에서 바라봤을 때
+
+		fMin = max(vDestMin.z, vSourMin.z);
+		fMax = min(vDestMax.z, vSourMax.z);
+
+		if (fMax < fMin)
+			isCollisionZ = false;
+
+		if (isCollisionX&&isCollisionY&&isCollisionZ)
+			iter->second->Set_IsColl(true);
+		else
+			iter->second->Set_IsColl(false);
+	}
+
+	return true;
+}
+
+_bool CCalculator::Collision_StaticObject_AABB(const _vec3 * pDestMin, const _vec3 * pDestMax, const _matrix * pDestWorld, _vec3 playerRot)
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+
+	bool isCollisionX = true;
+	bool isCollisionY = true;
+	bool isCollisionZ = true;
+	int distNum = 4;
+
+	m_collisionCGameObjectCurrnet.clear();
+	m_collisionCGameObjectCompare.clear();
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (!iter->second->Get_Draw())
+			continue;
+		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
+
+		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+		_float		fMin, fMax;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+		D3DXVec3TransformCoord(&vSourMin, getColl->Get_Min(), getColl->Get_CollWorldMatrix());
+		D3DXVec3TransformCoord(&vSourMax, getColl->Get_Max(), getColl->Get_CollWorldMatrix());
+
+		// x축에서 바라봤을 때
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
+		fMin = max(vDestMin.x, vSourMax.x);
+		fMax = min(vDestMax.x, vSourMin.x);
+
+		if (fMax < fMin)
+			isCollisionX = false;
+
+		//// y축에서 바라봤을 때
+
+		//fMin = max(vDestMin.y, vSourMin.y);
+		//fMax = min(vDestMax.y, vSourMax.y);
+
+		//if (fMax < fMin)
+		//	isCollisionY = false;
+
+		// z축에서 바라봤을 때
+
+		fMin = max(vDestMin.z, vSourMax.z);
+		fMax = min(vDestMax.z, vSourMin.z);
+
+		if (fMax < fMin)
+			isCollisionZ = false;
+
+		if (isCollisionX&&isCollisionY&&isCollisionZ)
+			iter->second->Set_IsColl(true);
+		else
+			iter->second->Set_IsColl(false);
+	}
 
 	return true;
 }

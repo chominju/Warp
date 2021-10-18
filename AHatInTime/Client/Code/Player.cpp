@@ -7,6 +7,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 	, m_pushKey{false,false,false,false,}
 	, m_isKeyStop{ false,false,false,false }
+	, m_startTime(0.f)
 {
 
 }
@@ -40,9 +41,18 @@ HRESULT CPlayer::Ready_Object(void)
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
+
+	m_startTime += fTimeDelta;
+	if (m_startTime > 1.f)
+	{
+		_vec3 playerRot;
+		m_pTransformCom->Get_Rotation(&playerRot);
+		m_pCalculatorCom->Collision_InteractionObject_AABB(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
+		m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+	}
+	//m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 	
-	m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
-	m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+	
 	//Collision_ToObject();
 	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
 	//{
@@ -92,11 +102,23 @@ void CPlayer::Render_Object(void)
 	newWorldMatrix._42 += 3;
 	
 	m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix/*m_pTransformCom->Get_WorldMatrix()*/);
+	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 }
 
 HRESULT CPlayer::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
+
+	// ¸Þ½¬
+	pComponent = m_pStatic_MeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_StaticMesh_Player"));
+	NULL_CHECK_RETURN(pComponent);
+	Add_AddComponent(L"Com_StaticMesh", ID_DYNAMIC, pComponent);
+
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pStatic_MeshCom->Get_VtxPos(), m_pStatic_MeshCom->Get_NumVtx(), m_pStatic_MeshCom->Get_VtxSize());
+	NULL_CHECK_RETURN(pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+
+
 
 	// DynamicMesh
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(L"Proto_Mesh_Player"));

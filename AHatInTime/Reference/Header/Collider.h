@@ -18,7 +18,7 @@ public:
 	const _vec3*			Get_Max(void) { return &m_vMax; }
 
 public:
-	HRESULT			Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize);
+	HRESULT			Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize, _float posX =0 , _float posY = 0, _float posZ = 0);
 	void			Render_Collider(COLLTYPE eType, const _matrix* pColliderMatrix);
 
 private:
@@ -36,7 +36,7 @@ public:
 	static CCollider*	Create(LPDIRECT3DDEVICE9 pGraphicDev, 
 		const _vec3* pPos,
 		const _ulong& dwNumVtx,
-		const _ulong& dwVtxSize);
+		const _ulong& dwVtxSize, _float posX = 0, _float posY = 0, _float posZ = 0);
 
 	virtual CComponent* Clone(void);
 	virtual void Free(void);

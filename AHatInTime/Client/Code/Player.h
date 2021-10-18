@@ -13,6 +13,7 @@ class CCalculator;
 class CCollider;
 class CNaviMesh;
 class CSphereCollider;
+class CStaticMesh;
 
 END
 class CPlayer : public CGameObject
@@ -38,12 +39,12 @@ private:
 	_bool					Collision_ToObject(/*const _tchar* pLayerTag, const _tchar* pObjTag*/);
 
 private:
-	//CStaticMesh*			m_pStatic_MeshCom = nullptr;
+	CStaticMesh*			m_pStatic_MeshCom = nullptr;
 	CDynamicMesh*			m_pMeshCom = nullptr;
 	//CNaviMesh*				m_pNaviCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
-	//CCollider*				m_pColliderCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 	CSphereCollider*		m_pSphereColliderCom = nullptr;
 
 	CCalculator*			m_pCalculatorCom = nullptr;
@@ -51,7 +52,7 @@ private:
 
 	_bool					m_pushKey[KEY_END];
 	_bool					m_isKeyStop[KEY_END];
-
+	_float					m_startTime;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

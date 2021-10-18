@@ -32,12 +32,13 @@ public:
 	_float			Compute_HeightOnTerrain(const _vec3* pPos, const _vec3* pTerrainVtxPos, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv = 1);
 	_vec3			Picking_OnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransCom);
 
-	_bool			Collision_AABB(const _vec3* pDestMin,
+	_bool			Collision_InteractionObject_AABB(const _vec3* pDestMin,
 									const _vec3* pDestMax,
-									const _matrix* pDestWorld,
-									const _vec3* pSourMin,
-									const _vec3* pSourMax,
-									const _matrix* pSourWorld);
+									const _matrix* pDestWorld , _vec3 playerRot);
+
+	_bool			Collision_StaticObject_AABB(const _vec3* pDestMin,
+		const _vec3* pDestMax,
+		const _matrix* pDestWorld, _vec3 playerRot);
 
 	_bool			Collision_OBB(const _vec3* pDestMin,
 								const _vec3* pDestMax,
@@ -48,6 +49,7 @@ public:
 
 	_bool			Collision_StaticObject(CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
 	_bool			Collision_InteractionObject(CSphereCollider* playerCollider, _bool pushKey[], _bool isKeyStop[]);
+
 
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);

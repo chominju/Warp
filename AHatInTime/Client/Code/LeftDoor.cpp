@@ -5,6 +5,7 @@
 
 CLeftDoor::CLeftDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
+	, isOpen(false)
 {
 
 }
@@ -53,6 +54,23 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
+	if (m_bColl)
+		isOpen = true;
+
+	if (isOpen)
+	{
+		_vec3					m_vDir;
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+		m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z > 123)
+		{
+			isOpen = false;
+			m_bDraw = false;
+		}
+	}
 	return 0;
 }
 
@@ -89,6 +107,12 @@ void CLeftDoor::Render_Object(void)
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
 	//m_pMeshCom->Render_Meshes();
+
+
+		//const _matrix* getWorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		//_matrix getWorldMatrixTemp = *getWorldMatrix;
+		//getWorldMatrixTemp._41 -= 5;
+		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 
 	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
@@ -155,7 +179,7 @@ HRESULT CLeftDoor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),60,0,50);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 

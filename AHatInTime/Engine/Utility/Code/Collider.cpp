@@ -36,11 +36,11 @@ Engine::CCollider::~CCollider(void)
 
 }
 
-CCollider* Engine::CCollider::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize)
+CCollider* Engine::CCollider::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize, _float posX, _float posY, _float posZ)
 {
 	CCollider*	pInstance = new CCollider(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Collider(pPos, dwNumVtx, dwVtxSize)))
+	if (FAILED(pInstance->Ready_Collider(pPos, dwNumVtx, dwVtxSize,  posX,  posY,  posZ)))
 		Safe_Release(pInstance);
 
 	return pInstance;
@@ -67,7 +67,7 @@ void Engine::CCollider::Free(void)
 
 }
 
-HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize)
+HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNumVtx, const _ulong& dwVtxSize, _float posX, _float posY, _float posZ)
 {
 	D3DXComputeBoundingBox(pPos, dwNumVtx, sizeof(_vec3), &m_vMin, &m_vMax);
 
@@ -90,6 +90,14 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 
 
 	VTXCUBE*			pVertex = nullptr;
+
+	m_vMin.x -= posX;
+	m_vMin.y -= posY;
+	m_vMin.z -= posZ;
+
+	m_vMax.x += posX;
+	m_vMax.y += posY;
+	m_vMax.z += posZ;
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
 

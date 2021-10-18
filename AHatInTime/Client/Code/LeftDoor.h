@@ -30,7 +30,8 @@ private:
 	virtual HRESULT			Add_Component(void);
 	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
-//private:	
+private:
+	_bool					isOpen;
 //	CStaticMesh*			m_pMeshCom = nullptr;
 //	CTransform*				m_pTransformCom = nullptr;
 //	CRenderer*				m_pRendererCom = nullptr;

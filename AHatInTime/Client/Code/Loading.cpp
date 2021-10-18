@@ -59,6 +59,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 
 
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Stone", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"WallClear6.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_StaticMesh_Player", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Mesh/DynamicMesh/Player/", L"Player.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Mesh/DynamicMesh/Player/", L"Player.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Rectangle_White.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/Rectangle_White.jpg", TYPE_NORMAL, 1)), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Transform", CTransform::Create(m_pGraphicDev)) , E_FAIL);

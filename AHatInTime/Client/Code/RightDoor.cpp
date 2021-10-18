@@ -5,6 +5,7 @@
 
 CRightDoor::CRightDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
+	,isOpen(false)
 {
 
 }
@@ -36,9 +37,23 @@ Engine::_int CRightDoor::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	SetUp_OnTerrain();
+
 	if (m_bColl)
+		isOpen = true;
+
+	if (isOpen)
 	{
-		int a;
+		_vec3					m_vDir;
+		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+		m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
+
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z < 117)
+		{
+			isOpen = false;
+			m_bDraw = false;
+		}
 	}
 	//m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
 
@@ -158,7 +173,7 @@ HRESULT CRightDoor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),60,0,50);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
