@@ -10,6 +10,8 @@ CBall::CBall(LPDIRECT3DDEVICE9 pGraphicDev)
 	, isBall(false)
 	, m_firstPushKey{ false,false,false,false }
 	, m_isFirstColl(false)
+	, m_speed(3.f)
+	, m_angle{0.f,0.f}
 {
 
 }
@@ -58,10 +60,12 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
+	bool check=false;
 	if (m_bColl)
 	{
 		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
 	 	bool *getPlayerPush =  dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+		dynamic_cast<CPlayer*>(getPlayer->second)->Set_Speed(m_speed);
 		if (!m_isFirstColl)
 		{
 			m_isFirstColl = true;
@@ -71,54 +75,108 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 			}
 		}
 
+
+		if (getPlayerPush[0])// 아래
+		{
+			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+		}
+		if (getPlayerPush[1])//위
+		{
+			m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+		}
+		if (getPlayerPush[2])//왼쪽
+		{
+			m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+		}
+		if (getPlayerPush[3])//오른쪽
+		{
+			m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+		}
+			
+			for (int i = 0; i < KEY_END; i++)
+			{
+				if (getPlayerPush[i] && m_firstPushKey[i])
+				{
+					if (i == 0)
+					{
+						m_angle[1] += fTimeDelta;
+					}
+					else if (i == 1)
+					{
+						m_angle[1] -= fTimeDelta;
+					}
+					else if (i == 2)
+					{
+						m_angle[0] -= fTimeDelta;
+					}
+					else
+					{
+						m_angle[0] += fTimeDelta;
+					}
+					_vec3					m_vDir;
+					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					D3DXVec3Normalize(&m_vDir, &m_vDir);
+					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//m_pTransformCom->Set_Rotation(m_angle[0], m_angle[1], 0.f);
+					check = true;
+					break;
+				}
+				else
+					check = false;
+				/*			break;
+						case KEY_UP:
+							if (getPlayerPush[i]&& m_firstPushKey[i])
+							{
+								_vec3					m_vDir;
+								m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+								D3DXVec3Normalize(&m_vDir, &m_vDir);
+								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+							}
+							else
+								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
+							break;
+						case KEY_LEFT:
+							if (getPlayerPush[i]&& m_firstPushKey[i])
+							{
+								_vec3					m_vDir;
+								m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+								D3DXVec3Normalize(&m_vDir, &m_vDir);
+								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+							}
+							else
+								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
+							break;
+						case KEY_RIGHT:
+							if (getPlayerPush[i]&& m_firstPushKey[i])
+							{
+								_vec3					m_vDir;
+								m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+								D3DXVec3Normalize(&m_vDir, &m_vDir);
+								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+							}
+							else
+								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
+						default:
+							break;
+						}*/
+			}
+		if(!check)
+			dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
+	}
+	else
+	{
+		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
+		bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+		dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
+
+		m_isFirstColl = false;
 		for (int i = 0; i < KEY_END; i++)
 		{
-			switch (i)
-			{
-			case KEY_DOWN:
-				if (getPlayerPush[i])
-				{
-					_vec3					m_vDir;
-					m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-				}
-				break;
-			case KEY_UP:
-				if (getPlayerPush[i])
-				{
-					_vec3					m_vDir;
-					m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-				}
-				break; 
-			case KEY_LEFT:
-				if (getPlayerPush[i])
-				{
-					_vec3					m_vDir;
-					m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-				}
-				break;
-			case KEY_RIGHT:
-				if (getPlayerPush[i])
-				{
-					_vec3					m_vDir;
-					m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-				}
-			default:
-				break;
-			}
+			m_firstPushKey[i] = false;
 		}
-		
 	}
 		//isOpen = true;
 

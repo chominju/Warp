@@ -32,6 +32,10 @@ public:
 
 	_bool*		Get_PushKey() { return m_pushKey; }
 
+	_float					Get_Speed() { return m_speed; }
+	void					Set_Speed(_float speed) { m_speed = speed; }
+	void					Reset_Speed() { m_speed = m_firstSpeed; }
+
 private:
 	HRESULT					Add_Component(void);
 	void					Key_Input(const _float& fTimeDelta);
@@ -55,6 +59,8 @@ private:
 	_bool					m_pushKey[KEY_END];
 	_bool					m_isKeyStop[KEY_END];
 	_float					m_startTime;
+	_float					m_speed;
+	_float					m_firstSpeed;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

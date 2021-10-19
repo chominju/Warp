@@ -34,6 +34,8 @@ private:
 	_bool					isBall;
 	_bool					m_isFirstColl;
 	_bool					m_firstPushKey[KEY_END];
+	_float					m_speed;
+	_float					m_angle[2];
 //	CStaticMesh*			m_pMeshCom = nullptr;
 //	CTransform*				m_pTransformCom = nullptr;
 //	CRenderer*				m_pRendererCom = nullptr;

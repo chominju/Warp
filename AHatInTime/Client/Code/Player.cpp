@@ -8,6 +8,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_pushKey{false,false,false,false,}
 	, m_isKeyStop{ false,false,false,false }
 	, m_startTime(0.f)
+	, m_speed(10.f)
+	, m_firstSpeed(m_speed)
 {
 
 }
@@ -179,7 +181,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
 		if (!m_isKeyStop[KEY_DOWN])
 		{
-			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_UP] = false;
 		}
 		m_pushKey[KEY_DOWN] = true;
@@ -198,7 +200,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
 		if (!m_isKeyStop[KEY_UP])
 		{
-			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_DOWN] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
@@ -217,7 +219,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
 		if (!m_isKeyStop[KEY_LEFT])
 		{
-			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_RIGHT] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
@@ -236,7 +238,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
 		if (!m_isKeyStop[KEY_RIGHT])
 		{
-			m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_LEFT] = false;
 		}
 		m_pushKey[KEY_DOWN] = false;
