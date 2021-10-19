@@ -85,6 +85,9 @@
     <Filter Include="02. GameObject\11. InteractionObject\02. RightDoor">
       <UniqueIdentifier>{5e4737ba-6f7a-495c-90f4-0371d999052e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject\03. Ball">
+      <UniqueIdentifier>{f1e3e5bd-b153-4044-a503-a3ba68374031}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -165,6 +168,9 @@
     <ClInclude Include="..\Code\RightDoor.h">
       <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Ball.h">
+      <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -232,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\RightDoor.cpp">
       <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Ball.cpp">
+      <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

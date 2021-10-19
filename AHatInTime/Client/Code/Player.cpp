@@ -246,7 +246,13 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pMeshCom->Set_AnimationIndex(11);
 	}	
 	else
+	{
+		m_pushKey[KEY_DOWN] = false;
+		m_pushKey[KEY_UP] = false;
+		m_pushKey[KEY_LEFT] = false;
+		m_pushKey[KEY_RIGHT] = false;
 		m_pMeshCom->Set_AnimationIndex(23);
+	}
 	//else
 	//	m_pushKey[KEY_RIGHT] = false;
 

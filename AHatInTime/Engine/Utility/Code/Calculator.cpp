@@ -215,9 +215,6 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 {
 	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
 
-	bool isCollisionX = true;
-	bool isCollisionY = true;
-	bool isCollisionZ = true;
 	int distNum = 4;
 
 	m_collisionCGameObjectCurrnet.clear();
@@ -225,6 +222,9 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 
 	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
 	{
+	bool isCollisionX = true;
+	bool isCollisionY = true;
+	bool isCollisionZ = true;
 		if (!iter->second->Get_Draw())
 			continue;
 		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();

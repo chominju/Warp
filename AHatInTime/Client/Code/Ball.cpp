@@ -1,27 +1,31 @@
 #include "stdafx.h"
-#include "RightDoor.h"
+#include "Ball.h"
+#include "Player.h"
+
 
 #include "Export_Function.h"
 
-CRightDoor::CRightDoor(LPDIRECT3DDEVICE9 pGraphicDev)
+CBall::CBall(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
-	,isOpen(false)
+	, isBall(false)
+	, m_firstPushKey{ false,false,false,false }
+	, m_isFirstColl(false)
 {
 
 }
 
-CRightDoor::CRightDoor(const CRightDoor& rhs)
+CBall::CBall(const CBall& rhs)
 	: CInteractionObject(rhs)
 {
 
 }
 
-CRightDoor::~CRightDoor(void)
+CBall::~CBall(void)
 {
 
 }
 
-HRESULT CRightDoor::Ready_Object(void)
+HRESULT CBall::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
@@ -32,29 +36,12 @@ HRESULT CRightDoor::Ready_Object(void)
 	return S_OK;
 }
 
-Engine::_int CRightDoor::Update_Object(const _float& fTimeDelta)
+Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
 	SetUp_OnTerrain();
-
-	if (m_bColl)
-		isOpen = true;
-
-	if (isOpen)
-	{
-		_vec3					m_vDir;
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
-
-		_vec3 getPos;
-		m_pTransformCom->Get_Info(INFO_POS, &getPos);
-		if (getPos.z < 117)
-		{
-			isOpen = false;
-			m_bDraw = false;
-		}
-	}
+	//m_bColl
 	//m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
 
 	//if (m_bColl)
@@ -71,10 +58,88 @@ Engine::_int CRightDoor::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
+	if (m_bColl)
+	{
+		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
+	 	bool *getPlayerPush =  dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+		if (!m_isFirstColl)
+		{
+			m_isFirstColl = true;
+			for (int i = 0; i < KEY_END; i++)
+			{
+				m_firstPushKey[i] = getPlayerPush[i];
+			}
+		}
+
+		for (int i = 0; i < KEY_END; i++)
+		{
+			switch (i)
+			{
+			case KEY_DOWN:
+				if (getPlayerPush[i])
+				{
+					_vec3					m_vDir;
+					m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					D3DXVec3Normalize(&m_vDir, &m_vDir);
+					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+				}
+				break;
+			case KEY_UP:
+				if (getPlayerPush[i])
+				{
+					_vec3					m_vDir;
+					m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					D3DXVec3Normalize(&m_vDir, &m_vDir);
+					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+				}
+				break; 
+			case KEY_LEFT:
+				if (getPlayerPush[i])
+				{
+					_vec3					m_vDir;
+					m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					D3DXVec3Normalize(&m_vDir, &m_vDir);
+					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+				}
+				break;
+			case KEY_RIGHT:
+				if (getPlayerPush[i])
+				{
+					_vec3					m_vDir;
+					m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					D3DXVec3Normalize(&m_vDir, &m_vDir);
+					m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+				}
+			default:
+				break;
+			}
+		}
+		
+	}
+		//isOpen = true;
+
+	//if (isOpen)
+	//{
+		//_vec3					m_vDir;
+		//m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+		//m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+
+		//_vec3 getPos;
+		//m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		//if (getPos.z > 123)
+		//{
+		//	//isOpen = false;
+		//	m_bDraw = false;
+		//}
+	//}
 	return 0;
 }
 
-void CRightDoor::Render_Object(void)
+void CBall::Render_Object(void)
 {
 	if (false == m_bDraw)
 		return;
@@ -107,6 +172,12 @@ void CRightDoor::Render_Object(void)
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
 	//m_pMeshCom->Render_Meshes();
+
+
+		//const _matrix* getWorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		//_matrix getWorldMatrixTemp = *getWorldMatrix;
+		//getWorldMatrixTemp._41 -= 5;
+		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 
 	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
@@ -146,12 +217,12 @@ void CRightDoor::Render_Object(void)
 //	m_objectData.m_objectIndex = objectData.m_objectIndex;
 //}
 
-HRESULT CRightDoor::Add_Component(void)
+HRESULT CBall::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
 	// ¸Þ½¬
-	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_DoorClearRight.x"));
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Skeleton_Ball.x"));
 	NULL_CHECK_RETURN(pComponent);
 	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
@@ -173,7 +244,7 @@ HRESULT CRightDoor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),70,0,50);
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
@@ -202,9 +273,9 @@ HRESULT CRightDoor::Add_Component(void)
 //	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 //}
 
-CRightDoor* CRightDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CBall* CBall::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CRightDoor*	pInstance = new CRightDoor(pGraphicDev);
+	CBall*	pInstance = new CBall(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -212,7 +283,7 @@ CRightDoor* CRightDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CRightDoor::Free(void)
+void CBall::Free(void)
 {
 	CGameObject::Free();
 }

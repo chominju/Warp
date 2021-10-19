@@ -3,6 +3,7 @@
 #include "Load_Manager.h"
 #include "LeftDoor.h"
 #include "RightDoor.h"
+#include "Ball.h"
 
 #include "Export_Function.h"
 
@@ -162,7 +163,15 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor3", pGameObject), E_FAIL);
-	//
+	
+	
+	// º¼
+	pGameObject = CBall::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CBall*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.f, 2.5f, 120.f);
+	dynamic_cast<CBall*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Ball", pGameObject), E_FAIL);
+
 	
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 

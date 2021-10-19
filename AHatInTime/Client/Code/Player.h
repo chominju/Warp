@@ -30,6 +30,8 @@ public:
 
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
 
+	_bool*		Get_PushKey() { return m_pushKey; }
+
 private:
 	HRESULT					Add_Component(void);
 	void					Key_Input(const _float& fTimeDelta);
