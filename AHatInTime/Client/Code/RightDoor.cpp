@@ -5,7 +5,8 @@
 
 CRightDoor::CRightDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
-	,isOpen(false)
+	,m_isOpen(false)
+	, m_isFloorSwitch(false)
 {
 
 }
@@ -38,36 +39,88 @@ Engine::_int CRightDoor::Update_Object(const _float& fTimeDelta)
 
 	SetUp_OnTerrain();
 
-	if (m_bColl)
-		isOpen = true;
+	//if (m_bColl)
+	//	isOpen = true;
 
-	if (isOpen)
+	//if (isOpen)
+	//{
+	//	_vec3					m_vDir;
+	//	m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+	//	m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
+
+	//	_vec3 getPos;
+	//	m_pTransformCom->Get_Info(INFO_POS, &getPos);
+	//	if (getPos.z < 117)
+	//	{
+	//		isOpen = false;
+	//		m_bDraw = false;
+	//	}
+	//}
+	////m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
+
+	////if (m_bColl)
+	////{
+	////	CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"Player_Layer", L"Player",0);
+	////	//CPlayer * getPlayer = CManagement::GetInstance()
+	////	// 플레이어 세팅
+	////}
+
+	//_vec3	vPos;
+	//m_pTransformCom->Get_Info(INFO_POS, &vPos);
+
+	////m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
+
+	// 1번 문
+	if (m_bSensorColl)
+		m_isOpen = true;
+
+	if (m_doorOption == 1 || m_doorOption == 3)
 	{
-		_vec3					m_vDir;
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
-
-		_vec3 getPos;
-		m_pTransformCom->Get_Info(INFO_POS, &getPos);
-		if (getPos.z < 117)
+		if (m_isOpen)
 		{
-			isOpen = false;
-			m_bDraw = false;
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
+
+			_vec3 getPos;
+			m_pTransformCom->Get_Info(INFO_POS, &getPos);
+			if (getPos.z < 117)
+			{
+				m_isOpen = false;
+				m_bDraw = false;
+			}
 		}
 	}
-	//m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
 
-	//if (m_bColl)
-	//{
-	//	CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"Player_Layer", L"Player",0);
-	//	//CPlayer * getPlayer = CManagement::GetInstance()
-	//	// 플레이어 세팅
-	//}
+	// 2번 문 
+	if (m_doorOption == 2 && m_isFloorSwitch)
+	{
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z >= 117)
+		{
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, +80.f, fTimeDelta);
+		}
+		else
+			m_bDraw = false;
 
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
 
-	//m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
+	}
+	else if (m_doorOption == 2)
+	{
+		m_bDraw = true;
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z < m_firstPos.z)
+		{
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+		}
+
+	}
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -110,7 +163,7 @@ void CRightDoor::Render_Object(void)
 
 
 	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
-
+	m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
 
@@ -173,9 +226,15 @@ HRESULT CRightDoor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),70,0,50);
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+
+	// SensorCollider
+	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(), 70, 0, 50);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
+
 
 	//// Optimization
 	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));

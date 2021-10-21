@@ -88,6 +88,9 @@
     <Filter Include="02. GameObject\11. InteractionObject\03. Ball">
       <UniqueIdentifier>{f1e3e5bd-b153-4044-a503-a3ba68374031}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\11. InteractionObject\04. FloorSwitch">
+      <UniqueIdentifier>{51487c92-ddba-4faf-9c3b-1acdc34fa8ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -171,6 +174,9 @@
     <ClInclude Include="..\Code\Ball.h">
       <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\FloorSwitch.h">
+      <Filter>02. GameObject\11. InteractionObject\04. FloorSwitch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -241,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Ball.cpp">
       <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FloorSwitch.cpp">
+      <Filter>02. GameObject\11. InteractionObject\04. FloorSwitch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

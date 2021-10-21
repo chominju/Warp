@@ -34,6 +34,7 @@ public:
 	CStaticMesh* Get_StaticMesh_Component() { return m_pMeshCom; }
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
 	CCollider* Get_Collider_Component() { return m_pColliderCom; }
+	CCollider* Get_ColliderSensor_Component() { return m_pColliderSensorCom; }
 
 protected:
 	virtual HRESULT			Add_Component(void);
@@ -46,6 +47,7 @@ protected:
 	CRenderer*				m_pRendererCom		= nullptr;
 	CCalculator*			m_pCalculatorCom	= nullptr;
 	CCollider*				m_pColliderCom		= nullptr;
+	CCollider*				m_pColliderSensorCom = nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
 	//Object_Data				m_objectData;

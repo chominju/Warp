@@ -61,7 +61,7 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	bool check=false;
-	if (m_bColl)
+	if (m_bSensorColl)
 	{
 		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
 	 	bool *getPlayerPush =  dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
@@ -238,7 +238,7 @@ void CBall::Render_Object(void)
 		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 
-	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+		m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
@@ -302,9 +302,9 @@ HRESULT CBall::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
+	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
 
 	//// Optimization
 	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));

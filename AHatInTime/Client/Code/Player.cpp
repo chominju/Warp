@@ -49,8 +49,9 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	{
 		_vec3 playerRot;
 		m_pTransformCom->Get_Rotation(&playerRot);
-		m_pCalculatorCom->Collision_InteractionObject_AABB(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
+		m_pCalculatorCom->Collision_InteractionObjectSensor(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
 		m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+		m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 	}
 	//m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 	
@@ -87,7 +88,7 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-
+	//Add_RenderGroup(RENDER_PLAYER, this);
 	return 0;
 }
 

@@ -1,28 +1,30 @@
 #include "stdafx.h"
+#include "FloorSwitch.h"
 #include "LeftDoor.h"
+#include "RightDoor.h"
+#include "Ball.h"
 
 #include "Export_Function.h"
 
-CLeftDoor::CLeftDoor(LPDIRECT3DDEVICE9 pGraphicDev)
+CFloorSwitch::CFloorSwitch(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
-	, m_isOpen(false)
-	, m_isFloorSwitch(false)
+	, m_isBallColl(false)
 {
 
 }
 
-CLeftDoor::CLeftDoor(const CLeftDoor& rhs)
+CFloorSwitch::CFloorSwitch(const CFloorSwitch& rhs)
 	: CInteractionObject(rhs)
 {
 
 }
 
-CLeftDoor::~CLeftDoor(void)
+CFloorSwitch::~CFloorSwitch(void)
 {
 
 }
 
-HRESULT CLeftDoor::Ready_Object(void)
+HRESULT CFloorSwitch::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
@@ -33,7 +35,7 @@ HRESULT CLeftDoor::Ready_Object(void)
 	return S_OK;
 }
 
-Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
+Engine::_int CFloorSwitch::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
@@ -48,69 +50,63 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	//	// 플레이어 세팅
 	//}
 
+	_vec3	vPos;
+	m_pTransformCom->Get_Info(INFO_POS, &vPos);
+
 	//m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	 
-	// 1번 문
-	if (m_bSensorColl)
-		m_isOpen = true;
 
-	if (m_doorOption == 1 || m_doorOption == 3)
+	IsCollisionBall();
+
+	if (m_bSensorColl || m_isBallColl)
 	{
-		if (m_isOpen)
+		auto getInteractionObject =	CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+		
+		for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
 		{
-			_vec3					m_vDir;
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+			if (iter->first==L"LeftDoor2")
+				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
 
-			_vec3 getPos;
-			m_pTransformCom->Get_Info(INFO_POS, &getPos);
-			if (getPos.z > 123)
-			{
-				m_isOpen = false;
-				m_bDraw = false;
-			}
+				if(iter->first == L"RightDoor2")
+					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+		}
+
+	}
+	else
+	{
+		auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+		for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+		{
+			if (iter->first == L"LeftDoor2")
+				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(false);
+
+			if(iter->first == L"RightDoor2")
+				dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(false);
 		}
 	}
-
-	// 2번 문 
-	if (m_doorOption == 2 && m_isFloorSwitch)
+	/*if (isOpen)
 	{
-		_vec3 getPos;
-		m_pTransformCom->Get_Info(INFO_POS, &getPos);
-		if (getPos.z <= 123)
-		{
 		_vec3					m_vDir;
 		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
-		}
-		else
-			m_bDraw = false;
 
-
-	}
-	else if(m_doorOption==2)
-	{
-		m_bDraw = true;
 		_vec3 getPos;
 		m_pTransformCom->Get_Info(INFO_POS, &getPos);
-		if (getPos.z > m_firstPos.z)
+		if (getPos.z > 123)
 		{
-			_vec3					m_vDir;
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, 80.f, fTimeDelta);
+			isOpen = false;
+			m_bDraw = false;
 		}
-
-	}
+	}*/
 	return 0;
 }
 
-void CLeftDoor::Render_Object(void)
+void CFloorSwitch::Render_Object(void)
 {
 	if (false == m_bDraw)
 		return;
-
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
 	//if (!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear6.x") ||
@@ -147,9 +143,27 @@ void CLeftDoor::Render_Object(void)
 		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 
-	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 	m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
+
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
+}
+
+void CFloorSwitch::IsCollisionBall()
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (iter->first == L"Ball")
+			m_targetBall = iter->second;
+	}
+
+	auto ballColl = dynamic_cast<CBall*>(m_targetBall)->Get_ColliderSensor_Component();
+	if (m_pCalculatorCom->Collision_AABB(ballColl->Get_Min(), ballColl->Get_Max(), ballColl->Get_CollWorldMatrix(),
+		m_pColliderSensorCom->Get_Min(), m_pColliderSensorCom->Get_Max(), m_pColliderSensorCom->Get_CollWorldMatrix()))
+		m_isBallColl = true;
+	else
+		m_isBallColl = false;
 }
 
 //void CLeftDoor::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)
@@ -184,12 +198,12 @@ void CLeftDoor::Render_Object(void)
 //	m_objectData.m_objectIndex = objectData.m_objectIndex;
 //}
 
-HRESULT CLeftDoor::Add_Component(void)
+HRESULT CFloorSwitch::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
 	// 메쉬
-	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_DoorClearLeft.x"));
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Floorswitch.x"));
 	NULL_CHECK_RETURN(pComponent);
 	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
@@ -211,12 +225,7 @@ HRESULT CLeftDoor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
-
-	// SensorCollider
-	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),70, 0, 50);
+	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),-30,0,-30);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
 
@@ -245,9 +254,9 @@ HRESULT CLeftDoor::Add_Component(void)
 //	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 //}
 
-CLeftDoor* CLeftDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CFloorSwitch* CFloorSwitch::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CLeftDoor*	pInstance = new CLeftDoor(pGraphicDev);
+	CFloorSwitch*	pInstance = new CFloorSwitch(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -255,7 +264,7 @@ CLeftDoor* CLeftDoor::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CLeftDoor::Free(void)
+void CFloorSwitch::Free(void)
 {
 	CGameObject::Free();
 }

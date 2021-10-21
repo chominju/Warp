@@ -162,6 +162,7 @@
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\Ball.h" />
     <ClInclude Include="..\Code\Define.h" />
+    <ClInclude Include="..\Code\FloorSwitch.h" />
     <ClInclude Include="..\Code\InteractionObject.h" />
     <ClInclude Include="..\Code\LeftDoor.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
@@ -189,6 +190,7 @@
   <ItemGroup>
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Ball.cpp" />
+    <ClCompile Include="..\Code\FloorSwitch.cpp" />
     <ClCompile Include="..\Code\InteractionObject.cpp" />
     <ClCompile Include="..\Code\LeftDoor.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />

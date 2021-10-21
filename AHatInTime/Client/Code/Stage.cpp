@@ -4,6 +4,7 @@
 #include "LeftDoor.h"
 #include "RightDoor.h"
 #include "Ball.h"
+#include "FloorSwitch.h"
 
 #include "Export_Function.h"
 
@@ -128,12 +129,16 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(89.f, -0.1f, 120.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(1);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(89.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(89.f, -0.1f, 120.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(1);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(89.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor", pGameObject), E_FAIL);
 
 
@@ -142,12 +147,16 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(133.f, -0.1f, 120.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(2);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(133.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor2", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(133.f, -0.1f, 120.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(2);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(133.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor2", pGameObject), E_FAIL);
 
 
@@ -156,21 +165,33 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(3);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor3", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(3);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor3", pGameObject), E_FAIL);
 	
 	
 	// 볼
 	pGameObject = CBall::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CBall*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.f, 2.5f, 120.f);
+	dynamic_cast<CBall*>(pGameObject)->Get_Transform_Component()->Set_Pos(110.f, 2.5f, 117.f);
 	dynamic_cast<CBall*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Ball", pGameObject), E_FAIL);
+
+	// 바닥 스위치
+	pGameObject = CFloorSwitch::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(118.f, 0.f, 128.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch", pGameObject), E_FAIL);
+
 
 	
 	NULL_CHECK_RETURN(pLayer, E_FAIL);

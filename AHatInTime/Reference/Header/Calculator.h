@@ -32,13 +32,20 @@ public:
 	_float			Compute_HeightOnTerrain(const _vec3* pPos, const _vec3* pTerrainVtxPos, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv = 1);
 	_vec3			Picking_OnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransCom);
 
-	_bool			Collision_InteractionObject_AABB(const _vec3* pDestMin,
+	_bool			Collision_InteractionObjectSensor(const _vec3* pDestMin,
 									const _vec3* pDestMax,
 									const _matrix* pDestWorld , _vec3 playerRot);
 
-	_bool			Collision_StaticObject_AABB(const _vec3* pDestMin,
+	/*_bool			Collision_StaticObject_AABB(const _vec3* pDestMin,
 		const _vec3* pDestMax,
-		const _matrix* pDestWorld, _vec3 playerRot);
+		const _matrix* pDestWorld, _vec3 playerRot);*/
+
+	_bool			Collision_AABB(const _vec3* pDestMin,
+		const _vec3* pDestMax,
+		const _matrix* pDestWorld,
+		const _vec3* pSourMin,
+		const _vec3* pSourMax,
+		const _matrix* pSourWorld);
 
 	_bool			Collision_OBB(const _vec3* pDestMin,
 								const _vec3* pDestMax,
@@ -56,10 +63,16 @@ private:
 	void		Set_Axis(OBB* pObb);
 
 private:
-	vector<CGameObject*>	m_collisionCGameObjectCurrnet;
-	vector<CGameObject*>	m_collisionCGameObjectPrev;
+	vector<CGameObject*>	m_collision_StaticObjectCurrnet;
+	vector<CGameObject*>	m_collision_StaticObjectPrev;
+	vector<CGameObject*>	m_collision_StaticObjectCompare;
 
-	vector<CGameObject*>	m_collisionCGameObjectCompare;
+
+
+	vector<CGameObject*>	m_collision_InteractionObjectCurrnet;
+	vector<CGameObject*>	m_collision_InteractionObjectPrev;
+
+	vector<CGameObject*>	m_collision_InteractionObjectCompare;
 public:
 	static CCalculator*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual CComponent*		Clone(void);

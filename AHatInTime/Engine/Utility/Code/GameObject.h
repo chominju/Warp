@@ -20,6 +20,7 @@ public:
 	void			Set_Index(int index) { m_index = index; }
 	int				Get_Index() { return m_index; }
 	void			Set_IsColl(_bool coll) { m_bColl = coll; }
+	void			Set_IsSensorColl(_bool sensorColl) { m_bSensorColl = sensorColl; }
 
 	void			Set_StopPlayer(KEY keyType, bool stopPlayer) { m_stopPlayer[keyType] = stopPlayer; }
 	void			Set_StopPlayer(_bool stopPlayer[]);
@@ -43,6 +44,7 @@ protected:
 	_float								m_fViewZ;
 	int									m_index;
 	_bool								m_bColl;
+	_bool								m_bSensorColl;
 	_bool								m_bDraw;
 	_bool								m_stopPlayer[KEY_END];
 

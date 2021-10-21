@@ -209,7 +209,7 @@ Engine::_vec3 Engine::CCalculator::Picking_OnTerrain(HWND hWnd,
 	return _vec3();
 }
 
-Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3* pDestMin,
+Engine::_bool Engine::CCalculator::Collision_InteractionObjectSensor(const _vec3* pDestMin,
 													const _vec3* pDestMax, 
 													const _matrix* pDestWorld, _vec3 playerRot)
 {
@@ -217,8 +217,8 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 
 	int distNum = 4;
 
-	m_collisionCGameObjectCurrnet.clear();
-	m_collisionCGameObjectCompare.clear();
+	m_collision_StaticObjectCurrnet.clear();
+	m_collision_StaticObjectCompare.clear();
 
 	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
 	{
@@ -227,7 +227,10 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 	bool isCollisionZ = true;
 		if (!iter->second->Get_Draw())
 			continue;
-		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
+		CCollider* getSensorColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_ColliderSensor_Component();
+
+		if (getSensorColl == nullptr)
+			continue;
 
 		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
 		_float		fMin, fMax;
@@ -235,8 +238,8 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
 		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
 
-		D3DXVec3TransformCoord(&vSourMin, getColl->Get_Min(), getColl->Get_CollWorldMatrix());
-		D3DXVec3TransformCoord(&vSourMax, getColl->Get_Max(), getColl->Get_CollWorldMatrix());
+		D3DXVec3TransformCoord(&vSourMin, getSensorColl->Get_Min(), getSensorColl->Get_CollWorldMatrix());
+		D3DXVec3TransformCoord(&vSourMax, getSensorColl->Get_Max(), getSensorColl->Get_CollWorldMatrix());
 
 		_vec3 temp = vDestMin;
 		if (vDestMax.x < vDestMin.x)
@@ -288,85 +291,141 @@ Engine::_bool Engine::CCalculator::Collision_InteractionObject_AABB(const _vec3*
 			isCollisionZ = false;
 
 		if (isCollisionX&&isCollisionY&&isCollisionZ)
-			iter->second->Set_IsColl(true);
+			iter->second->Set_IsSensorColl(true);
 		else
-			iter->second->Set_IsColl(false);
+			iter->second->Set_IsSensorColl(false);
 	}
 
 	return true;
 }
 
-_bool CCalculator::Collision_StaticObject_AABB(const _vec3 * pDestMin, const _vec3 * pDestMax, const _matrix * pDestWorld, _vec3 playerRot)
+
+Engine::_bool Engine::CCalculator::Collision_AABB(const _vec3* pDestMin,
+	const _vec3* pDestMax,
+	const _matrix* pDestWorld,
+	const _vec3* pSourMin,
+	const _vec3* pSourMax,
+	const _matrix* pSourWorld)
 {
-	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+	_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+	_float		fMin, fMax;
 
-	bool isCollisionX = true;
-	bool isCollisionY = true;
-	bool isCollisionZ = true;
-	int distNum = 4;
+	D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+	D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
 
-	m_collisionCGameObjectCurrnet.clear();
-	m_collisionCGameObjectCompare.clear();
+	D3DXVec3TransformCoord(&vSourMin, pSourMin, pSourWorld);
+	D3DXVec3TransformCoord(&vSourMax, pSourMax, pSourWorld);
 
-	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	// x축에서 바라봤을 때
+	_vec3 temp = vDestMin;
+	if (vDestMax.x < vDestMin.x)
 	{
-		if (!iter->second->Get_Draw())
-			continue;
-		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
-
-		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
-		_float		fMin, fMax;
-
-		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-		D3DXVec3TransformCoord(&vSourMin, getColl->Get_Min(), getColl->Get_CollWorldMatrix());
-		D3DXVec3TransformCoord(&vSourMax, getColl->Get_Max(), getColl->Get_CollWorldMatrix());
-
-		// x축에서 바라봤을 때
-		_vec3 temp = vDestMin;
-		if (vDestMax.x < vDestMin.x)
-		{
-			vDestMin.x = vDestMax.x;
-			vDestMax.x = temp.x;
-		}
-
-		if (vDestMax.z < vDestMin.z)
-		{
-			vDestMin.z = vDestMax.z;
-			vDestMax.z = temp.z;
-		}
-
-		fMin = max(vDestMin.x, vSourMax.x);
-		fMax = min(vDestMax.x, vSourMin.x);
-
-		if (fMax < fMin)
-			isCollisionX = false;
-
-		//// y축에서 바라봤을 때
-
-		//fMin = max(vDestMin.y, vSourMin.y);
-		//fMax = min(vDestMax.y, vSourMax.y);
-
-		//if (fMax < fMin)
-		//	isCollisionY = false;
-
-		// z축에서 바라봤을 때
-
-		fMin = max(vDestMin.z, vSourMax.z);
-		fMax = min(vDestMax.z, vSourMin.z);
-
-		if (fMax < fMin)
-			isCollisionZ = false;
-
-		if (isCollisionX&&isCollisionY&&isCollisionZ)
-			iter->second->Set_IsColl(true);
-		else
-			iter->second->Set_IsColl(false);
+		vDestMin.x = vDestMax.x;
+		vDestMax.x = temp.x;
 	}
+
+	if (vDestMax.z < vDestMin.z)
+	{
+		vDestMin.z = vDestMax.z;
+		vDestMax.z = temp.z;
+	}
+
+	fMin = max(vDestMin.x, vSourMin.x);
+	fMax = min(vDestMax.x, vSourMax.x);
+
+	if (fMax < fMin)
+		return false;
+
+	// y축에서 바라봤을 때
+
+	fMin = max(vDestMin.y, vSourMin.y);
+	fMax = min(vDestMax.y, vSourMax.y);
+
+	if (fMax < fMin)
+		return false;
+
+	// z축에서 바라봤을 때
+
+	fMin = max(vDestMin.z, vSourMin.z);
+	fMax = min(vDestMax.z, vSourMax.z);
+
+	if (fMax < fMin)
+		return false;
 
 	return true;
 }
+
+//_bool CCalculator::Collision_StaticObject_AABB(const _vec3 * pDestMin, const _vec3 * pDestMax, const _matrix * pDestWorld, _vec3 playerRot)
+//{
+//	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+//
+//	bool isCollisionX = true;
+//	bool isCollisionY = true;
+//	bool isCollisionZ = true;
+//	int distNum = 4;
+//
+//	m_collisionCGameObjectCurrnet.clear();
+//	m_collisionCGameObjectCompare.clear();
+//
+//	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+//	{
+//		if (!iter->second->Get_Draw())
+//			continue;
+//		CCollider* getColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
+//
+//		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+//		_float		fMin, fMax;
+//
+//		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+//		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+//
+//		D3DXVec3TransformCoord(&vSourMin, getColl->Get_Min(), getColl->Get_CollWorldMatrix());
+//		D3DXVec3TransformCoord(&vSourMax, getColl->Get_Max(), getColl->Get_CollWorldMatrix());
+//
+//		// x축에서 바라봤을 때
+//		_vec3 temp = vDestMin;
+//		if (vDestMax.x < vDestMin.x)
+//		{
+//			vDestMin.x = vDestMax.x;
+//			vDestMax.x = temp.x;
+//		}
+//
+//		if (vDestMax.z < vDestMin.z)
+//		{
+//			vDestMin.z = vDestMax.z;
+//			vDestMax.z = temp.z;
+//		}
+//
+//		fMin = max(vDestMin.x, vSourMax.x);
+//		fMax = min(vDestMax.x, vSourMin.x);
+//
+//		if (fMax < fMin)
+//			isCollisionX = false;
+//
+//		//// y축에서 바라봤을 때
+//
+//		//fMin = max(vDestMin.y, vSourMin.y);
+//		//fMax = min(vDestMax.y, vSourMax.y);
+//
+//		//if (fMax < fMin)
+//		//	isCollisionY = false;
+//
+//		// z축에서 바라봤을 때
+//
+//		fMin = max(vDestMin.z, vSourMax.z);
+//		fMax = min(vDestMax.z, vSourMin.z);
+//
+//		if (fMax < fMin)
+//			isCollisionZ = false;
+//
+//		if (isCollisionX&&isCollisionY&&isCollisionZ)
+//			iter->second->Set_IsColl(true);
+//		else
+//			iter->second->Set_IsColl(false);
+//	}
+//
+//	return true;
+//}
 
 _bool CCalculator::Collision_OBB(const _vec3 * pDestMin, const _vec3 * pDestMax, 
 									const _matrix * pDestWorld, 
@@ -424,8 +483,8 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 	bool isCollision = false;
 	int distNum = 4;
 
-	m_collisionCGameObjectCurrnet.clear();
-	m_collisionCGameObjectCompare.clear();
+	m_collision_StaticObjectCurrnet.clear();
+	m_collision_StaticObjectCompare.clear();
 
 	for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
 	{
@@ -477,7 +536,7 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 			isCollision = true;
 
 			//iter->second->Set_StopPlayer(pushKey);
-			m_collisionCGameObjectCurrnet.push_back(iter->second);
+			m_collision_StaticObjectCurrnet.push_back(iter->second);
 		}
 		else
 			iter->second->Set_IsColl(false);
@@ -487,10 +546,10 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 	bool isDifferent = false;
 
 	// 지금 현재 충돌체크 갯수
-	int vecSize = m_collisionCGameObjectCurrnet.size();
+	int vecSize = m_collision_StaticObjectCurrnet.size();
 
 	// 이전 충돌체크 충돌체크 갯수
-	int vecSizeAfter = m_collisionCGameObjectPrev.size();
+	int vecSizeAfter = m_collision_StaticObjectPrev.size();
 
 	if (vecSize == 1 && vecSizeAfter == 2)
 	{
@@ -506,23 +565,23 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 			isVecPush = false;
 			for (int j = 0; j < vecSize; j++)
 			{
-				if (m_collisionCGameObjectCurrnet[j] == m_collisionCGameObjectPrev[i])
+				if (m_collision_StaticObjectCurrnet[j] == m_collision_StaticObjectPrev[i])
 					isVecPush = true;
 			}
 			if (!isVecPush)
-				m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectPrev[i]);
+				m_collision_StaticObjectCompare.push_back(m_collision_StaticObjectPrev[i]);
 		}
 
-		int compareLength = m_collisionCGameObjectCompare.size();
+		int compareLength = m_collision_StaticObjectCompare.size();
 		for (int i = 0; i < compareLength; i++)
 		{
-			bool * getStopPlayer = m_collisionCGameObjectCompare[i]->Get_StopPlayer();
+			bool * getStopPlayer = m_collision_StaticObjectCompare[i]->Get_StopPlayer();
 			for (int j = 0; j < KEY_END; j++)
 			{
 				if (getStopPlayer[j])
 					isKeyStop[j] = false;
 			}
-			m_collisionCGameObjectCompare[i]->Reset_StopPlayer();
+			m_collision_StaticObjectCompare[i]->Reset_StopPlayer();
 		}
 
 	}
@@ -534,17 +593,17 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 			isVecPush = false;
 			for (int j = 0; j < vecSizeAfter; j++)
 			{
-				if (m_collisionCGameObjectCurrnet[i] == m_collisionCGameObjectPrev[j])
+				if (m_collision_StaticObjectCurrnet[i] == m_collision_StaticObjectPrev[j])
 					isVecPush = true;
 			}
 			if (!isVecPush)
-				m_collisionCGameObjectCompare.push_back(m_collisionCGameObjectCurrnet[i]);
+				m_collision_StaticObjectCompare.push_back(m_collision_StaticObjectCurrnet[i]);
 		}
 
-		int compareLength = m_collisionCGameObjectCompare.size();
+		int compareLength = m_collision_StaticObjectCompare.size();
 		for (int i = 0; i < compareLength; i++)
 		{
-			m_collisionCGameObjectCompare[i]->Set_StopPlayer(pushKey);
+			m_collision_StaticObjectCompare[i]->Set_StopPlayer(pushKey);
 			for (int j = 0; j < KEY_END; j++)
 			{
 				if (pushKey[j])
@@ -555,7 +614,7 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 
 	for (int i = 0; i < vecSize; i++)
 	{
-		auto stopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
+		auto stopPlayer = m_collision_StaticObjectCurrnet[i]->Get_StopPlayer();
 		for (int j = 0; j < KEY_END; j++)
 		{
 			if (stopPlayer[j])
@@ -563,9 +622,9 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 		}
 	}
 
-	m_collisionCGameObjectPrev.clear();
+	m_collision_StaticObjectPrev.clear();
 	for (int i = 0; i < vecSize; i++)
-		m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
+		m_collision_StaticObjectPrev.push_back(m_collision_StaticObjectCurrnet[i]);
 	/*{
 		bool * getStopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
 		for (int i = 0; i < KEY_END; i++)
@@ -1020,18 +1079,17 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 	bool isCollision = false;
 	int distNum = 4;
 
-	m_collisionCGameObjectCurrnet.clear();
-	m_collisionCGameObjectCompare.clear();
+	m_collision_InteractionObjectCurrnet.clear();
+	m_collision_InteractionObjectCompare.clear();
 
 	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
 	{
-		if (!iter->second->Get_Draw())
+		CCollider* getSensorColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
+		if (getSensorColl == nullptr)
 			continue;
-
-		CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
-		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
-		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
-		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getSensorColl)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getSensorColl)->Get_Max();
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getSensorColl)->Get_CollWorldMatrix();
 		_vec3		vDestMin, vDestMax;
 		_float		fMin, fMax;
 		float dist = 0.f;
@@ -1072,11 +1130,169 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 			isCollision = true;
 
 			//iter->second->Set_StopPlayer(pushKey);
-			m_collisionCGameObjectCurrnet.push_back(iter->second);
+			m_collision_InteractionObjectCurrnet.push_back(iter->second);
 		}
 		else
 			iter->second->Set_IsColl(false);
 	}
+
+	bool isVecPush = false;
+	bool isDifferent = false;
+
+	// 지금 현재 충돌체크 갯수
+	int vecSize = m_collision_InteractionObjectCurrnet.size();
+
+	// 이전 충돌체크 충돌체크 갯수
+	int vecSizeAfter = m_collision_InteractionObjectPrev.size();
+
+	if (vecSize == 1 && vecSizeAfter == 2)
+	{
+		int i;
+		i = 10;
+	}
+
+	// 현재 <= 이전
+	if (vecSize <= vecSizeAfter)
+	{
+		for (int i = 0; i < vecSizeAfter; i++)
+		{
+			isVecPush = false;
+			for (int j = 0; j < vecSize; j++)
+			{
+				if (m_collision_InteractionObjectCurrnet[j] == m_collision_InteractionObjectPrev[i])
+					isVecPush = true;
+			}
+			if (!isVecPush)
+				m_collision_InteractionObjectCompare.push_back(m_collision_InteractionObjectPrev[i]);
+		}
+
+		int compareLength = m_collision_InteractionObjectCompare.size();
+		for (int i = 0; i < compareLength; i++)
+		{
+			bool * getStopPlayer = m_collision_InteractionObjectCompare[i]->Get_StopPlayer();
+			for (int j = 0; j < KEY_END; j++)
+			{
+				if (getStopPlayer[j])
+					isKeyStop[j] = false;
+			}
+			m_collision_InteractionObjectCompare[i]->Reset_StopPlayer();
+		}
+
+	}
+	// 현재 > 이전
+	else
+	{
+		for (int i = 0; i < vecSize; i++)
+		{
+			isVecPush = false;
+			for (int j = 0; j < vecSizeAfter; j++)
+			{
+				if (m_collision_InteractionObjectCurrnet[i] == m_collision_InteractionObjectPrev[j])
+					isVecPush = true;
+			}
+			if (!isVecPush)
+				m_collision_InteractionObjectCompare.push_back(m_collision_InteractionObjectCurrnet[i]);
+		}
+
+		int compareLength = m_collision_InteractionObjectCompare.size();
+		for (int i = 0; i < compareLength; i++)
+		{
+			m_collision_InteractionObjectCompare[i]->Set_StopPlayer(pushKey);
+			for (int j = 0; j < KEY_END; j++)
+			{
+				if (pushKey[j])
+					isKeyStop[j] = true;
+			}
+		}
+	}
+
+	for (int i = 0; i < vecSize; i++)
+	{
+		auto stopPlayer = m_collision_InteractionObjectCurrnet[i]->Get_StopPlayer();
+		for (int j = 0; j < KEY_END; j++)
+		{
+			if (stopPlayer[j])
+				isKeyStop[j] = true;
+		}
+	}
+
+	m_collision_InteractionObjectPrev.clear();
+	for (int i = 0; i < vecSize; i++)
+		m_collision_InteractionObjectPrev.push_back(m_collision_InteractionObjectCurrnet[i]);
+	/*{
+	bool * getStopPlayer = m_collisionCGameObjectCurrnet[i]->Get_StopPlayer();
+	for (int i = 0; i < KEY_END; i++)
+	{
+	if (getStopPlayer[i])
+	isKeyStop[i] = true;
+	}
+	m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
+	}*/
+
+	return true;
+
+	//auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+	//bool isCollision = false;
+	//int distNum = 4;
+
+	//m_collisionCGameObjectCurrnet.clear();
+	//m_collisionCGameObjectCompare.clear();
+
+	//for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	//{
+	//	if (!iter->second->Get_Draw())
+	//		continue;
+
+	//	CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
+	//	const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
+	//	const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
+	//	const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
+	//	_vec3		vDestMin, vDestMax;
+	//	_float		fMin, fMax;
+	//	float dist = 0.f;
+
+	//	D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+	//	D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+
+	//	// x축에서 바라봤을 때
+
+	//	const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+	//	_matrix		matWorld;
+	//	D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+	//	float ridius = playerCollider->Get_Radius();
+	//	_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+	//	_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+	//	float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+	//	float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+	//	float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+	//	float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+	//	// this is the same as isPointInsideSphere
+	//	float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+	//		(y - playerVec3.y) * (y - playerVec3.y) +
+	//		(z - playerVec3.z) * (z - playerVec3.z));
+
+	//	float radius = playerCollider->Get_Radius();
+	//	//radius = sqrt(radius);
+
+	//	int sensor = 2;
+
+	//	if (distance < sensor)
+	//	{
+	//		iter->second->Set_IsColl(true);
+	//		isCollision = true;
+
+	//		//iter->second->Set_StopPlayer(pushKey);
+	//		m_collisionCGameObjectCurrnet.push_back(iter->second);
+	//	}
+	//	else
+	//		iter->second->Set_IsColl(false);
+	//}
 
 	//bool isVecPush = false;
 	//bool isDifferent = false;

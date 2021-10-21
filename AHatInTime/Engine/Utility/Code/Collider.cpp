@@ -90,14 +90,49 @@ HRESULT Engine::CCollider::Ready_Collider(const _vec3* pPos, const _ulong& dwNum
 
 
 	VTXCUBE*			pVertex = nullptr;
+		m_vMin.x -= posX;
 
-	m_vMin.x -= posX;
-	m_vMin.y -= posY;
-	m_vMin.z -= posZ;
+		m_vMin.y -= posY;
 
-	m_vMax.x += posX;
-	m_vMax.y += posY;
-	m_vMax.z += posZ;
+		m_vMin.z -= posZ;
+
+
+		m_vMax.x += posX;
+
+		m_vMax.y += posY;
+
+		m_vMax.z += posZ;
+	/*if (posX >= 0)
+		m_vMin.x -= posX;
+	else
+		m_vMin.x += posX;
+
+	if (posY >= 0)
+		m_vMin.y -= posY;
+	else
+		m_vMin.y += posY;
+
+	if (posZ >= 0)
+		m_vMin.z -= posZ;
+	else
+		m_vMin.z += posZ;
+
+
+	if (posX >= 0)
+		m_vMax.x += posX;
+	else
+		m_vMax.x -= posX;
+
+	if (posY >= 0)
+		m_vMax.y += posY;
+	else
+		m_vMax.y -= posY;
+
+	if (posZ >= 0)
+		m_vMax.z += posZ;
+	else
+		m_vMax.z -= posZ;*/
+
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
 
