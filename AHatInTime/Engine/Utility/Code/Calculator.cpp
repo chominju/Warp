@@ -501,6 +501,26 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
 		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
 
+		// test
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.y < vDestMin.y)
+		{
+			vDestMin.y = vDestMax.y;
+			vDestMax.y = temp.y;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
 
 		// x축에서 바라봤을 때
 
@@ -527,8 +547,8 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 		//radius = sqrt(radius);
 
 		int sensor = 2;
-		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_Maze_Wall1.x"))
-			sensor = 5;
+		/*if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_Maze_Wall1.x"))
+			sensor = 5;*/
 
 		if (distance < sensor)
 		{
@@ -636,440 +656,6 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 	}*/
 
 	return true;
-
-	//		for (int i = 0; i < vecSize; i++)
-	//		{
-	//			if (m_collisionCGameObject[i] == iter->second)
-	//				isVecPush = true;
-	//		}
-	//		if (!isVecPush)
-	//		{
-	//			m_collisionCGameObject.push_back(iter->second);
-	//			for (int i = 0; i < KEY_END; i++)
-	//			{
-	//				if (pushKey[i])
-	//					isKeyStop[i] = pushKey[i];
-	//			}
-	//		}
-
-	//		//m_collisionCGameObject = iter->second;
-	//	}
-	//	else
-	//	{
-	//		iter->second->Set_IsColl(false);
-	//	}
-
-	//	//return distance < radius;
-	//}
-	//if (!isCollision)
-	//{
-	//	m_collisionCGameObjectCurrnet.clear();
-	//	for (int i = 0; i < KEY_END; i++)
-	//	{
-	//		isKeyStop[i] = false;
-	//	}
-	//}
-
-	//return isCollision;
-
-
-
-
-
-
-
-
-//	 최근코드
-	//auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
-
-	//bool isCollision = false;
-	//int distNum = 4;
-
-	//for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
-	//{
-	//	if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_DoorClearFin.x"))
-	//		continue;
-	//	CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
-	//	const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
-	//	const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
-	//	const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
-	//	_vec3		vDestMin, vDestMax;
-	//	_float		fMin, fMax;
-	//	float dist = 0.f;
-
-	//	D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	//	D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-
-	//	// x축에서 바라봤을 때
-
-	//	const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//	_matrix		matWorld;
-	//	D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
-	//	float ridius = playerCollider->Get_Radius();
-	//	_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
-	//	_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
-
-	//	float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
-
-
-	//	float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
-	//	float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
-	//	float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
-
-	//	// this is the same as isPointInsideSphere
-	//	float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
-	//		(y - playerVec3.y) * (y - playerVec3.y) +
-	//		(z - playerVec3.z) * (z - playerVec3.z));
-
-	//	float radius = playerCollider->Get_Radius();
-	//	//radius = sqrt(radius);
-	//	if (distance < 2)
-	//	{
-	//		iter->second->Set_IsColl(true);
-	//		isCollision = true;
-
-	//		bool isVecPush = false;
-	//		int vecSize = m_collisionCGameObject.size();
-	//		for (int i = 0; i < vecSize; i++)
-	//		{
-	//			if (m_collisionCGameObject[i] == iter->second)
-	//				isVecPush = true;
-	//		}
-	//		if (!isVecPush)
-	//		{
-	//			m_collisionCGameObject.push_back(iter->second);
-	//			for (int i = 0; i < KEY_END; i++)
-	//			{
-	//				if (pushKey[i])
-	//					isKeyStop[i] = pushKey[i];
-	//			}
-	//		}
-
-	//		//m_collisionCGameObject = iter->second;
-	//	}
-	//	else
-	//	{
-	//		iter->second->Set_IsColl(false);
-	//	}
-
-	//	//return distance < radius;
-	//}
-	//if (!isCollision)
-	//{
-	//	m_collisionCGameObject.clear();
-	//	for (int i = 0; i < KEY_END; i++)
-	//	{
-	//		isKeyStop[i] = false;
-	//	}
-	//}
-
-	//return isCollision;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
-
-	//bool isCollision = false;
-	//int distNum = 4;
-
-	//for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
-	//{
-	//	 CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
-	//	 const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
-	//	 const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
-	//	 const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
-	//	_vec3		vDestMin, vDestMax;
-	//	 _float		fMin, fMax;
-	//	 float dist = 0.f;
-
-	//	 D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	//	 D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-
-	//	 // x축에서 바라봤을 때
-
-	//	 const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//	 float ridius = playerCollider->Get_Radius();
-	//	 _vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
-	//	 _vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
-
-	//	 float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
-
-	//	 if (playerObjectDist < 5)
-	//	 {
-	//		 if (playerVec3.x < vDestMin.x)
-	//		 {
-	//			 dist += (vDestMin.x - playerVec3.x)*(vDestMin.x - playerVec3.x);
-	//		 }
-	//		 else if (playerVec3.x > vDestMax.x)
-	//		 {
-	//			 dist += (playerVec3.x - vDestMax.x)*(playerVec3.x - vDestMax.x);
-	//		 }
-
-
-	//		 //if (playerVec3.y < vDestMin.y)
-	//		 //{
-	//			// dist += (vDestMin.y - playerVec3.y)*(vDestMin.y - playerVec3.y);
-	//		 //}
-	//		 //else if (playerVec3.y > vDestMax.y)
-	//		 //{
-	//			// dist += (playerVec3.y - vDestMax.y)*(playerVec3.y - vDestMax.y);
-	//		 //}
-
-
-	//		 if (playerVec3.z < vDestMin.z)
-	//		 {
-	//			 dist += (vDestMin.z - playerVec3.z)*(vDestMin.z - playerVec3.z);
-	//		 }
-	//		 else if (playerVec3.z > vDestMax.z)
-	//		 {
-	//			 dist += (playerVec3.z - vDestMax.z)*(playerVec3.z - vDestMax.z);
-	//		 }
-
-	//		 //if (m_Key[0] || m_Key[1])
-	//			// distNum = 6;
-	//		 //if (m_Key[2] || m_Key[3])
-	//			// distNum = 3;
-
-	//		 if (dist > distNum)
-	//			 iter->second->Set_IsColl(false);
-	//		 else
-	//		 {
-	//			 iter->second->Set_IsColl(true);
-	//			 isCollision = true;
-	//		 }
-
-	//	 }
-	//	 else
-	//		 iter->second->Set_IsColl(false);
-	//}
-	//	 if (isCollision)
-	//		 return true;
-	//	 else
-	//		 return false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//_vec3		vDestMin, vDestMax;
-	//_vec3 sum{0.f,0.f,0.f};[
-	////_float		fMin, fMax;
-	//float dist = 0.f;
-
-	//D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	//D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-	//const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//float radius = playerCollider->Get_Radius();
-	//_vec3 playerVec3 = { playerMatrix->_41,playerMatrix->_42,playerMatrix->_43 };
-
-	//if (vDestMin.x < playerVec3.x&&playerVec3.x < vDestMax.x)
-	//	sum.x = vDestMin.x;
-	//else if (vDestMax.x < playerVec3.x)
-	//	sum.x -= (vDestMax.x - vDestMin.x);
-
-	//if (vDestMin.y < playerVec3.y&&playerVec3.y < vDestMax.y)
-	//	sum.y = vDestMin.y;
-	//else if (vDestMax.y < playerVec3.y)
-	//	sum.y -= (vDestMax.y - vDestMin.y);
-
-	//if (vDestMin.z < playerVec3.z&&playerVec3.z < vDestMax.z)
-	//	sum.z = vDestMin.z;
-	//else if (vDestMax.z < playerVec3.z)
-	//	sum.z -= (vDestMax.z - vDestMin.z);
-
-	//// y,z도 위와 같이
-	//dist = D3DXVec3Length(&(vDestMin - sum));
-	//if (dist < radius)
-	//	return true;
-	//else
-	//	return false;
-
-	//0.
-	//// x축에서 바라봤을 때
-
-	//const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//float radius = playerCollider->Get_Radius();
-	//_vec3 playerVec3 = { playerMatrix->_41,playerMatrix->_42,playerMatrix->_43 };
-
-	//if (playerVec3.x < vDestMin.x && vDestMin.x - playerVec3.x > radius)
-	//	return false;
-
-	//if (playerVec3.x > vDestMax.x && playerVec3.x - vDestMax.x > radius)
-	//	return false;
-
-	//if (playerVec3.y < vDestMin.y && vDestMin.y - playerVec3.y > radius)
-	//	return false;
-
-	//if (playerVec3.y > vDestMax.y && playerVec3.y - vDestMax.y > radius)
-	//	return false;
-
-	//if (playerVec3.z < vDestMin.z && vDestMin.z - playerVec3.z > radius)
-	//	return false;
-
-	//if (playerVec3.z > vDestMax.z && playerVec3.z - vDestMax.z > radius)
-	//	return false;
-
-	//return true;
-
-
-	//CManagement::GetInstance()->Get_Scene()->Get_MapLayer()
-	
-
-
-
-
-
-
-	//1.
-	//_vec3		vDestMin, vDestMax;
-	//_float		fMin, fMax;
-	//float dist=0.f;
-
-	//D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	//D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-
-	//// x축에서 바라봤을 때
-
-	//const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//float ridius = playerCollider->Get_Radius();
-	//_vec3 playerVec3 = { playerMatrix->_41,playerMatrix->_42,playerMatrix->_43 };
-
-	//if (playerVec3.x < vDestMin.x)
-	//{
-	//	dist += (vDestMin.x - playerVec3.x)*(vDestMin.x - playerVec3.x);
-	//}
-	//else if (playerVec3.x > vDestMax.x)
-	//{
-	//	dist += (playerVec3.x - vDestMax.x)*(playerVec3.x - vDestMax.x);
-	//}
-
-
-
-	//if (playerVec3.y < vDestMin.y)
-	//{
-	//	dist += (vDestMin.y - playerVec3.y)*(vDestMin.y - playerVec3.y);
-	//}
-	//else if (playerVec3.y > vDestMax.y)
-	//{
-	//	dist += (playerVec3.y - vDestMax.y)*(playerVec3.y - vDestMax.y);
-	//}
-
-
-
-	//if (playerVec3.z < vDestMin.z)
-	//{
-	//	dist += (vDestMin.z - playerVec3.z)*(vDestMin.z - playerVec3.z);
-	//}
-	//else if (playerVec3.z > vDestMax.z)
-	//{
-	//	dist += (playerVec3.z - vDestMax.z)*(playerVec3.z - vDestMax.z);
-	//}
-
-	//if (dist > 5)
-	//	return false;
-	//else
-	//	return true;
-
-
-
-
-
-
-
-
-
-
-	//2.\
-
-	//_vec3		vDestMin, vDestMax;
-	//_float		fMin, fMax;
-	//float dist=0.f;
-
-	//D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
-	//D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
-
-	//// x축에서 바라봤을 때
-
-	//const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
-	//float ridius = playerCollider->Get_Radius();
-	//_vec3 playerVec3 = { playerMatrix->_41,playerMatrix->_42,playerMatrix->_43 };
-
-
-	//_vec3 temp;
-	//if (playerVec3.x < vDestMin.x - (vDestMax.x - vDestMin.x) / 2.f)
-	//	temp.x = pDestWorld->_41 - (vDestMax.x - vDestMin.x) / 2.f;
-	//else if (playerVec3.x > pDestWorld->_41 + (vDestMax.x - vDestMin.x) / 2.f)
-	//	temp.x = pDestWorld->_41 + (vDestMax.x - vDestMin.x) / 2.f;
-	//else
-	//	temp.x = playerVec3.x;
-
-
-
-	//if (playerVec3.y < pDestWorld->_42 - (vDestMax.y - vDestMin.y) / 2.f)
-	//	temp.y = pDestWorld->_42 - (vDestMax.y - vDestMin.y) / 2.f;
-	//else if (playerVec3.y > pDestWorld->_42 + (vDestMax.y - vDestMin.y) / 2.f)
-	//	temp.y = pDestWorld->_42 + (vDestMax.y - vDestMin.y) / 2.f;
-	//else
-	//	temp.y = playerVec3.y;
-
-
-
-	//if (playerVec3.z < pDestWorld->_43 - (vDestMax.z - vDestMin.z) / 2.f)
-	//	temp.z = pDestWorld->_43 - (vDestMax.z - vDestMin.z) / 2.f;
-	//else if (playerVec3.z > pDestWorld->_43 + (vDestMax.z - vDestMin.z) / 2.f)
-	//	temp.z = pDestWorld->_43 + (vDestMax.z - vDestMin.z) / 2.f;
-	//else
-	//	temp.z = playerVec3.z;
-
-	//_vec3 temp3 = playerVec3 - temp;
-	//float lenght = D3DXVec3Length(&temp3);
-	//float radius = playerCollider->Get_Radius();
-	//		if (radius > lenght)
-	//	return true;
-	//else
-	//	return false;
 }
 
 _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider, _bool pushKey[], _bool isKeyStop[])
@@ -1087,6 +673,8 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 		CCollider* getSensorColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
 		if (getSensorColl == nullptr)
 			continue;
+		if (!iter->second->Get_Draw())
+			continue;
 		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getSensorColl)->Get_Min();
 		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getSensorColl)->Get_Max();
 		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getSensorColl)->Get_CollWorldMatrix();
@@ -1096,6 +684,28 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 
 		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
 		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+
+		// test
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.y < vDestMin.y)
+		{
+			vDestMin.y = vDestMax.y;
+			vDestMax.y = temp.y;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
 
 
 		// x축에서 바라봤을 때
@@ -1380,6 +990,181 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 
 
 	return true;
+}
+
+_bool CCalculator::Collision_Warp_InteractionObject(CSphereCollider * playerCollider, _bool *playerHideAble, CGameObject*& hideObject)
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+	bool isCollision = false;
+	int distNum = 4;
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		CCollider* getSensorColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_Collider_Component();
+		if (getSensorColl == nullptr)
+			continue;
+		if (!iter->second->Get_Draw())
+			continue;
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getSensorColl)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getSensorColl)->Get_Max();
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getSensorColl)->Get_CollWorldMatrix();
+		_vec3		vDestMin, vDestMax;
+		_float		fMin, fMax;
+		float dist = 0.f;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+
+		// test
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.y < vDestMin.y)
+		{
+			vDestMin.y = vDestMax.y;
+			vDestMax.y = temp.y;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
+
+
+		// x축에서 바라봤을 때
+
+		const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+		_matrix		matWorld;
+		D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+		float ridius = playerCollider->Get_Radius();
+		_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+		_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+		float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+		float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+		float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+		float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+		// this is the same as isPointInsideSphere
+		float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+			(y - playerVec3.y) * (y - playerVec3.y) +
+			(z - playerVec3.z) * (z - playerVec3.z));
+
+		float radius = playerCollider->Get_Radius();
+		//radius = sqrt(radius);
+
+		int sensor = 2;
+
+		if (distance < sensor)
+		{
+			isCollision = true;
+
+			*playerHideAble = dynamic_cast<CInteractionObject*>(iter->second)->Get_IsObject_PlayerHide();
+			if (*playerHideAble)
+				hideObject = iter->second;
+			break;
+		}
+
+	}
+	if (!isCollision)
+	{
+		*playerHideAble = false;
+		hideObject = nullptr;
+	}
+	return isCollision;
+}
+
+_bool CCalculator::Collision_Warp_StaticObject(CSphereCollider * playerCollider)
+{
+	auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+
+	bool isCollision = false;
+	int distNum = 4;
+
+	m_collision_StaticObjectCurrnet.clear();
+	m_collision_StaticObjectCompare.clear();
+
+	for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
+	{
+		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_DoorClearFin.x"))
+			continue;
+		CComponent* getComponent = iter->second->Get_Component(L"Com_Collider", ID_STATIC);
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getComponent)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getComponent)->Get_Max();
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getComponent)->Get_CollWorldMatrix();
+		_vec3		vDestMin, vDestMax;
+		_float		fMin, fMax;
+		float dist = 0.f;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+		// test
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.y < vDestMin.y)
+		{
+			vDestMin.y = vDestMax.y;
+			vDestMax.y = temp.y;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
+
+		// x축에서 바라봤을 때
+
+		const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+		_matrix		matWorld;
+		D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+		float ridius = playerCollider->Get_Radius();
+		_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+		_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+		float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+		float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+		float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+		float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+		// this is the same as isPointInsideSphere
+		float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+			(y - playerVec3.y) * (y - playerVec3.y) +
+			(z - playerVec3.z) * (z - playerVec3.z));
+
+		float radius = playerCollider->Get_Radius();
+		//radius = sqrt(radius);
+
+		int sensor = 2;
+		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_Maze_Wall1.x"))
+			sensor = 2;
+
+		if (distance < sensor)
+		{
+			isCollision = true;
+			break;
+		}
+	}
+	return isCollision;
 }
 
 void CCalculator::Set_Point(OBB * pObb, const _vec3 * pMin, const _vec3 * pMax)

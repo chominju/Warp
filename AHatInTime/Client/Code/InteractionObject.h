@@ -36,6 +36,8 @@ public:
 	CCollider* Get_Collider_Component() { return m_pColliderCom; }
 	CCollider* Get_ColliderSensor_Component() { return m_pColliderSensorCom; }
 
+	_bool		Get_IsObject_PlayerHide() { return m_isObject_PlayerHide; }
+
 protected:
 	virtual HRESULT			Add_Component(void);
 	void					SetUp_OnTerrain(void);
@@ -51,11 +53,11 @@ protected:
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
 	//Object_Data				m_objectData;
+	_bool					m_isObject_PlayerHide;
 
 private:	
 	
 	_uint					m_iFlag;
-
 
 public:
 	static CInteractionObject*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

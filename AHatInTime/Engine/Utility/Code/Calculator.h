@@ -57,6 +57,8 @@ public:
 	_bool			Collision_StaticObject(CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
 	_bool			Collision_InteractionObject(CSphereCollider* playerCollider, _bool pushKey[], _bool isKeyStop[]);
 
+	_bool			Collision_Warp_InteractionObject(CSphereCollider* playerCollider, _bool *playerHideAble, CGameObject*& hideObject);
+	_bool			Collision_Warp_StaticObject(CSphereCollider* playerCollider);
 
 private:
 	void		Set_Point(OBB* pObb, const _vec3* pMin, const _vec3* pMax);

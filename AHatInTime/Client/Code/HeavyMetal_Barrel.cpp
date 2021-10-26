@@ -1,36 +1,32 @@
 #include "stdafx.h"
+#include "HeavyMetal_Barrel.h"
 #include "Ball.h"
 #include "Player.h"
 
-
 #include "Export_Function.h"
 
-CBall::CBall(LPDIRECT3DDEVICE9 pGraphicDev)
+CHeavyMetal_Barrel::CHeavyMetal_Barrel(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
-	, isBall(false)
-	, m_firstPushKey{ false,false,false,false }
-	, m_isFirstColl(false)
-	, m_speed(3.f)
-	, m_angle{0.f,0.f}
+	, m_speed(2.f)
 {
 
 }
 
-CBall::CBall(const CBall& rhs)
+CHeavyMetal_Barrel::CHeavyMetal_Barrel(const CHeavyMetal_Barrel& rhs)
 	: CInteractionObject(rhs)
 {
 
 }
 
-CBall::~CBall(void)
+CHeavyMetal_Barrel::~CHeavyMetal_Barrel(void)
 {
 
 }
 
-HRESULT CBall::Ready_Object(void)
+HRESULT CHeavyMetal_Barrel::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-
+	m_isObject_PlayerHide = true;
 	//m_pTransformCom->Set_Pos(89.f, 0.f, 126.f);
 	//m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
@@ -38,7 +34,7 @@ HRESULT CBall::Ready_Object(void)
 	return S_OK;
 }
 
-Engine::_int CBall::Update_Object(const _float& fTimeDelta)
+Engine::_int CHeavyMetal_Barrel::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
@@ -60,148 +56,22 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
-	bool check=false;
-	if (m_bSensorColl)
-	{
-		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
-	 	bool *getPlayerPush =  dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
-		dynamic_cast<CPlayer*>(getPlayer->second)->Set_Speed(m_speed);
-		if (!m_isFirstColl)
-		{
-			m_isFirstColl = true;
-			for (int i = 0; i < KEY_END; i++)
-			{
-				m_firstPushKey[i] = getPlayerPush[i];
-			}
-		}
+	//IsCollisionBall();
 
-
-		if (getPlayerPush[0])// 아래
-		{
-			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
-		}
-		if (getPlayerPush[1])//위
-		{
-			m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-		}
-		if (getPlayerPush[2])//왼쪽
-		{
-			m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-		}
-		if (getPlayerPush[3])//오른쪽
-		{
-			m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-		}
-			
-			for (int i = 0; i < KEY_END; i++)
-			{
-				if (getPlayerPush[i] && m_firstPushKey[i])
-				{
-					if (i == 0)
-					{
-						m_angle[1] += fTimeDelta;
-					}
-					else if (i == 1)
-					{
-						m_angle[1] -= fTimeDelta;
-					}
-					else if (i == 2)
-					{
-						m_angle[0] -= fTimeDelta;
-					}
-					else
-					{
-						m_angle[0] += fTimeDelta;
-					}
-					_vec3					m_vDir;
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-					//m_pTransformCom->Set_Rotation(m_angle[0], m_angle[1], 0.f);
-					check = true;
-					break;
-				}
-				else
-					check = false;
-				/*			break;
-						case KEY_UP:
-							if (getPlayerPush[i]&& m_firstPushKey[i])
-							{
-								_vec3					m_vDir;
-								m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-								D3DXVec3Normalize(&m_vDir, &m_vDir);
-								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-							}
-							else
-								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
-							break;
-						case KEY_LEFT:
-							if (getPlayerPush[i]&& m_firstPushKey[i])
-							{
-								_vec3					m_vDir;
-								m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-								D3DXVec3Normalize(&m_vDir, &m_vDir);
-								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-							}
-							else
-								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
-							break;
-						case KEY_RIGHT:
-							if (getPlayerPush[i]&& m_firstPushKey[i])
-							{
-								_vec3					m_vDir;
-								m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-								m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-								D3DXVec3Normalize(&m_vDir, &m_vDir);
-								m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-							}
-							else
-								dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
-						default:
-							break;
-						}*/
-			}
-		if(!check)
-			dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
-	}
-	else
-	{
-		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
-		bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
-		dynamic_cast<CPlayer*>(getPlayer->second)->Reset_Speed();
-
-		m_isFirstColl = false;
-		for (int i = 0; i < KEY_END; i++)
-		{
-			m_firstPushKey[i] = false;
-		}
-	}
-		//isOpen = true;
-
-	//if (isOpen)
+	//if (m_bSensorColl)
 	//{
-		//_vec3					m_vDir;
-		//m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		//m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
-
-		//_vec3 getPos;
-		//m_pTransformCom->Get_Info(INFO_POS, &getPos);
-		//if (getPos.z > 123)
-		//{
-		//	//isOpen = false;
-		//	m_bDraw = false;
-		//}
+	//	auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
+	//	bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+	//	dynamic_cast<CPlayer*>(getPlayer->second)->Set_Speed(m_speed);
 	//}
+	
 	return 0;
 }
 
-void CBall::Render_Object(void)
+void CHeavyMetal_Barrel::Render_Object(void)
 {
 	if (false == m_bDraw)
 		return;
-
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
 	//if (!_tcscmp(m_objectData.m_objectTextureName, L"Proto_Mesh_WallClear6.x") ||
@@ -238,10 +108,28 @@ void CBall::Render_Object(void)
 		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 		// @@@@@@@@안보이게 주석
-		m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
+		m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
+
+//void CConveyor::IsCollisionBall()
+//{
+//	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+//
+//	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+//	{
+//		if (iter->first == L"Ball")
+//			m_targetBall = iter->second;
+//	}
+//
+//	auto ballColl = dynamic_cast<CBall*>(m_targetBall)->Get_ColliderSensor_Component();
+//	if (m_pCalculatorCom->Collision_AABB(ballColl->Get_Min(), ballColl->Get_Max(), ballColl->Get_CollWorldMatrix(),
+//		m_pColliderSensorCom->Get_Min(), m_pColliderSensorCom->Get_Max(), m_pColliderSensorCom->Get_CollWorldMatrix()))
+//		m_isBallColl = true;
+//	else
+//		m_isBallColl = false;
+//}
 
 //void CLeftDoor::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)
 //{
@@ -275,12 +163,12 @@ void CBall::Render_Object(void)
 //	m_objectData.m_objectIndex = objectData.m_objectIndex;
 //}
 
-HRESULT CBall::Add_Component(void)
+HRESULT CHeavyMetal_Barrel::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
 	// 메쉬
-	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Skeleton_Ball.x"));
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_HeavyMetal_Barrel.x"));
 	NULL_CHECK_RETURN(pComponent);
 	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
@@ -302,9 +190,9 @@ HRESULT CBall::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
+	pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),0,0,0);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
+	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 	//// Optimization
 	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
@@ -315,25 +203,10 @@ HRESULT CBall::Add_Component(void)
 
 }
 
-//void CLeftDoor::SetUp_OnTerrain(void)
-//{
-//	_vec3	vPos;
-//	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-//
-//	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic_Layer", L"Terrain", L"Com_Buffer", ID_STATIC));
-//	NULL_CHECK(pTerrainBufferCom);
-//
-//	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
-//
-//
-//	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
-//	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
-//	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
-//}
 
-CBall* CBall::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CHeavyMetal_Barrel* CHeavyMetal_Barrel::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CBall*	pInstance = new CBall(pGraphicDev);
+	CHeavyMetal_Barrel*	pInstance = new CHeavyMetal_Barrel(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -341,7 +214,7 @@ CBall* CBall::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CBall::Free(void)
+void CHeavyMetal_Barrel::Free(void)
 {
 	CGameObject::Free();
 }

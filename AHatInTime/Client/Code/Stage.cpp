@@ -5,6 +5,9 @@
 #include "RightDoor.h"
 #include "Ball.h"
 #include "FloorSwitch.h"
+#include "Conveyor.h"
+#include "Maze.h"
+#include "HeavyMetal_Barrel.h"
 
 #include "Export_Function.h"
 
@@ -107,7 +110,7 @@ HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
 	/*CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);*/
-	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh400.dat", pLayer, m_pGraphicDev);
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh409.dat", pLayer, m_pGraphicDev);
 	//CGameObject*			pGameObject = nullptr;
 
 	//pGameObject = CLeftDoor::Create(m_pGraphicDev);
@@ -123,7 +126,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
 	CGameObject*			pGameObject = nullptr;
-
+#pragma region Door
 	// 1번문
 	pGameObject = CLeftDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -176,6 +179,46 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(3);
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor3", pGameObject), E_FAIL);
+
+
+
+	//// 4번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 150.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(4);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 150.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor4", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 150.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(4);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 150.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor4", pGameObject), E_FAIL);
+
+
+	//// 5번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(5);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 150.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor5", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(5);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 192.5f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor5", pGameObject), E_FAIL);
+
+#pragma endregion
+
 	
 	
 	// 볼
@@ -193,7 +236,204 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch", pGameObject), E_FAIL);
 
 
+
+	// 컨베이너1
+	pGameObject = CConveyor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CConveyor*>(pGameObject)->Get_Transform_Component()->Set_Pos(137.f, 0.f, 120.f);
+	dynamic_cast<CConveyor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Conveyor1", pGameObject), E_FAIL);
+
+	// 컨베이너2
+	pGameObject = CConveyor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CConveyor*>(pGameObject)->Get_Transform_Component()->Set_Pos(143.5f, 0.f, 120.f);
+	dynamic_cast<CConveyor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Conveyor2", pGameObject), E_FAIL);
+
+#pragma region Maze
+
+	// 미로
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 139.f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze1", pGameObject), E_FAIL);
 	
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 135.9f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze2", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 132.8f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze3", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 129.7f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze4", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 120.f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze5", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 116.9f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze6", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 113.8f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze7", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 110.7f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze8", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(162.1f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze9", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(165.2f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze10", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(168.3f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze11", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(171.4f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze12", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(174.5f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze13", pGameObject), E_FAIL);
+	
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(174.5f, 0.f, 110.7f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze14", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(174.5f, 0.f, 113.8f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze15", pGameObject), E_FAIL);
+
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(171.4f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze16", pGameObject), E_FAIL);
+
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(168.3f, 0.f, 107.6f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze17", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(171.4f, 0.f, 104.5f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze18", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(171.4f, 0.f, 101.4f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze19", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(174.5f, 0.f, 101.4f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze20", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(191.5f, 0.f, 113.5f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze21", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(191.5f, 0.f, 110.4f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze22", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(191.5f, 0.f, 107.3f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze23", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 106.3f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze24", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 103.2f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze25", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 100.1f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze26", pGameObject), E_FAIL);
+
+	pGameObject = CMaze::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 97.f);
+	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze27", pGameObject), E_FAIL);
+
+#pragma endregion
+
+
+	pGameObject = CHeavyMetal_Barrel::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 130.f);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HeavyMetal_Barrel1", pGameObject), E_FAIL);
+
+	pGameObject = CHeavyMetal_Barrel::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 140.f);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HeavyMetal_Barrel2", pGameObject), E_FAIL);
+
+
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	m_mapLayer.emplace(pLayerTag, pLayer);
@@ -247,6 +487,10 @@ HRESULT CStage::Ready_LightInfo(void)
 	FAILED_CHECK_RETURN(Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
 
 	return S_OK;
+}
+
+void CStage::Create_Maze(const _tchar * pLayerTag)
+{
 }
 
 CStage* CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)

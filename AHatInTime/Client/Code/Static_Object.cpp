@@ -94,7 +94,7 @@ void CStatic_Objects::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
 	//m_pMeshCom->Render_Meshes();
 
-	
+	// @@@@@@@@안보이게 주석
 	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());

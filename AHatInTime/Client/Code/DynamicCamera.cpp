@@ -49,7 +49,7 @@ Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 	const _matrix* playerMatrix= dynamic_cast<CPlayer*>(player->second)->Get_Transform_Component()->Get_NRotWorldMatrix();
 
 	m_vEye.x = playerMatrix->_41 - 5.f;
-	m_vEye.y = playerMatrix->_42 + 60.f;
+	m_vEye.y = playerMatrix->_42 + 70.f;
 	m_vEye.z = playerMatrix->_43 - 40.f;
 
 

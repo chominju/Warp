@@ -161,8 +161,10 @@
   <ItemGroup>
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\Ball.h" />
+    <ClInclude Include="..\Code\Conveyor.h" />
     <ClInclude Include="..\Code\Define.h" />
     <ClInclude Include="..\Code\FloorSwitch.h" />
+    <ClInclude Include="..\Code\HeavyMetal_Barrel.h" />
     <ClInclude Include="..\Code\InteractionObject.h" />
     <ClInclude Include="..\Code\LeftDoor.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
@@ -171,6 +173,7 @@
     <ClInclude Include="..\Code\Load_Manager.h" />
     <ClInclude Include="..\Code\Logo.h" />
     <ClInclude Include="..\Code\MainApp.h" />
+    <ClInclude Include="..\Code\Maze.h" />
     <ClInclude Include="..\Code\Monster.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\RightDoor.h" />
@@ -190,7 +193,9 @@
   <ItemGroup>
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Ball.cpp" />
+    <ClCompile Include="..\Code\Conveyor.cpp" />
     <ClCompile Include="..\Code\FloorSwitch.cpp" />
+    <ClCompile Include="..\Code\HeavyMetal_Barrel.cpp" />
     <ClCompile Include="..\Code\InteractionObject.cpp" />
     <ClCompile Include="..\Code\LeftDoor.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
@@ -199,6 +204,7 @@
     <ClCompile Include="..\Code\Load_Manager.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
+    <ClCompile Include="..\Code\Maze.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\RightDoor.cpp" />

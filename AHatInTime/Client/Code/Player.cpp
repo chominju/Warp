@@ -1,15 +1,21 @@
 #include "stdafx.h"
 #include "Player.h"
-
+#include "InteractionObject.h"
 #include "Export_Function.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
-	, m_pushKey{false,false,false,false,}
+	, m_pushKey{ false,false,false,false, }
 	, m_isKeyStop{ false,false,false,false }
 	, m_startTime(0.f)
 	, m_speed(10.f)
 	, m_firstSpeed(m_speed)
+	, m_isConveyor(false)
+	, m_isWrapable(true)
+	, m_isWrapKeyable(true)
+	, m_isHideObject(false)
+	, m_isHideObjectAble(false)
+	, m_hideObject(nullptr)
 {
 
 }
@@ -31,6 +37,7 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
+	/*m_pTransformCom->Set_Pos(148.f, 0.f, 120.f);*/
 	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
 	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 	
@@ -52,34 +59,17 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pCalculatorCom->Collision_InteractionObjectSensor(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
 		m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 		m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+
+
+		_bool temp1;
+		_bool temp2;
+		temp1 =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObject);
+		temp2 =m_pCalculatorCom->Collision_Warp_StaticObject(m_pWrapSphereColliderCom);
+		if((temp1==false ||(temp1==true && m_isHideObjectAble ==true))&&temp2==false)
+			m_isWrapable = true;
+		else
+			m_isWrapable = false;
 	}
-	//m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
-	
-	
-	//Collision_ToObject();
-	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
-	//{
-	//	int a;
-	//	m_isKeyStop[KEY_DOWN];
-	//	m_isKeyStop[KEY_UP];
-	//	m_isKeyStop[KEY_LEFT];
-	//	m_isKeyStop[KEY_RIGHT];
-	//	a = 10;
-	//}
-	//if (Collision_ToObject(/*L"StaticObject_Layer", L"Static_Object"*/))
-	//{
-	//	for (int i = 0; i < KEY_END; i++)
-	//	{
-	//		m_isKeyStop[i] = m_pushKey[i];
-	//	}
-	//}
-	//else
-	//{
-	//	for (int i = 0; i < KEY_END; i++)
-	//	{
-	//		m_isKeyStop[i] = false;
-	//	}
-	//}
 
 	SetUp_OnTerrain();
 
@@ -94,18 +84,38 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::Render_Object(void)
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
+	if (m_bDraw)
+	{
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
 
-	//m_pNaviCom->Render_NaviMesh();
+		//m_pNaviCom->Render_NaviMesh();
 
-	m_pMeshCom->Render_Meshes();
+		m_pMeshCom->Render_Meshes();
 
-	const _matrix* getTemp = m_pTransformCom->Get_WorldMatrix();
-	_matrix newWorldMatrix = *getTemp;
-	newWorldMatrix._42 += 3;
-	
-	m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix/*m_pTransformCom->Get_WorldMatrix()*/);
-	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+		const _matrix* getTemp = m_pTransformCom->Get_WorldMatrix();
+		_matrix newWorldMatrix = *getTemp;
+		newWorldMatrix._42 += 3;
+
+		// @@@@@@@@안보이게 주석
+		m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix/*m_pTransformCom->Get_WorldMatrix()*/);
+		m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
+
+	}
+	const _matrix* getTemp2 = m_pTransformCom->Get_WorldMatrix();
+	_matrix newWorldMatrix2 = *getTemp2;
+	newWorldMatrix2._42 += 3;
+
+	if (m_lastPushKey[KEY_DOWN])
+		newWorldMatrix2._43 -= 10;
+	if (m_lastPushKey[KEY_UP])
+		newWorldMatrix2._43 += 10;
+	if (m_lastPushKey[KEY_LEFT])
+		newWorldMatrix2._41 -= 10;
+	if (m_lastPushKey[KEY_RIGHT])
+		newWorldMatrix2._41 += 10;
+
+	m_pWrapSphereColliderCom->Render_SphereCollider(&newWorldMatrix2/*m_pTransformCom->Get_WorldMatrix()*/);
+
 }
 
 HRESULT CPlayer::Add_Component(void)
@@ -154,33 +164,23 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_SphereCollider", pComponent);
 
+	// WarpCollider
+	pComponent = m_pWrapSphereColliderCom = CSphereCollider::Create(m_pGraphicDev, 30);
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_mapComponent[ID_STATIC].emplace(L"Com_WrapSphereCollider", pComponent);
+
 	return S_OK;
 
 }
 
 void CPlayer::Key_Input(const _float& fTimeDelta)
 {
-	//m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-
-
-	//if (Get_DIKeyState(DIK_UP) & 0x80)
-	//{
-	//	_vec3	vPos, vDir;
-	//	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-	//	m_pTransformCom->Get_Info(INFO_LOOK, &vDir);
-	//	D3DXVec3Normalize(&vDir, &vDir);
-
-	///*	m_pTransformCom->Set_Pos(&m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir *fTimeDelta * 5.f)));
-	//	m_pMeshCom->Set_AnimationIndex(11);*/
-	//}
-	
-
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
 		m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
 		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_DOWN])
+		if (!m_isKeyStop[KEY_DOWN]&&!m_isHideObject)
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_UP] = false;
@@ -189,6 +189,11 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pushKey[KEY_UP] = false;
 		m_pushKey[KEY_LEFT] = false;
 		m_pushKey[KEY_RIGHT] = false;
+
+		m_lastPushKey[KEY_DOWN] = true;
+		m_lastPushKey[KEY_UP] = false;
+		m_lastPushKey[KEY_LEFT] = false;
+		m_lastPushKey[KEY_RIGHT] = false;
 		m_pMeshCom->Set_AnimationIndex(11);
 	}
 	//else
@@ -199,7 +204,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_UP])
+		if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_DOWN] = false;
@@ -208,6 +213,11 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pushKey[KEY_UP] = true;
 		m_pushKey[KEY_LEFT] = false;
 		m_pushKey[KEY_RIGHT] = false;
+
+		m_lastPushKey[KEY_DOWN] = false;
+		m_lastPushKey[KEY_UP] = true;
+		m_lastPushKey[KEY_LEFT] = false;
+		m_lastPushKey[KEY_RIGHT] = false;
 		m_pMeshCom->Set_AnimationIndex(11);
 	}
 	//else
@@ -218,7 +228,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
 		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_LEFT])
+		if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_RIGHT] = false;
@@ -227,6 +237,11 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pushKey[KEY_UP] = false;
 		m_pushKey[KEY_LEFT] = true;
 		m_pushKey[KEY_RIGHT] = false;
+
+		m_lastPushKey[KEY_DOWN] = false;
+		m_lastPushKey[KEY_UP] = false;
+		m_lastPushKey[KEY_LEFT] = true;
+		m_lastPushKey[KEY_RIGHT] = false;
 		m_pMeshCom->Set_AnimationIndex(11);
 	}
 	/*else
@@ -237,7 +252,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
 		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_RIGHT])
+		if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
 		{
 			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			//m_isKeyStop[KEY_LEFT] = false;
@@ -246,6 +261,11 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pushKey[KEY_UP] = false;
 		m_pushKey[KEY_LEFT] = false;
 		m_pushKey[KEY_RIGHT] = true;
+
+		m_lastPushKey[KEY_DOWN] = false;
+		m_lastPushKey[KEY_UP] = false;
+		m_lastPushKey[KEY_LEFT] = false;
+		m_lastPushKey[KEY_RIGHT] = true;
 		m_pMeshCom->Set_AnimationIndex(11);
 	}	
 	else
@@ -256,6 +276,41 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_pushKey[KEY_RIGHT] = false;
 		m_pMeshCom->Set_AnimationIndex(23);
 	}
+
+	if (m_isWrapable)
+	{
+		if (GetAsyncKeyState('Q') & 0x8000)
+		{
+			if (m_isWrapKeyable)
+			{
+				m_isWrapKeyable = false;
+				if (m_isHideObjectAble)
+				{
+					m_bDraw = false;
+					m_isHideObject = true;
+
+					const _matrix * getWorld = dynamic_cast<CInteractionObject*>(m_hideObject)->Get_Transform_Component()->Get_WorldMatrix();// Get_CollWorldMatrix();
+					_vec3 temp;
+					m_pTransformCom->Get_Info(INFO_POS, &temp);
+					m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+
+				}
+				else
+				{
+					m_bDraw = true;
+					m_isHideObject = false;
+				const _matrix * getWorld = m_pWrapSphereColliderCom->Get_CollWorldMatrix();
+				_vec3 temp;
+				m_pTransformCom->Get_Info(INFO_POS, &temp);
+				m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+				}
+			}
+		}
+		else
+			m_isWrapKeyable = true;
+	}
+	else
+		m_isWrapKeyable = true;
 	//else
 	//	m_pushKey[KEY_RIGHT] = false;
 

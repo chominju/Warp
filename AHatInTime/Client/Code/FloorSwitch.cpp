@@ -68,8 +68,8 @@ Engine::_int CFloorSwitch::Update_Object(const _float& fTimeDelta)
 			if (iter->first==L"LeftDoor2")
 				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
 
-				if(iter->first == L"RightDoor2")
-					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+			if(iter->first == L"RightDoor2")
+				dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
 		}
 
 	}
@@ -142,7 +142,7 @@ void CFloorSwitch::Render_Object(void)
 		//getWorldMatrixTemp._41 -= 5;
 		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
-
+		//// @@@@@@@@안보이게 주석
 	m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());

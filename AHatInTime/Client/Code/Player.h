@@ -36,6 +36,9 @@ public:
 	void					Set_Speed(_float speed) { m_speed = speed; }
 	void					Reset_Speed() { m_speed = m_firstSpeed; }
 
+	_bool					Get_IsConveyor() { return m_isConveyor; }
+	void					Set_IsConveyor(_bool conveyor) { m_isConveyor = conveyor; }
+
 private:
 	HRESULT					Add_Component(void);
 	void					Key_Input(const _float& fTimeDelta);
@@ -52,15 +55,24 @@ private:
 	CRenderer*				m_pRendererCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
 	CSphereCollider*		m_pSphereColliderCom = nullptr;
+	CSphereCollider*		m_pWrapSphereColliderCom = nullptr;
 
 	CCalculator*			m_pCalculatorCom = nullptr;
 	_vec3					m_vDir;
 
 	_bool					m_pushKey[KEY_END];
+	_bool					m_lastPushKey[KEY_END];
 	_bool					m_isKeyStop[KEY_END];
+	_bool					m_isConveyor;
+	_bool					m_isWrapable;
+	_bool					m_isWrapKeyable;
+	_bool					m_isHideObject;
+	_bool					m_isHideObjectAble;
 	_float					m_startTime;
 	_float					m_speed;
 	_float					m_firstSpeed;
+
+	CGameObject*			m_hideObject;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

@@ -81,18 +81,18 @@ void Engine::CSphereCollider::Render_SphereCollider(/*COLLTYPE eType, *//*const*
 	m_matCollWorld = *pColliderMatrix;
 
 #ifdef _DEBUG
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, pColliderMatrix);
-	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pGraphicDev->SetTransform(D3DTS_WORLD, pColliderMatrix);
+	//m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	m_pSphereMesh->DrawSubset(0);
-	/*m_pGraphicDev->SetTexture(0, m_pTexture[eType]);
+	//m_pSphereMesh->DrawSubset(0);
+	///*m_pGraphicDev->SetTexture(0, m_pTexture[eType]);
 
-	m_pGraphicDev->SetStreamSource(0, m_pVB, 0, sizeof(VTXCUBE));
-	m_pGraphicDev->SetFVF(FVF_CUBE);
-	m_pGraphicDev->SetIndices(m_pIB);*/
-	//m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
+	//m_pGraphicDev->SetStreamSource(0, m_pVB, 0, sizeof(VTXCUBE));
+	//m_pGraphicDev->SetFVF(FVF_CUBE);
+	//m_pGraphicDev->SetIndices(m_pIB);*/
+	////m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
 
-	m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	//m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 #endif
 }
 

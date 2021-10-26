@@ -37,6 +37,8 @@ private:
 	HRESULT			Ready_UI_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_LightInfo(void);
 
+	void			Create_Maze(const _tchar* pLayerTag);
+
 private:
 	_ulong			m_dwRenderCnt = 0;
 	_tchar			m_szFPS[256];

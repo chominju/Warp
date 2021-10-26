@@ -73,23 +73,32 @@
     <Filter Include="03. LoadData">
       <UniqueIdentifier>{96d29b06-d1ef-45a3-bb6a-8b388ecb2705}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject">
+    <Filter Include="02. GameObject\12. InteractionObject">
       <UniqueIdentifier>{66abefb6-2394-4773-ad6b-582343f85964}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject\00. InteractionObject">
+    <Filter Include="02. GameObject\12. InteractionObject\00. InteractionObject">
       <UniqueIdentifier>{35fd4a3b-b868-41e4-9253-86a96aa0bcd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject\01. LeftDoor">
+    <Filter Include="02. GameObject\12. InteractionObject\01. LeftDoor">
       <UniqueIdentifier>{44f8639b-1f72-4499-b670-f346e78d0410}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject\02. RightDoor">
+    <Filter Include="02. GameObject\12. InteractionObject\02. RightDoor">
       <UniqueIdentifier>{5e4737ba-6f7a-495c-90f4-0371d999052e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject\03. Ball">
+    <Filter Include="02. GameObject\12. InteractionObject\03. Ball">
       <UniqueIdentifier>{f1e3e5bd-b153-4044-a503-a3ba68374031}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\11. InteractionObject\04. FloorSwitch">
+    <Filter Include="02. GameObject\12. InteractionObject\04. FloorSwitch">
       <UniqueIdentifier>{51487c92-ddba-4faf-9c3b-1acdc34fa8ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\05. Conveyor">
+      <UniqueIdentifier>{47126408-e54c-4ca8-a388-240bffd793c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\06. Maze">
+      <UniqueIdentifier>{2bc34854-1994-4146-8622-2941dcf4343b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel">
+      <UniqueIdentifier>{3c515cec-a07c-4629-b6a8-ad40f55a4d23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -163,19 +172,28 @@
       <Filter>03. LoadData</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\LeftDoor.h">
-      <Filter>02. GameObject\11. InteractionObject\01. LeftDoor</Filter>
+      <Filter>02. GameObject\12. InteractionObject\01. LeftDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\InteractionObject.h">
-      <Filter>02. GameObject\11. InteractionObject\00. InteractionObject</Filter>
+      <Filter>02. GameObject\12. InteractionObject\00. InteractionObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\RightDoor.h">
-      <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
+      <Filter>02. GameObject\12. InteractionObject\02. RightDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Ball.h">
-      <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
+      <Filter>02. GameObject\12. InteractionObject\03. Ball</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\FloorSwitch.h">
-      <Filter>02. GameObject\11. InteractionObject\04. FloorSwitch</Filter>
+      <Filter>02. GameObject\12. InteractionObject\04. FloorSwitch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Conveyor.h">
+      <Filter>02. GameObject\12. InteractionObject\05. Conveyor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Maze.h">
+      <Filter>02. GameObject\12. InteractionObject\06. Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HeavyMetal_Barrel.h">
+      <Filter>02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -237,19 +255,28 @@
       <Filter>03. LoadData</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\LeftDoor.cpp">
-      <Filter>02. GameObject\11. InteractionObject\01. LeftDoor</Filter>
+      <Filter>02. GameObject\12. InteractionObject\01. LeftDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\InteractionObject.cpp">
-      <Filter>02. GameObject\11. InteractionObject\00. InteractionObject</Filter>
+      <Filter>02. GameObject\12. InteractionObject\00. InteractionObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\RightDoor.cpp">
-      <Filter>02. GameObject\11. InteractionObject\02. RightDoor</Filter>
+      <Filter>02. GameObject\12. InteractionObject\02. RightDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Ball.cpp">
-      <Filter>02. GameObject\11. InteractionObject\03. Ball</Filter>
+      <Filter>02. GameObject\12. InteractionObject\03. Ball</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\FloorSwitch.cpp">
-      <Filter>02. GameObject\11. InteractionObject\04. FloorSwitch</Filter>
+      <Filter>02. GameObject\12. InteractionObject\04. FloorSwitch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Conveyor.cpp">
+      <Filter>02. GameObject\12. InteractionObject\05. Conveyor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Maze.cpp">
+      <Filter>02. GameObject\12. InteractionObject\06. Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HeavyMetal_Barrel.cpp">
+      <Filter>02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
