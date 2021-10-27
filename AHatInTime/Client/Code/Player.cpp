@@ -16,6 +16,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_isHideObject(false)
 	, m_isHideObjectAble(false)
 	, m_hideObject(nullptr)
+	, m_isFrozenRoadOn(false
+	)
 {
 
 }
@@ -175,161 +177,285 @@ HRESULT CPlayer::Add_Component(void)
 
 void CPlayer::Key_Input(const _float& fTimeDelta)
 {
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	if (!m_isFrozenRoadOn) // ºùÆÇÀ§°¡ ¾Æ´Ò¶§
 	{
-		m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_DOWN]&&!m_isHideObject)
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 		{
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-			//m_isKeyStop[KEY_UP] = false;
-		}
-		m_pushKey[KEY_DOWN] = true;
-		m_pushKey[KEY_UP] = false;
-		m_pushKey[KEY_LEFT] = false;
-		m_pushKey[KEY_RIGHT] = false;
-
-		m_lastPushKey[KEY_DOWN] = true;
-		m_lastPushKey[KEY_UP] = false;
-		m_lastPushKey[KEY_LEFT] = false;
-		m_lastPushKey[KEY_RIGHT] = false;
-		m_pMeshCom->Set_AnimationIndex(11);
-	}
-	//else
-	//	m_pushKey[KEY_DOWN] = false;
-
-	else if (GetAsyncKeyState(VK_UP) & 0x8000)
-	{
-		m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
-		{
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-			//m_isKeyStop[KEY_DOWN] = false;
-		}
-		m_pushKey[KEY_DOWN] = false;
-		m_pushKey[KEY_UP] = true;
-		m_pushKey[KEY_LEFT] = false;
-		m_pushKey[KEY_RIGHT] = false;
-
-		m_lastPushKey[KEY_DOWN] = false;
-		m_lastPushKey[KEY_UP] = true;
-		m_lastPushKey[KEY_LEFT] = false;
-		m_lastPushKey[KEY_RIGHT] = false;
-		m_pMeshCom->Set_AnimationIndex(11);
-	}
-	//else
-	//	m_pushKey[KEY_UP] = false;
-
-	else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	{
-		m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
-		{
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-			//m_isKeyStop[KEY_RIGHT] = false;
-		}
-		m_pushKey[KEY_DOWN] = false;
-		m_pushKey[KEY_UP] = false;
-		m_pushKey[KEY_LEFT] = true;
-		m_pushKey[KEY_RIGHT] = false;
-
-		m_lastPushKey[KEY_DOWN] = false;
-		m_lastPushKey[KEY_UP] = false;
-		m_lastPushKey[KEY_LEFT] = true;
-		m_lastPushKey[KEY_RIGHT] = false;
-		m_pMeshCom->Set_AnimationIndex(11);
-	}
-	/*else
-		m_pushKey[KEY_LEFT] = false;*/
-
-	else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-		m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-		D3DXVec3Normalize(&m_vDir, &m_vDir);
-		if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
-		{
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-			//m_isKeyStop[KEY_LEFT] = false;
-		}
-		m_pushKey[KEY_DOWN] = false;
-		m_pushKey[KEY_UP] = false;
-		m_pushKey[KEY_LEFT] = false;
-		m_pushKey[KEY_RIGHT] = true;
-
-		m_lastPushKey[KEY_DOWN] = false;
-		m_lastPushKey[KEY_UP] = false;
-		m_lastPushKey[KEY_LEFT] = false;
-		m_lastPushKey[KEY_RIGHT] = true;
-		m_pMeshCom->Set_AnimationIndex(11);
-	}	
-	else
-	{
-		m_pushKey[KEY_DOWN] = false;
-		m_pushKey[KEY_UP] = false;
-		m_pushKey[KEY_LEFT] = false;
-		m_pushKey[KEY_RIGHT] = false;
-		m_pMeshCom->Set_AnimationIndex(23);
-	}
-
-	if (m_isWrapable)
-	{
-		if (GetAsyncKeyState('Q') & 0x8000)
-		{
-			if (m_isWrapKeyable)
+			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			D3DXVec3Normalize(&m_vDir, &m_vDir);
+			if (!m_isKeyStop[KEY_DOWN] && !m_isHideObject)
 			{
-				m_isWrapKeyable = false;
-				if (m_isHideObjectAble)
-				{
-					m_bDraw = false;
-					m_isHideObject = true;
+				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+				//m_isKeyStop[KEY_UP] = false;
+			}
+			m_pushKey[KEY_DOWN] = true;
+			m_pushKey[KEY_UP] = false;
+			m_pushKey[KEY_LEFT] = false;
+			m_pushKey[KEY_RIGHT] = false;
 
-					const _matrix * getWorld = dynamic_cast<CInteractionObject*>(m_hideObject)->Get_Transform_Component()->Get_WorldMatrix();// Get_CollWorldMatrix();
-					_vec3 temp;
-					m_pTransformCom->Get_Info(INFO_POS, &temp);
-					m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+			m_lastPushKey[KEY_DOWN] = true;
+			m_lastPushKey[KEY_UP] = false;
+			m_lastPushKey[KEY_LEFT] = false;
+			m_lastPushKey[KEY_RIGHT] = false;
+			m_pMeshCom->Set_AnimationIndex(11);
+		}
+		//else
+		//	m_pushKey[KEY_DOWN] = false;
 
-				}
-				else
+		else if (GetAsyncKeyState(VK_UP) & 0x8000)
+		{
+			m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			D3DXVec3Normalize(&m_vDir, &m_vDir);
+			if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
+			{
+				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+				//m_isKeyStop[KEY_DOWN] = false;
+			}
+			m_pushKey[KEY_DOWN] = false;
+			m_pushKey[KEY_UP] = true;
+			m_pushKey[KEY_LEFT] = false;
+			m_pushKey[KEY_RIGHT] = false;
+
+			m_lastPushKey[KEY_DOWN] = false;
+			m_lastPushKey[KEY_UP] = true;
+			m_lastPushKey[KEY_LEFT] = false;
+			m_lastPushKey[KEY_RIGHT] = false;
+			m_pMeshCom->Set_AnimationIndex(11);
+		}
+		//else
+		//	m_pushKey[KEY_UP] = false;
+
+		else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+		{
+			m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			D3DXVec3Normalize(&m_vDir, &m_vDir);
+			if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
+			{
+				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+				//m_isKeyStop[KEY_RIGHT] = false;
+			}
+			m_pushKey[KEY_DOWN] = false;
+			m_pushKey[KEY_UP] = false;
+			m_pushKey[KEY_LEFT] = true;
+			m_pushKey[KEY_RIGHT] = false;
+
+			m_lastPushKey[KEY_DOWN] = false;
+			m_lastPushKey[KEY_UP] = false;
+			m_lastPushKey[KEY_LEFT] = true;
+			m_lastPushKey[KEY_RIGHT] = false;
+			m_pMeshCom->Set_AnimationIndex(11);
+		}
+		/*else
+			m_pushKey[KEY_LEFT] = false;*/
+
+		else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+		{
+			m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			D3DXVec3Normalize(&m_vDir, &m_vDir);
+			if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
+			{
+				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+				//m_isKeyStop[KEY_LEFT] = false;
+			}
+			m_pushKey[KEY_DOWN] = false;
+			m_pushKey[KEY_UP] = false;
+			m_pushKey[KEY_LEFT] = false;
+			m_pushKey[KEY_RIGHT] = true;
+
+			m_lastPushKey[KEY_DOWN] = false;
+			m_lastPushKey[KEY_UP] = false;
+			m_lastPushKey[KEY_LEFT] = false;
+			m_lastPushKey[KEY_RIGHT] = true;
+			m_pMeshCom->Set_AnimationIndex(11);
+		}
+		else
+		{
+			m_pushKey[KEY_DOWN] = false;
+			m_pushKey[KEY_UP] = false;
+			m_pushKey[KEY_LEFT] = false;
+			m_pushKey[KEY_RIGHT] = false;
+			m_pMeshCom->Set_AnimationIndex(23);
+		}
+
+		if (m_isWrapable)
+		{
+			if (GetAsyncKeyState('Q') & 0x8000)
+			{
+				if (m_isWrapKeyable)
 				{
-					m_bDraw = true;
-					m_isHideObject = false;
-				const _matrix * getWorld = m_pWrapSphereColliderCom->Get_CollWorldMatrix();
-				_vec3 temp;
-				m_pTransformCom->Get_Info(INFO_POS, &temp);
-				m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+					m_isWrapKeyable = false;
+					if (m_isHideObjectAble)
+					{
+						m_bDraw = false;
+						m_isHideObject = true;
+
+						const _matrix * getWorld = dynamic_cast<CInteractionObject*>(m_hideObject)->Get_Transform_Component()->Get_WorldMatrix();// Get_CollWorldMatrix();
+						_vec3 temp;
+						m_pTransformCom->Get_Info(INFO_POS, &temp);
+						m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+
+					}
+					else
+					{
+						m_bDraw = true;
+						m_isHideObject = false;
+						const _matrix * getWorld = m_pWrapSphereColliderCom->Get_CollWorldMatrix();
+						_vec3 temp;
+						m_pTransformCom->Get_Info(INFO_POS, &temp);
+						m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+					}
 				}
 			}
+			else
+				m_isWrapKeyable = true;
 		}
 		else
 			m_isWrapKeyable = true;
+		//else
+		//	m_pushKey[KEY_RIGHT] = false;
+
+		//if(m_pushKey[0]|| m_pushKey[1]|| m_pushKey[2]|| m_pushKey[3])
+		//	m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
+		/*if (Get_DIMouseState(DIM_LB) & 0X80)
+		{
+			_vec3	vPos = PickUp_OnTerrain();
+
+			m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
+		}*/
+
+		if (Get_DIMouseState(DIM_RB) & 0X80)
+		{
+			m_pMeshCom->Set_AnimationIndex(11);
+		}
+
+		if (true == m_pMeshCom->Is_AnimationsetFinish())
+			m_pMeshCom->Set_AnimationIndex(11);
 	}
 	else
-		m_isWrapKeyable = true;
-	//else
-	//	m_pushKey[KEY_RIGHT] = false;
-
-	//if(m_pushKey[0]|| m_pushKey[1]|| m_pushKey[2]|| m_pushKey[3])
-	//	m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-	/*if (Get_DIMouseState(DIM_LB) & 0X80)
 	{
-		_vec3	vPos = PickUp_OnTerrain();
+		if (!m_isFrozenRoadWalk)	// °È°í ÀÖÁö ¾ÊÀ» ¶§
+		{
+			if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+			{
+				m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+				m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+				D3DXVec3Normalize(&m_vDir, &m_vDir);
+				if (!m_isKeyStop[KEY_DOWN] && !m_isHideObject)
+				{
+					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//m_isKeyStop[KEY_UP] = false;
+				}
+				m_pushKey[KEY_DOWN] = true;
+				m_pushKey[KEY_UP] = false;
+				m_pushKey[KEY_LEFT] = false;
+				m_pushKey[KEY_RIGHT] = false;
 
-		m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
-	}*/
+				m_lastPushKey[KEY_DOWN] = true;
+				m_lastPushKey[KEY_UP] = false;
+				m_lastPushKey[KEY_LEFT] = false;
+				m_lastPushKey[KEY_RIGHT] = false;
+				m_pMeshCom->Set_AnimationIndex(11);
+			}
+			//else
+			//	m_pushKey[KEY_DOWN] = false;
 
-	if (Get_DIMouseState(DIM_RB) & 0X80)
-	{
-		m_pMeshCom->Set_AnimationIndex(11);
+			else if (GetAsyncKeyState(VK_UP) & 0x8000)
+			{
+				m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+				m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+				D3DXVec3Normalize(&m_vDir, &m_vDir);
+				if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
+				{
+					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//m_isKeyStop[KEY_DOWN] = false;
+				}
+				m_pushKey[KEY_DOWN] = false;
+				m_pushKey[KEY_UP] = true;
+				m_pushKey[KEY_LEFT] = false;
+				m_pushKey[KEY_RIGHT] = false;
+
+				m_lastPushKey[KEY_DOWN] = false;
+				m_lastPushKey[KEY_UP] = true;
+				m_lastPushKey[KEY_LEFT] = false;
+				m_lastPushKey[KEY_RIGHT] = false;
+				m_pMeshCom->Set_AnimationIndex(11);
+			}
+			//else
+			//	m_pushKey[KEY_UP] = false;
+
+			else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			{
+				m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+				m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+				D3DXVec3Normalize(&m_vDir, &m_vDir);
+				if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
+				{
+					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//m_isKeyStop[KEY_RIGHT] = false;
+				}
+				m_pushKey[KEY_DOWN] = false;
+				m_pushKey[KEY_UP] = false;
+				m_pushKey[KEY_LEFT] = true;
+				m_pushKey[KEY_RIGHT] = false;
+
+				m_lastPushKey[KEY_DOWN] = false;
+				m_lastPushKey[KEY_UP] = false;
+				m_lastPushKey[KEY_LEFT] = true;
+				m_lastPushKey[KEY_RIGHT] = false;
+				m_pMeshCom->Set_AnimationIndex(11);
+			}
+			/*else
+			m_pushKey[KEY_LEFT] = false;*/
+
+			else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			{
+				m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+				m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+				D3DXVec3Normalize(&m_vDir, &m_vDir);
+				if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
+				{
+					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//m_isKeyStop[KEY_LEFT] = false;
+				}
+				m_pushKey[KEY_DOWN] = false;
+				m_pushKey[KEY_UP] = false;
+				m_pushKey[KEY_LEFT] = false;
+				m_pushKey[KEY_RIGHT] = true;
+
+				m_lastPushKey[KEY_DOWN] = false;
+				m_lastPushKey[KEY_UP] = false;
+				m_lastPushKey[KEY_LEFT] = false;
+				m_lastPushKey[KEY_RIGHT] = true;
+				m_pMeshCom->Set_AnimationIndex(11);
+			}
+			else
+			{
+				m_pushKey[KEY_DOWN] = false;
+				m_pushKey[KEY_UP] = false;
+				m_pushKey[KEY_LEFT] = false;
+				m_pushKey[KEY_RIGHT] = false;
+				m_pMeshCom->Set_AnimationIndex(23);
+			}
+
+			if (Get_DIMouseState(DIM_RB) & 0X80)
+			{
+				m_pMeshCom->Set_AnimationIndex(11);
+			}
+
+			if (true == m_pMeshCom->Is_AnimationsetFinish())
+				m_pMeshCom->Set_AnimationIndex(11);
+		}
+		else	// °È°í ÀÖÀ» ¶§ Àå¾Ö¹° ¾øÀ» ¶§ ±îÁö Âß °È±â
+		{
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			D3DXVec3Normalize(&m_vDir, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+		}
 	}
-
-	if(true == m_pMeshCom->Is_AnimationsetFinish())
-		m_pMeshCom->Set_AnimationIndex(11);
 }
 
 void CPlayer::SetUp_OnTerrain(void)

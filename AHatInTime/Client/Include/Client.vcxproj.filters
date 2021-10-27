@@ -100,6 +100,9 @@
     <Filter Include="02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel">
       <UniqueIdentifier>{3c515cec-a07c-4629-b6a8-ad40f55a4d23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\08. EmptyObject">
+      <UniqueIdentifier>{4a0ed786-57a8-47d5-b93c-3acefcc155b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -195,6 +198,9 @@
     <ClInclude Include="..\Code\HeavyMetal_Barrel.h">
       <Filter>02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\EmptyObject.h">
+      <Filter>02. GameObject\12. InteractionObject\08. EmptyObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -277,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\HeavyMetal_Barrel.cpp">
       <Filter>02. GameObject\12. InteractionObject\07. HeavyMetal_Barrel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EmptyObject.cpp">
+      <Filter>02. GameObject\12. InteractionObject\08. EmptyObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
