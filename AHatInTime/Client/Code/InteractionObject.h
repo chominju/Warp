@@ -37,6 +37,7 @@ public:
 	CCollider* Get_ColliderSensor_Component() { return m_pColliderSensorCom; }
 
 	_bool		Get_IsObject_PlayerHide() { return m_isObject_PlayerHide; }
+	void		Set_IsObject_PlayerWarpMove(_bool wrapMove) { m_isObject_PlayerWarpMove = wrapMove; }
 
 protected:
 	virtual HRESULT			Add_Component(void);
@@ -54,11 +55,14 @@ protected:
 
 	//Object_Data				m_objectData;
 	_bool					m_isObject_PlayerHide;
+	_bool					m_isObject_PlayerWarpMove;
+	_bool					m_isObject_PlayerWarpMoveFirst;
+	_vec3					m_vDir;
+
 
 private:	
 	
 	_uint					m_iFlag;
-
 public:
 	static CInteractionObject*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

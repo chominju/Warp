@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "InteractionObject.h"
+#include "EmptyObject.h"
 #include "Export_Function.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -15,9 +16,13 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_isWrapKeyable(true)
 	, m_isHideObject(false)
 	, m_isHideObjectAble(false)
+	, m_hideObjectAble(nullptr)
 	, m_hideObject(nullptr)
-	, m_isFrozenRoadOn(false
-	)
+	, m_isFrozenRoadOn(false)
+	, m_isFrozenRoadWalk(false)
+	, m_isColl_StaticObject(false)
+	, m_isColl_InteractionObject(false)
+	, m_isWrapSkillItem(true)
 {
 
 }
@@ -39,8 +44,13 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
-	/*m_pTransformCom->Set_Pos(148.f, 0.f, 120.f);*/
+	//ºùÆÇ¸Ê
+	//m_pTransformCom->Set_Pos(120.f, 0.f, 180.f);
+	//¹°Ã¼¹Ì´Â¸Ê
+	//m_pTransformCom->Set_Pos(180.f, 0.f, 150.f);
+	//±âÁ¸À§Ä¡
 	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
+
 	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 	
 	//m_pNaviCom->Set_CellIndex(1);
@@ -59,21 +69,34 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 		_vec3 playerRot;
 		m_pTransformCom->Get_Rotation(&playerRot);
 		m_pCalculatorCom->Collision_InteractionObjectSensor(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
-		m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
-		m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+		/*m_isColl_StaticObject = */m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+		m_isColl_InteractionObject = m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 
 
 		_bool temp1;
 		_bool temp2;
-		temp1 =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObject);
+		temp1 =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObjectAble);
 		temp2 =m_pCalculatorCom->Collision_Warp_StaticObject(m_pWrapSphereColliderCom);
 		if((temp1==false ||(temp1==true && m_isHideObjectAble ==true))&&temp2==false)
 			m_isWrapable = true;
 		else
 			m_isWrapable = false;
+
+		if (m_hideObjectAble == nullptr)
+		{
+			int a;
+		}
 	}
 
 	SetUp_OnTerrain();
+
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (!_tcscmp(iter->first, L"FrozenLoad"))
+			m_FrozenObject = iter->second;
+
+	}
 
 	Key_Input(fTimeDelta);
 
@@ -179,6 +202,28 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 {
 	if (!m_isFrozenRoadOn) // ºùÆÇÀ§°¡ ¾Æ´Ò¶§
 	{
+		if (m_isHideObject)	// ¹°Ã¼¿¡ ¼û¾úÀ» ¶§
+		{
+			if (GetAsyncKeyState('W') & 0x8000)	// W¸¦ ´­·¶À» ¶§
+			{
+				/*if (m_lastPushKey[KEY_DOWN])
+				{
+				}
+				else if(m_lastPushKey[KEY_UP])
+				{
+
+				}
+				else if (m_lastPushKey[KEY_LEFT])
+				{
+
+				}
+				else if(m_lastPushKey[KEY_RIGHT])*/
+				dynamic_cast<CInteractionObject*>(m_hideObject)->Set_IsObject_PlayerWarpMove(true);
+				m_isHideObject = false;
+				m_bDraw = true;
+			}
+		}
+
 		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 		{
 			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
@@ -278,10 +323,16 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_pushKey[KEY_UP] = false;
 			m_pushKey[KEY_LEFT] = false;
 			m_pushKey[KEY_RIGHT] = false;
-			m_pMeshCom->Set_AnimationIndex(23);
+			if (m_pMeshCom->Get_AnimationIndex() == 10)
+			{
+				if (true == m_pMeshCom->Is_AnimationsetFinish())
+					m_pMeshCom->Set_AnimationIndex(23);
+			}
+			else
+				m_pMeshCom->Set_AnimationIndex(23);
 		}
 
-		if (m_isWrapable)
+		if (m_isWrapable && m_isWrapSkillItem)
 		{
 			if (GetAsyncKeyState('Q') & 0x8000)
 			{
@@ -293,11 +344,12 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 						m_bDraw = false;
 						m_isHideObject = true;
 
-						const _matrix * getWorld = dynamic_cast<CInteractionObject*>(m_hideObject)->Get_Transform_Component()->Get_WorldMatrix();// Get_CollWorldMatrix();
+						const _matrix * getWorld = dynamic_cast<CInteractionObject*>(m_hideObjectAble)->Get_Transform_Component()->Get_WorldMatrix();// Get_CollWorldMatrix();
 						_vec3 temp;
 						m_pTransformCom->Get_Info(INFO_POS, &temp);
 						m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
-
+						m_pMeshCom->Set_AnimationIndex(10);
+						m_hideObject = m_hideObjectAble;
 					}
 					else
 					{
@@ -307,6 +359,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 						_vec3 temp;
 						m_pTransformCom->Get_Info(INFO_POS, &temp);
 						m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
+						m_pMeshCom->Set_AnimationIndex(10);
 					}
 				}
 			}
@@ -327,16 +380,49 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
 		}*/
 
-		if (Get_DIMouseState(DIM_RB) & 0X80)
-		{
-			m_pMeshCom->Set_AnimationIndex(11);
-		}
+		//if (Get_DIMouseState(DIM_RB) & 0X80)
+		//{
+		//	m_pMeshCom->Set_AnimationIndex(11);
+		//}
 
-		if (true == m_pMeshCom->Is_AnimationsetFinish())
-			m_pMeshCom->Set_AnimationIndex(11);
+		//if (true == m_pMeshCom->Is_AnimationsetFinish())
+		//	m_pMeshCom->Set_AnimationIndex(11);
 	}
 	else
 	{
+		CCollider* getSensorColl = dynamic_cast<CEmptyObject*>(m_FrozenObject)->Get_ColliderSensor_Component();
+
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getSensorColl)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getSensorColl)->Get_Max();
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getSensorColl)->Get_CollWorldMatrix();
+		_vec3		vDestMin, vDestMax;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.y < vDestMin.y)
+		{
+			vDestMin.y = vDestMax.y;
+			vDestMax.y = temp.y;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
+		_vec3 playerPos;
+		m_pTransformCom->Get_Info(INFO_POS, &playerPos);
+
+		Set_Speed(m_firstSpeed * 2);
 		if (!m_isFrozenRoadWalk)	// °È°í ÀÖÁö ¾ÊÀ» ¶§
 		{
 			if (GetAsyncKeyState(VK_DOWN) & 0x8000)
@@ -346,7 +432,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				D3DXVec3Normalize(&m_vDir, &m_vDir);
 				if (!m_isKeyStop[KEY_DOWN] && !m_isHideObject)
 				{
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					if (vDestMin.z < playerPos.z)
+					{
+						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					}
 					//m_isKeyStop[KEY_UP] = false;
 				}
 				m_pushKey[KEY_DOWN] = true;
@@ -359,6 +448,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_lastPushKey[KEY_LEFT] = false;
 				m_lastPushKey[KEY_RIGHT] = false;
 				m_pMeshCom->Set_AnimationIndex(11);
+				m_isFrozenRoadWalk = true;
 			}
 			//else
 			//	m_pushKey[KEY_DOWN] = false;
@@ -370,7 +460,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				D3DXVec3Normalize(&m_vDir, &m_vDir);
 				if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
 				{
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					if (vDestMax.z > playerPos.z)
+					{
+						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					}
 					//m_isKeyStop[KEY_DOWN] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
@@ -383,6 +476,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_lastPushKey[KEY_LEFT] = false;
 				m_lastPushKey[KEY_RIGHT] = false;
 				m_pMeshCom->Set_AnimationIndex(11);
+				m_isFrozenRoadWalk = true;
 			}
 			//else
 			//	m_pushKey[KEY_UP] = false;
@@ -394,7 +488,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				D3DXVec3Normalize(&m_vDir, &m_vDir);
 				if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
 				{
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					if (vDestMin.x < playerPos.x)
+					{
+						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					}
 					//m_isKeyStop[KEY_RIGHT] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
@@ -407,6 +504,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_lastPushKey[KEY_LEFT] = true;
 				m_lastPushKey[KEY_RIGHT] = false;
 				m_pMeshCom->Set_AnimationIndex(11);
+				m_isFrozenRoadWalk = true;
 			}
 			/*else
 			m_pushKey[KEY_LEFT] = false;*/
@@ -418,7 +516,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				D3DXVec3Normalize(&m_vDir, &m_vDir);
 				if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
 				{
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					if (vDestMax.x > playerPos.x)
+					{
+						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					}
 					//m_isKeyStop[KEY_LEFT] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
@@ -431,6 +532,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_lastPushKey[KEY_LEFT] = false;
 				m_lastPushKey[KEY_RIGHT] = true;
 				m_pMeshCom->Set_AnimationIndex(11);
+				m_isFrozenRoadWalk = true;
 			}
 			else
 			{
@@ -451,9 +553,116 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		}
 		else	// °È°í ÀÖÀ» ¶§ Àå¾Ö¹° ¾øÀ» ¶§ ±îÁö Âß °È±â
 		{
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+			//if (!m_isColl_StaticObject && !m_isColl_InteractionObject)
+			//{
+			//	
+				if (m_lastPushKey[KEY_DOWN])
+				{
+					if (vDestMin.z < playerPos.z)
+					{
+						if (!m_isKeyStop[KEY_DOWN] && !m_isHideObject)
+						{
+							m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+							D3DXVec3Normalize(&m_vDir, &m_vDir);
+							m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+						}
+						else
+						{
+							m_pMeshCom->Set_AnimationIndex(23);
+							m_isFrozenRoadWalk = false;
+						}
+					}
+					else
+					{
+						m_pMeshCom->Set_AnimationIndex(23);
+						m_isFrozenRoadWalk = false;
+					}
+				}
+				else if (m_lastPushKey[KEY_UP])
+				{
+					if (vDestMax.z > playerPos.z)
+					{
+						if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
+						{
+							m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+							D3DXVec3Normalize(&m_vDir, &m_vDir);
+							m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+						}
+						else
+						{
+							m_pMeshCom->Set_AnimationIndex(23);
+							m_isFrozenRoadWalk = false;
+						}
+					}
+					else
+					{
+						m_pMeshCom->Set_AnimationIndex(23);
+						m_isFrozenRoadWalk = false;
+					}
+				}
+				else if (m_lastPushKey[KEY_LEFT])
+				{
+					if (vDestMin.x < playerPos.x)
+					{
+						if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
+						{
+							m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+							D3DXVec3Normalize(&m_vDir, &m_vDir);
+							m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+						}
+						else
+						{
+							m_pMeshCom->Set_AnimationIndex(23);
+							m_isFrozenRoadWalk = false;
+						}
+					}
+					else if (vDestMin.x > playerPos.x && (playerPos.z < 190 && playerPos.z>180))
+					{
+						m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+						D3DXVec3Normalize(&m_vDir, &m_vDir);
+						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					}
+					else
+					{
+						m_pMeshCom->Set_AnimationIndex(23);
+						m_isFrozenRoadWalk = false;
+					}
+				}
+				else if (m_lastPushKey[KEY_RIGHT])
+				{
+					if (vDestMax.x > playerPos.x)
+					{
+						if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
+						{
+							m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+							D3DXVec3Normalize(&m_vDir, &m_vDir);
+							m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+						}
+						else
+						{
+							m_pMeshCom->Set_AnimationIndex(23);
+							m_isFrozenRoadWalk = false;
+						}
+					}
+					else
+					{
+						m_pMeshCom->Set_AnimationIndex(23);
+						m_isFrozenRoadWalk = false;
+						Reset_Speed();
+					}
+				}
+
+			/*}
+			else
+			{
+				m_pMeshCom->Set_AnimationIndex(23);
+				m_isFrozenRoadWalk = false;
+			}*/
+			/*else
+			{
+				m_pMeshCom->Set_AnimationIndex(23);
+				m_isFrozenRoadWalk = false;
+			}*/
 		}
 	}
 }

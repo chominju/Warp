@@ -31,6 +31,7 @@ public:
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
 
 	_bool*		Get_PushKey() { return m_pushKey; }
+	_bool*		Get_LastPushKey() { return m_lastPushKey; }
 
 	_float					Get_Speed() { return m_speed; }
 	void					Set_Speed(_float speed) { m_speed = speed; }
@@ -38,6 +39,11 @@ public:
 
 	_bool					Get_IsConveyor() { return m_isConveyor; }
 	void					Set_IsConveyor(_bool conveyor) { m_isConveyor = conveyor; }
+
+	_bool					Get_IsFrozenRoadOn() { return m_isFrozenRoadOn; }
+	void					Set_IsFrozenRoadOn(_bool frozenRoad) { m_isFrozenRoadOn = frozenRoad; }
+	_bool					Get_IsWrapSkillItem() { return m_isWrapSkillItem; }
+	void					Set_IsWrapSkillItem(_bool wrapSkill) { m_isWrapSkillItem = wrapSkill; }
 
 private:
 	HRESULT					Add_Component(void);
@@ -64,17 +70,24 @@ private:
 	_bool					m_lastPushKey[KEY_END];				// 마지막으로 눌렀던 키(방향을 볼려고)
 	_bool					m_isKeyStop[KEY_END];				// 이동이 안되는 키
 	_bool					m_isConveyor;						// 컨베이너 위에 있는지
+	_bool					m_isWrapSkillItem;					// 워프 가능하게 하는 아이템을 먹었는지
 	_bool					m_isWrapable;						// 워프가 가능한지(충돌체크확인)
 	_bool					m_isWrapKeyable;					// 워프키를 눌렀는지(Q)
 	_bool					m_isHideObject;						// 오브젝트 안에 들어갔는지
 	_bool					m_isHideObjectAble;					// 오브젝트 안에 들어갈수있는지
 	_bool					m_isFrozenRoadOn;					// 빙판 위에 있는지
 	_bool					m_isFrozenRoadWalk;					// 빙판 위를 걷고있는지
+	_bool					m_isColl_StaticObject;
+	_bool					m_isColl_InteractionObject;
+
+
 	_float					m_startTime;						
 	_float					m_speed;
 	_float					m_firstSpeed;
 
+	CGameObject*			m_hideObjectAble;
 	CGameObject*			m_hideObject;
+	CGameObject*			m_FrozenObject;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

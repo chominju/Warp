@@ -8,6 +8,8 @@
 CInteractionObject::CInteractionObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 	, m_isObject_PlayerHide(false)
+	, m_isObject_PlayerWarpMove(false)
+	, m_isObject_PlayerWarpMoveFirst(false)
 {
 
 }

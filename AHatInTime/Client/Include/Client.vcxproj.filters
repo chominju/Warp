@@ -103,6 +103,15 @@
     <Filter Include="02. GameObject\12. InteractionObject\08. EmptyObject">
       <UniqueIdentifier>{4a0ed786-57a8-47d5-b93c-3acefcc155b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\09. GarbageBag">
+      <UniqueIdentifier>{d88b532d-dde7-4419-9bd5-572ce8ac5ff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\10. Jelly">
+      <UniqueIdentifier>{9f3dd23b-2431-4310-9542-e081f10a2bbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\11. Computer">
+      <UniqueIdentifier>{5dcc46b6-4d32-4303-b873-ce87eaa61397}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -201,6 +210,15 @@
     <ClInclude Include="..\Code\EmptyObject.h">
       <Filter>02. GameObject\12. InteractionObject\08. EmptyObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\GarbageBag.h">
+      <Filter>02. GameObject\12. InteractionObject\09. GarbageBag</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Jelly.h">
+      <Filter>02. GameObject\12. InteractionObject\10. Jelly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Computer.h">
+      <Filter>02. GameObject\12. InteractionObject\11. Computer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -286,6 +304,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\EmptyObject.cpp">
       <Filter>02. GameObject\12. InteractionObject\08. EmptyObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GarbageBag.cpp">
+      <Filter>02. GameObject\12. InteractionObject\09. GarbageBag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Jelly.cpp">
+      <Filter>02. GameObject\12. InteractionObject\10. Jelly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Computer.cpp">
+      <Filter>02. GameObject\12. InteractionObject\11. Computer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

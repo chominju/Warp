@@ -74,24 +74,22 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 				m_firstPushKey[i] = getPlayerPush[i];
 			}
 		}
-
-
-		if (getPlayerPush[0])// 아래
-		{
-			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
-		}
-		if (getPlayerPush[1])//위
-		{
-			m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-		}
-		if (getPlayerPush[2])//왼쪽
-		{
-			m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-		}
-		if (getPlayerPush[3])//오른쪽
-		{
-			m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-		}
+		//if (getPlayerPush[0])// 아래
+		//{
+		//	m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
+		//}
+		//if (getPlayerPush[1])//위
+		//{
+		//	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
+		//}
+		//if (getPlayerPush[2])//왼쪽
+		//{
+		//	m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
+		//}
+		//if (getPlayerPush[3])//오른쪽
+		//{
+		//	m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
+		//}
 			
 			for (int i = 0; i < KEY_END; i++)
 			{
@@ -99,25 +97,30 @@ Engine::_int CBall::Update_Object(const _float& fTimeDelta)
 				{
 					if (i == 0)
 					{
-						m_angle[1] += fTimeDelta;
+						m_angle[1] += 1.f;
 					}
 					else if (i == 1)
 					{
-						m_angle[1] -= fTimeDelta;
+						m_angle[1] -= 1.f;
 					}
 					else if (i == 2)
 					{
-						m_angle[0] -= fTimeDelta;
+						m_angle[0] += 1.f;
 					}
 					else
 					{
-						m_angle[0] += fTimeDelta;
+						m_angle[0] -= 1.f;
 					}
-					_vec3					m_vDir;
-					m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-					D3DXVec3Normalize(&m_vDir, &m_vDir);
-					m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-					//m_pTransformCom->Set_Rotation(m_angle[0], m_angle[1], 0.f);
+					m_pTransformCom->Set_Rotation(m_angle[1], 0.f, m_angle[0]);
+		_vec3					m_vDir;
+		dynamic_cast<CPlayer*>(getPlayer->second)->Get_Transform_Component()->Get_Info(INFO_LOOK, &m_vDir);
+		D3DXVec3Normalize(&m_vDir, &m_vDir);
+		m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					//_vec3					m_vDir;
+					//m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+					//D3DXVec3Normalize(&m_vDir, &m_vDir);
+					//m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
+					////m_pTransformCom->Set_Rotation(m_angle[0], m_angle[1], 0.f);
 					check = true;
 					break;
 				}
@@ -238,7 +241,16 @@ void CBall::Render_Object(void)
 		//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), &getWorldMatrixTemp);
 
 		// @@@@@@@@안보이게 주석
-		m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), m_pTransformCom->Get_WorldMatrix());
+		_matrix temp;
+		D3DXMatrixIdentity(&temp);
+		temp._11 = 0.05f;// m_pTransformCom->Get_WorldMatrix()->_11;
+		temp._22 = 0.05f;// m_pTransformCom->Get_WorldMatrix()->_22;
+		temp._33 = 0.05f;//m_pTransformCom->Get_WorldMatrix()->_33;
+		temp._41 = m_pTransformCom->Get_WorldMatrix()->_41;
+		temp._42 = m_pTransformCom->Get_WorldMatrix()->_42;
+		temp._43 = m_pTransformCom->Get_WorldMatrix()->_43;
+
+		m_pColliderSensorCom->Render_Collider(COLLTYPE(m_bSensorColl), &temp/* m_pTransformCom->Get_WorldMatrix()*/);
 
 	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }

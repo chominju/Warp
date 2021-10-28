@@ -113,6 +113,8 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_WallClear15.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"WallClear15.X")), E_FAIL);
 	
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Floorswitch.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Floorswitch.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Jelly.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Jelly.X")), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Computer.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Computer.X")), E_FAIL);
 	m_bFinish = true;
 
 	lstrcpy(m_szLoading, L"Loading Complete!!!!!!!!!!!!!!!!!!!!!!");

@@ -1,32 +1,31 @@
 #include "stdafx.h"
-#include "HeavyMetal_Barrel.h"
+#include "Computer.h"
 #include "Ball.h"
 #include "Player.h"
 
 #include "Export_Function.h"
 
-CHeavyMetal_Barrel::CHeavyMetal_Barrel(LPDIRECT3DDEVICE9 pGraphicDev)
+CComputer::CComputer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
-	, m_speed(10.f)
+	, m_speed(2.f)
 {
 
 }
 
-CHeavyMetal_Barrel::CHeavyMetal_Barrel(const CHeavyMetal_Barrel& rhs)
+CComputer::CComputer(const CComputer& rhs)
 	: CInteractionObject(rhs)
 {
 
 }
 
-CHeavyMetal_Barrel::~CHeavyMetal_Barrel(void)
+CComputer::~CComputer(void)
 {
 
 }
 
-HRESULT CHeavyMetal_Barrel::Ready_Object(void)
+HRESULT CComputer::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	m_isObject_PlayerHide = true;
 	//m_pTransformCom->Set_Pos(89.f, 0.f, 126.f);
 	//m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
 	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
@@ -34,7 +33,7 @@ HRESULT CHeavyMetal_Barrel::Ready_Object(void)
 	return S_OK;
 }
 
-Engine::_int CHeavyMetal_Barrel::Update_Object(const _float& fTimeDelta)
+Engine::_int CComputer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
@@ -56,60 +55,6 @@ Engine::_int CHeavyMetal_Barrel::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
-	if (m_isObject_PlayerWarpMove)
-	{
-		if (!m_isObject_PlayerWarpMoveFirst)
-		{
-			auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
-			dynamic_cast<CPlayer*>(getPlayer->second)->Get_Transform_Component()->Get_Info(INFO_LOOK, &m_vDir);
-			auto playerLastKey = dynamic_cast<CPlayer*>(getPlayer->second)->Get_LastPushKey();
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, 200, fTimeDelta);
-
-			m_pTransformCom->Update_Component(fTimeDelta);
-			m_isObject_PlayerWarpMoveFirst = true;
-		}
-		else
-		{
-			if (!m_pCalculatorCom->Collision_Object_StaticObject(m_pColliderCom))
-			{
-				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-			}
-			else
-			{
-				m_isObject_PlayerWarpMove = false;
-				m_isObject_PlayerWarpMoveFirst = false;
-			}
-		}
-		/*if (playerLastKey[KEY_DOWN])
-		{
-			m_pTransformCom->Set_Rotation(0.f, 180.f, 0.f);
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-		}
-		else if(playerLastKey[KEY_UP])
-		{
-			m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-		}
-		else if (playerLastKey[KEY_LEFT])
-		{
-			m_pTransformCom->Set_Rotation(0.f, -90.f, 0.f);
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-		}
-		else if (playerLastKey[KEY_RIGHT])
-		{
-			m_pTransformCom->Set_Rotation(0.f, 90.f, 0.f);
-			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-		}*/
-	}
-
 	//IsCollisionBall();
 
 	//if (m_bSensorColl)
@@ -122,7 +67,7 @@ Engine::_int CHeavyMetal_Barrel::Update_Object(const _float& fTimeDelta)
 	return 0;
 }
 
-void CHeavyMetal_Barrel::Render_Object(void)
+void CComputer::Render_Object(void)
 {
 	if (false == m_bDraw)
 		return;
@@ -217,12 +162,12 @@ void CHeavyMetal_Barrel::Render_Object(void)
 //	m_objectData.m_objectIndex = objectData.m_objectIndex;
 //}
 
-HRESULT CHeavyMetal_Barrel::Add_Component(void)
+HRESULT CComputer::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
 	// ¸Þ½¬
-	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_HeavyMetal_Barrel.x"));
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Computer.x"));
 	NULL_CHECK_RETURN(pComponent);
 	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
@@ -258,9 +203,9 @@ HRESULT CHeavyMetal_Barrel::Add_Component(void)
 }
 
 
-CHeavyMetal_Barrel* CHeavyMetal_Barrel::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CComputer* CComputer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CHeavyMetal_Barrel*	pInstance = new CHeavyMetal_Barrel(pGraphicDev);
+	CComputer*	pInstance = new CComputer(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 		Safe_Release(pInstance);
@@ -268,7 +213,7 @@ CHeavyMetal_Barrel* CHeavyMetal_Barrel::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CHeavyMetal_Barrel::Free(void)
+void CComputer::Free(void)
 {
 	CGameObject::Free();
 }

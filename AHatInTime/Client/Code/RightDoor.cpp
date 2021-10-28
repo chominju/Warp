@@ -122,6 +122,33 @@ Engine::_int CRightDoor::Update_Object(const _float& fTimeDelta)
 
 	}
 
+	if (m_doorOption == 4 && m_isFloorSwitch)
+	{
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z >= (m_firstPos.z - 2.5))
+		{
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, 80.f, fTimeDelta);
+		}
+		else
+			m_bDraw = false;
+	}
+	else if (m_doorOption == 4)
+	{
+		m_bDraw = true;
+		_vec3 getPos;
+		m_pTransformCom->Get_Info(INFO_POS, &getPos);
+		if (getPos.z < m_firstPos.z)
+		{
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+		}
+
+	}
+
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	return 0;

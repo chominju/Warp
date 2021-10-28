@@ -1,5 +1,5 @@
-#ifndef FloorSwitch_h__
-#define FloorSwitch_h__
+#ifndef GarbageBag_h__
+#define GarbageBag_h__
 
 #include "GameObject.h"
 #include "Define.h"
@@ -14,25 +14,20 @@ class CCalculator;
 class CCollider;
 
 END
-class CFloorSwitch : public CInteractionObject
+class CGarbageBag : public CInteractionObject
 {
 private:
-	explicit CFloorSwitch(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CFloorSwitch(const CFloorSwitch& rhs);
-	virtual ~CFloorSwitch(void);
+	explicit CGarbageBag(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CGarbageBag(const CGarbageBag& rhs);
+	virtual ~CGarbageBag(void);
 
 public:
 	virtual HRESULT Ready_Object(void) override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
-	void	IsCollisionBall();
-	void	IsCollisionObject();
+	//void	IsCollisionBall();
 
-	void	Set_SwitchOption(int option) { m_switchOption = option; }
-	int		Get_SwitchOption() { return m_switchOption; }
-
-	_bool	Get_IsObjectColl() { return m_isObjectColl; }
 private:
 	virtual HRESULT			Add_Component(void);
 	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
@@ -44,12 +39,10 @@ private:
 //	CCalculator*			m_pCalculatorCom = nullptr;
 //	CCollider*				m_pColliderCom = nullptr;
 	CGameObject*					m_targetBall;
-	_bool							m_isBallColl;
-	_bool							m_isObjectColl;
-	int								m_switchOption;
+	_float							m_speed;
 
 public:
-	static CFloorSwitch*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CGarbageBag*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void		Free(void);

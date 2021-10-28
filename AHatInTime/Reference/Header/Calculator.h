@@ -8,6 +8,7 @@ BEGIN(Engine)
 class CTerrainTex;
 class CTransform;
 class CSphereCollider;
+class CCollider;
 class CGameObject;
 
 class ENGINE_DLL CCalculator : public CComponent
@@ -56,6 +57,9 @@ public:
 
 	_bool			Collision_StaticObject(CSphereCollider* playerCollider, _bool pushKey[] , _bool isKeyStop[]);
 	_bool			Collision_InteractionObject(CSphereCollider* playerCollider, _bool pushKey[], _bool isKeyStop[]);
+
+	_bool			Collision_Object_StaticObject(CCollider* ObjectCollider);
+	//_bool			Collision_Object_InteractionObject(CCollider* playerCollider);
 
 	_bool			Collision_Warp_InteractionObject(CSphereCollider* playerCollider, _bool *playerHideAble, CGameObject*& hideObject);
 	_bool			Collision_Warp_StaticObject(CSphereCollider* playerCollider);

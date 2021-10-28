@@ -654,8 +654,10 @@ _bool CCalculator::Collision_StaticObject(/*const _vec3 * pDestMin, const _vec3 
 		}
 		m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
 	}*/
-
-	return true;
+	if (m_collision_StaticObjectCompare.size())
+		return true;
+	else
+		return false;
 }
 
 _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider, _bool pushKey[], _bool isKeyStop[])
@@ -839,7 +841,10 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 	m_collisionCGameObjectPrev.push_back(m_collisionCGameObjectCurrnet[i]);
 	}*/
 
-	return true;
+	if (m_collision_InteractionObjectCompare.size())
+		return true;
+	else
+		return false;
 
 	//auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
 
@@ -990,6 +995,210 @@ _bool CCalculator::Collision_InteractionObject(CSphereCollider * playerCollider,
 
 
 	return true;
+}
+
+_bool CCalculator::Collision_Object_StaticObject(CCollider * ObjectCollider)
+{
+	auto getStaticObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"StaticObject_Layer");
+
+	bool isCollisionX = false;
+	bool isCollisionZ = false;
+	int distNum = 4;
+	for (auto iter = getStaticObject->begin(); iter != getStaticObject->end(); iter++)
+	{
+		isCollisionX = false;
+		isCollisionZ = false;
+		if (!_tcscmp(dynamic_cast<CStatic_Objects*>(iter->second)->Get_Static_Objects_Data().m_objectTextureName, L"Proto_Mesh_Table2.x"))
+		{
+			int a;
+			a = 10;
+		}
+		CCollider* getColl = dynamic_cast<CStatic_Objects*>(iter->second)->Get_Collider_Component();
+		if (getColl == nullptr)
+			continue;
+		if (!iter->second->Get_Draw())
+			continue;
+		const _vec3 * pDestMin = dynamic_cast<CCollider*>(getColl)->Get_Min();
+		const _vec3 * pDestMax = dynamic_cast<CCollider*>(getColl)->Get_Max();
+
+		const _vec3 * pSourMin = ObjectCollider->Get_Min();
+		const _vec3 * pSourMax = ObjectCollider->Get_Max();
+
+		const _matrix * pDestWorld = dynamic_cast<CCollider*>(getColl)->Get_CollWorldMatrix();
+		const _matrix * pSourWorld = ObjectCollider->Get_CollWorldMatrix();
+		_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+		_float		fMin, fMax;
+		//float dist = 0.f;
+
+		D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+		D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+		D3DXVec3TransformCoord(&vSourMin, pSourMin, pSourWorld);
+		D3DXVec3TransformCoord(&vSourMax, pSourMax, pSourWorld);
+
+
+		// x축에서 바라봤을 때
+		_vec3 temp = vDestMin;
+		if (vDestMax.x < vDestMin.x)
+		{
+			vDestMin.x = vDestMax.x;
+			vDestMax.x = temp.x;
+		}
+
+		if (vDestMax.z < vDestMin.z)
+		{
+			vDestMin.z = vDestMax.z;
+			vDestMax.z = temp.z;
+		}
+
+		_vec3 temp2 = vSourMin;
+		if (vSourMax.x < vSourMin.x)
+		{
+			vSourMin.x = vSourMax.x;
+			vSourMax.x = temp2.x;
+		}
+
+		if (vSourMax.z < vSourMin.z)
+		{
+			vSourMin.z = vSourMax.z;
+			vSourMax.z = temp2.z;
+		}
+
+		fMin = max(vDestMin.x, vSourMin.x);
+		fMax = min(vDestMax.x, vSourMax.x);
+
+		if (fMax >= fMin+0.5)
+			isCollisionX = true;
+
+		// y축에서 바라봤을 때
+
+		//fMin = max(vDestMin.y, vSourMin.y);
+		//fMax = min(vDestMax.y, vSourMax.y);
+
+		//if (fMax < fMin)
+		//	return false;
+
+		// z축에서 바라봤을 때
+
+		fMin = max(vDestMin.z, vSourMin.z);
+		fMax = min(vDestMax.z, vSourMax.z);
+
+		if (fMax >= fMin)
+			isCollisionZ = true;
+		if (isCollisionX && isCollisionZ)
+			break;
+	}
+	if (isCollisionX && isCollisionZ)
+		return true;
+	else 
+		return false;
+	//	// test
+	//	_vec3 temp = vDestMin;
+	//	if (vDestMax.x < vDestMin.x)
+	//	{
+	//		vDestMin.x = vDestMax.x;
+	//		vDestMax.x = temp.x;
+	//	}
+
+	//	if (vDestMax.y < vDestMin.y)
+	//	{
+	//		vDestMin.y = vDestMax.y;
+	//		vDestMax.y = temp.y;
+	//	}
+
+	//	if (vDestMax.z < vDestMin.z)
+	//	{
+	//		vDestMin.z = vDestMax.z;
+	//		vDestMax.z = temp.z;
+	//	}
+
+
+
+	//	// x축에서 바라봤을 때
+
+	//	const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+	//	_matrix		matWorld;
+	//	D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+	//	float ridius = playerCollider->Get_Radius();
+	//	_vec3 objectVec3 = { pDestWorld->_41, pDestWorld->_42 , pDestWorld->_43 };
+	//	_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+	//	float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+
+	//	float x = max(vDestMin.x, min(playerVec3.x, vDestMax.x));
+	//	float y = max(vDestMin.y, min(playerVec3.y, vDestMax.y));
+	//	float z = max(vDestMin.z, min(playerVec3.z, vDestMax.z));
+
+	//	// this is the same as isPointInsideSphere
+	//	float distance = sqrt((x - playerVec3.x) * (x - playerVec3.x) +
+	//		(y - playerVec3.y) * (y - playerVec3.y) +
+	//		(z - playerVec3.z) * (z - playerVec3.z));
+
+	//	float radius = playerCollider->Get_Radius();
+	//	//radius = sqrt(radius);
+
+	//	int sensor = 2;
+
+	//	if (distance < sensor)
+	//	{
+	//		iter->second->Set_IsColl(true);
+	//		isCollision = true;
+
+	//		//iter->second->Set_StopPlayer(pushKey);
+	//		m_collision_InteractionObjectCurrnet.push_back(iter->second);
+	//	}
+	//	else
+	//		iter->second->Set_IsColl(false);
+	//}
+
+
+	//_vec3		vDestMin, vDestMax, vSourMin, vSourMax;
+	//_float		fMin, fMax;
+
+	//D3DXVec3TransformCoord(&vDestMin, pDestMin, pDestWorld);
+	//D3DXVec3TransformCoord(&vDestMax, pDestMax, pDestWorld);
+
+	//D3DXVec3TransformCoord(&vSourMin, pSourMin, pSourWorld);
+	//D3DXVec3TransformCoord(&vSourMax, pSourMax, pSourWorld);
+
+	//// x축에서 바라봤을 때
+	//_vec3 temp = vDestMin;
+	//if (vDestMax.x < vDestMin.x)
+	//{
+	//	vDestMin.x = vDestMax.x;
+	//	vDestMax.x = temp.x;
+	//}
+
+	//if (vDestMax.z < vDestMin.z)
+	//{
+	//	vDestMin.z = vDestMax.z;
+	//	vDestMax.z = temp.z;
+	//}
+
+	//fMin = max(vDestMin.x, vSourMin.x);
+	//fMax = min(vDestMax.x, vSourMax.x);
+
+	//if (fMax < fMin)
+	//	return false;
+
+	//// y축에서 바라봤을 때
+
+	//fMin = max(vDestMin.y, vSourMin.y);
+	//fMax = min(vDestMax.y, vSourMax.y);
+
+	//if (fMax < fMin)
+	//	return false;
+
+	//// z축에서 바라봤을 때
+
+	//fMin = max(vDestMin.z, vSourMin.z);
+	//fMax = min(vDestMax.z, vSourMax.z);
+
+	//if (fMax < fMin)
+	//	return false;
+
+	//return true;
 }
 
 _bool CCalculator::Collision_Warp_InteractionObject(CSphereCollider * playerCollider, _bool *playerHideAble, CGameObject*& hideObject)

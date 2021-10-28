@@ -3,12 +3,14 @@
 #include "LeftDoor.h"
 #include "RightDoor.h"
 #include "Ball.h"
+#include "HeavyMetal_Barrel.h"
 
 #include "Export_Function.h"
 
 CFloorSwitch::CFloorSwitch(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
 	, m_isBallColl(false)
+	, m_isObjectColl(false)
 {
 
 }
@@ -57,35 +59,91 @@ Engine::_int CFloorSwitch::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
-	IsCollisionBall();
 
-	if (m_bSensorColl || m_isBallColl)
+	if (m_switchOption == 1)
 	{
-		auto getInteractionObject =	CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
-		
-		for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+		IsCollisionBall();
+		if (m_bSensorColl || m_isBallColl)
 		{
-			if (iter->first==L"LeftDoor2")
-				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
+			auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
 
-			if(iter->first == L"RightDoor2")
-				dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+			for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+			{
+				if (iter->first == L"LeftDoor2")
+					dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
+
+				if (iter->first == L"RightDoor2")
+					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+			}
+
 		}
+		else
+		{
+			auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
 
+			for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+			{
+				if (iter->first == L"LeftDoor2")
+					dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(false);
+
+				if (iter->first == L"RightDoor2")
+					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(false);
+			}
+		}
 	}
-	else
+	
+	if (m_switchOption == 2 || m_switchOption == 3)
 	{
+		IsCollisionObject();
+
 		auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
-
+		_bool Switch2 = false;
+		_bool Switch3 = false;
+		_bool Switch22 = false;
+		_bool Switch33 = false;
 		for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
 		{
-			if (iter->first == L"LeftDoor2")
-				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(false);
+			if (iter->first == L"FloorSwitch2")
+			{
+				Switch2 =	dynamic_cast<CFloorSwitch*>(iter->second)->Get_IsObjectColl();
+				Switch22 = dynamic_cast<CFloorSwitch*>(iter->second)->Get_IsSensorColl();
+			}
 
-			if(iter->first == L"RightDoor2")
-				dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(false);
+			if (iter->first == L"FloorSwitch3")
+			{
+
+				Switch3 = dynamic_cast<CFloorSwitch*>(iter->second)->Get_IsObjectColl();
+				Switch33 = dynamic_cast<CFloorSwitch*>(iter->second)->Get_IsSensorColl();
+			}
 		}
+
+		if ((Switch2|| Switch22) && (Switch3|| Switch33))
+		{
+			for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+			{
+				if (iter->first == L"LeftDoor4")
+					dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
+
+				if (iter->first == L"RightDoor4")
+					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+			}
+		}
+		else
+		{
+			for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+			{
+				if (iter->first == L"LeftDoor4")
+					dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(false);
+
+				if (iter->first == L"RightDoor4")
+					dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(false);
+			}
+		}
+
 	}
+
+
+
 	/*if (isOpen)
 	{
 		_vec3					m_vDir;
@@ -164,6 +222,43 @@ void CFloorSwitch::IsCollisionBall()
 		m_isBallColl = true;
 	else
 		m_isBallColl = false;
+}
+
+void CFloorSwitch::IsCollisionObject()
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (iter->first == L"HeavyMetal_Barrel1")
+			m_targetBall = iter->second;
+	}
+
+	auto ballColl = dynamic_cast<CHeavyMetal_Barrel*>(m_targetBall)->Get_Collider_Component();
+	if (m_pCalculatorCom->Collision_AABB(ballColl->Get_Min(), ballColl->Get_Max(), ballColl->Get_CollWorldMatrix(),
+		m_pColliderSensorCom->Get_Min(), m_pColliderSensorCom->Get_Max(), m_pColliderSensorCom->Get_CollWorldMatrix()))
+		m_isObjectColl = true;
+	else
+		m_isObjectColl = false;
+
+
+
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		if (iter->first == L"HeavyMetal_Barrel2")
+			m_targetBall = iter->second;
+	}
+
+	ballColl = dynamic_cast<CHeavyMetal_Barrel*>(m_targetBall)->Get_Collider_Component();
+	if (m_pCalculatorCom->Collision_AABB(ballColl->Get_Min(), ballColl->Get_Max(), ballColl->Get_CollWorldMatrix(),
+		m_pColliderSensorCom->Get_Min(), m_pColliderSensorCom->Get_Max(), m_pColliderSensorCom->Get_CollWorldMatrix()))
+		m_isObjectColl = true;
+	if (!m_isObjectColl)
+		m_isObjectColl = false;
+
+
+
 }
 
 //void CLeftDoor::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)

@@ -8,6 +8,10 @@
 #include "Conveyor.h"
 #include "Maze.h"
 #include "HeavyMetal_Barrel.h"
+#include "EmptyObject.h"
+#include "GarbageBag.h"
+#include "Jelly.h"
+#include "Computer.h"
 
 #include "Export_Function.h"
 
@@ -185,18 +189,18 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	//// 4번문
 	pGameObject = CLeftDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 150.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(4);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 150.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor4", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 150.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(4);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 150.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor4", pGameObject), E_FAIL);
 
 
@@ -219,8 +223,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 #pragma endregion
 
-	
-	
+#pragma region Room2_Ball
 	// 볼
 	pGameObject = CBall::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -233,10 +236,14 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(118.f, 0.f, 128.f);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch", pGameObject), E_FAIL);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Set_SwitchOption(1);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch1", pGameObject), E_FAIL);
 
 
 
+#pragma endregion
+
+#pragma region Room3_Conveyor
 	// 컨베이너1
 	pGameObject = CConveyor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -251,7 +258,9 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CConveyor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Conveyor2", pGameObject), E_FAIL);
 
-#pragma region Maze
+#pragma endregion
+
+#pragma region Room4_Maze
 
 	// 미로
 	pGameObject = CMaze::Create(m_pGraphicDev);
@@ -418,20 +427,146 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CMaze*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 90.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"MoveMaze27", pGameObject), E_FAIL);
 
+	pGameObject = CJelly::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CJelly*>(pGameObject)->Get_Transform_Component()->Set_Pos(188.f, 0.f, 102.f);
+	dynamic_cast<CJelly*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Jelly", pGameObject), E_FAIL);
+
 #pragma endregion
 
+#pragma region Room5_ObjectMove
 
 	pGameObject = CHeavyMetal_Barrel::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 130.f);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(175.f, 0.f, 130.f);
 	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HeavyMetal_Barrel1", pGameObject), E_FAIL);
 
 	pGameObject = CHeavyMetal_Barrel::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 140.f);
+	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(182.7f, 0.f, 154.f);
 	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"HeavyMetal_Barrel2", pGameObject), E_FAIL);
+
+
+	// 바닥 스위치
+	pGameObject = CFloorSwitch::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(191.f, 0.f, 154.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Set_SwitchOption(2);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch2", pGameObject), E_FAIL);
+
+
+	// 바닥 스위치
+	pGameObject = CFloorSwitch::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(175.f, 0.f, 125.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Set_SwitchOption(3);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch3", pGameObject), E_FAIL);
+
+#pragma endregion
+
+	// 빙판 위 쓰레기
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(122.f, 0.f, 188.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag0", pGameObject), E_FAIL);
+
+	// 빙판 위 쓰레기
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(127.f, 0.f, 188.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag00", pGameObject), E_FAIL);
+
+	// 빙판 위 쓰레기
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(132.f, 0.f, 188.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag000", pGameObject), E_FAIL);
+
+	// 빙판 위 쓰레기
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(137.f, 0.f, 188.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag0000", pGameObject), E_FAIL);
+#pragma region Room_Frozen
+	// 빙판
+	pGameObject = CEmptyObject::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CEmptyObject*>(pGameObject)->Get_Transform_Component()->Set_Pos(167.f, 0.f, 187.f);
+	dynamic_cast<CEmptyObject*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FrozenLoad", pGameObject), E_FAIL);
+
+	// 빙판 위 쓰레기
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(197.f, 0.f, 195.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag1", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(180.f, 0.f, 190.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag2", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(185.f, 0.f, 165.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag3", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(185.f, 0.f, 210.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag4", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(170.f, 0.f, 200.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag5", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(175.f, 0.f, 175.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag6", pGameObject), E_FAIL);
+
+	pGameObject = CGarbageBag::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(150.f, 0.f, 178.f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag7", pGameObject), E_FAIL);
+
+	// 도착하는 물건
+	pGameObject = CComputer::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CComputer*>(pGameObject)->Get_Transform_Component()->Set_Pos(157.f, 0.f, 200.f);
+	dynamic_cast<CComputer*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.05f, 0.05f, 0.05f);
+	dynamic_cast<CComputer*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Computer", pGameObject), E_FAIL);
+
+#pragma endregion
 
 
 	NULL_CHECK_RETURN(pLayer, E_FAIL);

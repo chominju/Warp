@@ -168,12 +168,15 @@
   <ItemGroup>
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\Ball.h" />
+    <ClInclude Include="..\Code\Computer.h" />
     <ClInclude Include="..\Code\Conveyor.h" />
     <ClInclude Include="..\Code\Define.h" />
     <ClInclude Include="..\Code\EmptyObject.h" />
     <ClInclude Include="..\Code\FloorSwitch.h" />
+    <ClInclude Include="..\Code\GarbageBag.h" />
     <ClInclude Include="..\Code\HeavyMetal_Barrel.h" />
     <ClInclude Include="..\Code\InteractionObject.h" />
+    <ClInclude Include="..\Code\Jelly.h" />
     <ClInclude Include="..\Code\LeftDoor.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
     <ClInclude Include="..\Code\Effect.h" />
@@ -201,11 +204,14 @@
   <ItemGroup>
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Ball.cpp" />
+    <ClCompile Include="..\Code\Computer.cpp" />
     <ClCompile Include="..\Code\Conveyor.cpp" />
     <ClCompile Include="..\Code\EmptyObject.cpp" />
     <ClCompile Include="..\Code\FloorSwitch.cpp" />
+    <ClCompile Include="..\Code\GarbageBag.cpp" />
     <ClCompile Include="..\Code\HeavyMetal_Barrel.cpp" />
     <ClCompile Include="..\Code\InteractionObject.cpp" />
+    <ClCompile Include="..\Code\Jelly.cpp" />
     <ClCompile Include="..\Code\LeftDoor.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\Effect.cpp" />

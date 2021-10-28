@@ -166,7 +166,7 @@ HRESULT CConveyor::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// Collider
-	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),-40,0,-20);
+	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(),-40,0,-10);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
 

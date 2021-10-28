@@ -22,6 +22,9 @@ public:
 	void			Set_IsColl(_bool coll) { m_bColl = coll; }
 	void			Set_IsSensorColl(_bool sensorColl) { m_bSensorColl = sensorColl; }
 
+	_bool			Get_IsColl() { return m_bColl; }
+	_bool			Get_IsSensorColl() { return m_bSensorColl; }
+
 	void			Set_StopPlayer(KEY keyType, bool stopPlayer) { m_stopPlayer[keyType] = stopPlayer; }
 	void			Set_StopPlayer(_bool stopPlayer[]);
 	void			Reset_StopPlayer();

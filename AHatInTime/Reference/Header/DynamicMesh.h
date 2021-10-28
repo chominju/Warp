@@ -15,7 +15,8 @@ private:
 	virtual ~CDynamicMesh(void);
 
 public:
-	void			Set_AnimationIndex(const _uint& iIndex);	
+	void			Set_AnimationIndex(const _uint& iIndex);
+	_uint			Get_AnimationIndex() { return m_pAniCtrl->Get_AnimationIndex(); }
 	void			Play_Animation(const _float& fTimeDelta);	
 	const	D3DXFRAME_DERIVED*		Get_FrameByName(const char* pFrameName);
 	_bool			Is_AnimationsetFinish(void);

@@ -54,17 +54,19 @@ Engine::_int CEmptyObject::Update_Object(const _float& fTimeDelta)
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	// 플레이어랑 충돌했을 때
+		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
 	if (m_bSensorColl)
 	{
-		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
-		bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+		//bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();
+		dynamic_cast<CPlayer*>(getPlayer->second)->Set_IsFrozenRoadOn(true);
 		/*_vec3					m_vDir = { -1,0,0 };
 		D3DXVec3Normalize(&m_vDir, &m_vDir);
 		dynamic_cast<CPlayer*>(getPlayer->second)->Get_Transform_Component()->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 		dynamic_cast<CPlayer*>(getPlayer->second)->Set_Speed(6);*/
-
-
-
+	}
+	else
+	{
+		dynamic_cast<CPlayer*>(getPlayer->second)->Set_IsFrozenRoadOn(false);
 	}
 
 	//IsCollisionBall();
@@ -162,10 +164,10 @@ HRESULT CEmptyObject::Add_Component(void)
 {
 	CComponent*			pComponent = nullptr;
 
-	//// 메쉬
-	//pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_HeavyMetal_Barrel.x"));
-	//NULL_CHECK_RETURN(pComponent);
-	//Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
+	// 메쉬
+	pComponent = m_pMeshCom = dynamic_cast<CStaticMesh*>(Clone_Proto(L"Proto_Mesh_Wall1.x"));
+	NULL_CHECK_RETURN(pComponent);
+	Add_AddComponent(L"Com_Mesh", ID_DYNAMIC, pComponent);
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -185,7 +187,9 @@ HRESULT CEmptyObject::Add_Component(void)
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
 	// SensorCollider
-	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize(), 50, 80, 80);
+	_vec3* temp;
+	//temp
+	pComponent = m_pColliderSensorCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), 4/*m_pMeshCom->Get_NumVtx()*/, m_pMeshCom->Get_VtxSize(), 540, 0, 425);
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_SensorCollider", pComponent);
 
