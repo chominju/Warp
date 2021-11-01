@@ -62,6 +62,9 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_StaticMesh_Player", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Mesh/DynamicMesh/Player/", L"Player.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Player", CDynamicMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Mesh/DynamicMesh/Player/", L"Player.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Rectangle_White.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/Rectangle_White.jpg", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"iceTerrain.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/iceTerrain.jpg", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"TileSound.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/TileSound.jpg", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"TileSoundOn.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/TileSoundOn.jpg", TYPE_NORMAL, 1)), E_FAIL);
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Transform", CTransform::Create(m_pGraphicDev)) , E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Bed.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Bed.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Box1.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Box1.X")), E_FAIL);

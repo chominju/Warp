@@ -12,6 +12,9 @@ class CRenderer;
 class CCalculator;
 class CCollider;
 class COptimization;
+class CTexture;
+class CRcTex;
+class CSphereCollider;
 
 END
 class CInteractionObject : public CGameObject
@@ -35,6 +38,8 @@ public:
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
 	CCollider* Get_Collider_Component() { return m_pColliderCom; }
 	CCollider* Get_ColliderSensor_Component() { return m_pColliderSensorCom; }
+	CSphereCollider* Get_SphereCollider_Component() { return m_pSphereColliderCom; }
+
 
 	_bool		Get_IsObject_PlayerHide() { return m_isObject_PlayerHide; }
 	void		Set_IsObject_PlayerWarpMove(_bool wrapMove) { m_isObject_PlayerWarpMove = wrapMove; }
@@ -45,12 +50,15 @@ protected:
 	_bool					Collision_ToPlayer(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 protected:
+	CRcTex*					m_pBufferCom		= nullptr;
+	CTexture*				m_pTextureCom		= nullptr;
 	CStaticMesh*			m_pMeshCom			= nullptr;
 	CTransform*				m_pTransformCom		= nullptr;
 	CRenderer*				m_pRendererCom		= nullptr;
 	CCalculator*			m_pCalculatorCom	= nullptr;
 	CCollider*				m_pColliderCom		= nullptr;
 	CCollider*				m_pColliderSensorCom = nullptr;
+	CSphereCollider*		m_pSphereColliderCom = nullptr;
 	//COptimization*			m_pOptimizationCom	= nullptr;
 
 	//Object_Data				m_objectData;

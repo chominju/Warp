@@ -45,11 +45,11 @@ HRESULT CPlayer::Ready_Object(void)
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
 	//ºùÆÇ¸Ê
-	//m_pTransformCom->Set_Pos(120.f, 0.f, 180.f);
+	m_pTransformCom->Set_Pos(80.f, 0.f, 180.f);
 	//¹°Ã¼¹Ì´Â¸Ê
 	//m_pTransformCom->Set_Pos(180.f, 0.f, 150.f);
 	//±âÁ¸À§Ä¡
-	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
+	//m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
 
 	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 	
@@ -77,6 +77,8 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 		_bool temp2;
 		temp1 =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObjectAble);
 		temp2 =m_pCalculatorCom->Collision_Warp_StaticObject(m_pWrapSphereColliderCom);
+		m_pCalculatorCom->Collision_OrderTile(m_pSphereColliderCom);
+		
 		if((temp1==false ||(temp1==true && m_isHideObjectAble ==true))&&temp2==false)
 			m_isWrapable = true;
 		else

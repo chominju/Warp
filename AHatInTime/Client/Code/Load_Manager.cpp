@@ -2,6 +2,7 @@
 #include "Load_Manager.h"
 #include "Static_Object.h"
 #include "Terrain.h"
+#include "IceBackGround.h"
 #include "Export_Function.h"
 //#include "afxdialogex.h"
 #include <fstream>
@@ -24,8 +25,10 @@ HRESULT CLoad_Manager::Load_Terrain_Data(const wstring & filePath , CLayer*		pLa
 	g_index = -1;
 
 	//for(int i=0; i<1; i++)
+	int i = 0;
 	while (true)
 	{
+		i++;
 		DWORD dwByte = 0;
 		DWORD dwStringCount = 0;
 		_tchar* szBuf = nullptr;
@@ -59,7 +62,16 @@ HRESULT CLoad_Manager::Load_Terrain_Data(const wstring & filePath , CLayer*		pLa
 
 		g_index++;
 		//CComponent*			pComponent = nullptr;
-		FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ, VTXITV)), E_FAIL);
+
+		if (i == 1)
+		{
+			FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ, VTXITV)), E_FAIL);
+		}
+		else if (i == 2)
+		{
+			FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_IceTerrainTex", CTerrainTex::Create(m_pGraphicDev, newTerrain_Data.m_cntX, newTerrain_Data.m_cntZ, VTXITV)), E_FAIL);
+			newTerrain_Data.m_pos[INFO_POS].y += 0.2;
+		}
 		CTerrain* newTerrain = CTerrain::Create(m_pGraphicDev);
 		newTerrain->Get_Transform_Component()->Set_Pos(newTerrain_Data.m_pos[INFO_POS].x, newTerrain_Data.m_pos[INFO_POS].y, newTerrain_Data.m_pos[INFO_POS].z);
 		newTerrain->Get_Transform_Component()->Set_Rotation(newTerrain_Data.m_vAngle.x, newTerrain_Data.m_vAngle.y, newTerrain_Data.m_vAngle.z);

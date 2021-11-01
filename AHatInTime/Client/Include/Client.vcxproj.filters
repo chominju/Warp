@@ -112,6 +112,18 @@
     <Filter Include="02. GameObject\12. InteractionObject\11. Computer">
       <UniqueIdentifier>{5dcc46b6-4d32-4303-b873-ce87eaa61397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\03. Terrain\Ice">
+      <UniqueIdentifier>{bcfaf2f4-733c-495a-bb98-ef9687b239dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\12. OrderTile">
+      <UniqueIdentifier>{64cb98f0-6b4a-4d3f-b5b8-0c98b295426e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\12. OrderTile\01. Manager">
+      <UniqueIdentifier>{00616a6d-854f-4b17-9bc6-b69ba38df7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. SoundManager">
+      <UniqueIdentifier>{fda65013-e6a0-4a54-adcc-f5eb2b1caf25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -219,6 +231,18 @@
     <ClInclude Include="..\Code\Computer.h">
       <Filter>02. GameObject\12. InteractionObject\11. Computer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\IceBackGround.h">
+      <Filter>02. GameObject\03. Terrain\Ice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\OrderTile.h">
+      <Filter>02. GameObject\12. InteractionObject\12. OrderTile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\OrderTile_Manager.h">
+      <Filter>02. GameObject\12. InteractionObject\12. OrderTile\01. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\SoundMgr.h">
+      <Filter>04. SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -313,6 +337,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\Computer.cpp">
       <Filter>02. GameObject\12. InteractionObject\11. Computer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\IceBackGround.cpp">
+      <Filter>02. GameObject\03. Terrain\Ice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\OrderTile.cpp">
+      <Filter>02. GameObject\12. InteractionObject\12. OrderTile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\OrderTile_Manager.cpp">
+      <Filter>02. GameObject\12. InteractionObject\12. OrderTile\01. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SoundMgr.cpp">
+      <Filter>04. SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

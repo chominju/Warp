@@ -33,6 +33,7 @@ private:
 	HRESULT			Ready_GameLogic_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_StaticObject_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_InteractionObject_Layer(const _tchar* pLayerTag);
+	HRESULT			Ready_OrderTile_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_Player_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_UI_Layer(const _tchar* pLayerTag);
 	HRESULT			Ready_LightInfo(void);

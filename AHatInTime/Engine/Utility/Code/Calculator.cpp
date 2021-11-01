@@ -1376,6 +1376,66 @@ _bool CCalculator::Collision_Warp_StaticObject(CSphereCollider * playerCollider)
 	return isCollision;
 }
 
+_bool CCalculator::Collision_OrderTile(CSphereCollider * playerCollider)
+{
+	auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"OrderTile_Layer");
+
+	bool isCollision = false;
+	int distNum = 4;
+
+	for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+	{
+		CSphereCollider* getSensorColl = dynamic_cast<CInteractionObject*>(iter->second)->Get_SphereCollider_Component();
+		if (getSensorColl == nullptr)
+			continue;
+		if (!iter->second->Get_Draw())
+			continue;
+
+		_vec3		vDestMin, vDestMax;
+		_float		fMin, fMax;
+		float dist = 0.f;
+
+		// x축에서 바라봤을 때
+
+		const _matrix *playerMatrix = playerCollider->Get_CollWorldMatrix();
+		const _matrix *objectMatrix = getSensorColl->Get_CollWorldMatrix();
+		_matrix		matWorld;
+		D3DXMatrixInverse(&matWorld, NULL, playerMatrix);
+		float ridius = playerCollider->Get_Radius();
+		float ridius2 = getSensorColl->Get_Radius();
+
+		_vec3 objectVec3 = { objectMatrix->_41, objectMatrix->_42 , objectMatrix->_43 };
+		_vec3 playerVec3 = { playerMatrix->_41, 0.f ,playerMatrix->_43 };
+
+		float playerObjectDist = D3DXVec3Length(&(objectVec3 - playerVec3));
+
+		if (playerObjectDist < 2)
+		{
+			iter->second->Set_IsColl(true);
+		}
+		else
+			iter->second->Set_IsColl(false);
+
+		float radius = playerCollider->Get_Radius();
+		//radius = sqrt(radius);
+
+		int sensor = 2;
+
+		/*if (distance < sensor)
+		{
+			isCollision = true;
+			iter->second->Set_IsColl(true);
+			break;
+		}*/
+
+	}
+	if (!isCollision)
+	{
+
+	}
+	return isCollision;
+}
+
 void CCalculator::Set_Point(OBB * pObb, const _vec3 * pMin, const _vec3 * pMax)
 {
 	pObb->vPoint[0] = _vec3(pMin->x, pMax->y, pMin->z);

@@ -162,11 +162,11 @@ void CTerrainTex::Reset_Buffer(const _ulong & dwCntX, const _ulong & dwCntZ)
 	m_dwIdxSize = sizeof(INDEX32);
 	m_IdxFmt = D3DFMT_INDEX32;
 
-	if (m_pPos)
-	{
-		delete[]m_pPos;
-		m_pPos = nullptr;
-	}
+	//if (m_pPos)
+	//{
+	//	delete[]m_pPos;
+	//	m_pPos = nullptr;
+	//}
 	m_pPos = new _vec3[m_dwVtxCnt];
 
 

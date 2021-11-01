@@ -130,6 +130,33 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 		}
 
 	}
+
+
+
+
+
+	if (m_doorOption == 6)
+	{
+		if (m_isOpen)
+		{
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+
+			_vec3 getPos;
+			m_pTransformCom->Get_Info(INFO_POS, &getPos);
+			if (getPos.z > 188)
+			{
+				m_isOpen = false;
+				m_bDraw = false;
+			}
+		}
+	}
+
+
+
+
+
 	return 0;
 }
 

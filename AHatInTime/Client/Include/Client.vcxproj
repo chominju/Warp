@@ -175,6 +175,7 @@
     <ClInclude Include="..\Code\FloorSwitch.h" />
     <ClInclude Include="..\Code\GarbageBag.h" />
     <ClInclude Include="..\Code\HeavyMetal_Barrel.h" />
+    <ClInclude Include="..\Code\IceBackGround.h" />
     <ClInclude Include="..\Code\InteractionObject.h" />
     <ClInclude Include="..\Code\Jelly.h" />
     <ClInclude Include="..\Code\LeftDoor.h" />
@@ -186,9 +187,12 @@
     <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\Maze.h" />
     <ClInclude Include="..\Code\Monster.h" />
+    <ClInclude Include="..\Code\OrderTile.h" />
+    <ClInclude Include="..\Code\OrderTile_Manager.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\RightDoor.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
+    <ClInclude Include="..\Code\SoundMgr.h" />
     <ClInclude Include="..\Code\Stage.h" />
     <ClInclude Include="..\Code\Static_Object.h" />
     <ClInclude Include="..\Code\Stone.h" />
@@ -210,6 +214,7 @@
     <ClCompile Include="..\Code\FloorSwitch.cpp" />
     <ClCompile Include="..\Code\GarbageBag.cpp" />
     <ClCompile Include="..\Code\HeavyMetal_Barrel.cpp" />
+    <ClCompile Include="..\Code\IceBackGround.cpp" />
     <ClCompile Include="..\Code\InteractionObject.cpp" />
     <ClCompile Include="..\Code\Jelly.cpp" />
     <ClCompile Include="..\Code\LeftDoor.cpp" />
@@ -221,9 +226,12 @@
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\Maze.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\OrderTile.cpp" />
+    <ClCompile Include="..\Code\OrderTile_Manager.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\RightDoor.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
+    <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\Static_Object.cpp" />
     <ClCompile Include="..\Code\Stone.cpp" />
