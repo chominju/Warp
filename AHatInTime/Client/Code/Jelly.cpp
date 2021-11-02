@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Jelly.h"
 #include "Player.h"
+#include "SoundMgr.h"
 
 #include "Export_Function.h"
 
@@ -51,6 +52,8 @@ Engine::_int CJelly::Update_Object(const _float& fTimeDelta)
 	//}
 	if (m_bSensorColl)
 	{
+		if(m_bDraw)
+			CSoundMgr::Get_Instance()->PlaySound(L"ItemEat.wav", CSoundMgr::PLAYER);
 		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
 		dynamic_cast<CPlayer*>(getPlayer->second)->Set_IsWrapSkillItem(true);
 		m_bDraw = false;

@@ -24,13 +24,14 @@
 #include "DynamicMesh.h"
 #include "NaviMesh.h"
 
+#include "Shader.h"
 
 #include "LightMgr.h"
 
 BEGIN(Engine)
 
 // management
-inline HRESULT			Create_Management(CManagement** ppManagement);
+inline HRESULT			Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement);
 inline HRESULT			Set_Scene(CScene* pScene);
 inline _int				Update_Scene(const _float& fTimeDelta);
 inline void				Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);

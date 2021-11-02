@@ -19,6 +19,7 @@ public:
 	HRESULT Insert_Texture(LPDIRECT3DDEVICE9 pGraphicDev, const wstring & filePath, const wstring & stateKey = L"", const DWORD & count = 0);
 	const Texture_Info* Get_TextureInfo(const wstring & stateKey = L"", const DWORD & index = 0);
 
+	void			Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName, const _uint& iIndex = 0);
 private:
 	vector<IDirect3DBaseTexture9*>		m_vecTexture;	
 

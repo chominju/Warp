@@ -54,7 +54,7 @@ Engine::_int CEmptyObject::Update_Object(const _float& fTimeDelta)
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	// 플레이어랑 충돌했을 때
-		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
+	auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
 	if (m_bSensorColl)
 	{
 		//bool *getPlayerPush = dynamic_cast<CPlayer*>(getPlayer->second)->Get_PushKey();

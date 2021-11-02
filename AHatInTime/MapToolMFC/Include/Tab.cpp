@@ -101,7 +101,7 @@ void CTab::OnInitialUpdate()
 	int y = rect.Height();
 
 
-	Create_Management(&m_pManagementClass);
+	Create_Management(m_pGraphicDev,&m_pManagementClass);
 	m_pManagementClass->AddRef();
 
 	m_pScene = CStage::Create(m_pGraphicDev);

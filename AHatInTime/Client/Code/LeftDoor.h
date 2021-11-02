@@ -50,6 +50,9 @@ private:
 	int						m_doorOption;
 	_vec3					m_firstPos;
 
+	_bool					m_isSound;
+	_bool					m_isBackSound;
+
 public:
 	static CLeftDoor*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

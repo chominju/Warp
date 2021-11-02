@@ -47,6 +47,7 @@ private:
 	_bool							m_isBallColl;
 	_bool							m_isObjectColl;
 	int								m_switchOption;
+	float							m_timer;
 
 public:
 	static CFloorSwitch*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

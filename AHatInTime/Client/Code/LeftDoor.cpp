@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LeftDoor.h"
+#include "SoundMgr.h"
 
 #include "Export_Function.h"
 
@@ -7,6 +8,8 @@ CLeftDoor::CLeftDoor(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
 	, m_isOpen(false)
 	, m_isFloorSwitch(false)
+	, m_isSound(false)
+	, m_isBackSound(true)
 {
 
 }
@@ -60,6 +63,9 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	{
 		if (m_isOpen)
 		{
+			if(!m_isSound)
+				CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+			m_isSound = true;
 			_vec3					m_vDir;
 			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
@@ -77,6 +83,11 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	// 2¹ø ¹® 
 	if (m_doorOption == 2 && m_isFloorSwitch)
 	{
+		if (!m_isSound)
+			CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+		m_isSound = true;
+		m_isBackSound = false;
+
 		_vec3 getPos;
 		m_pTransformCom->Get_Info(INFO_POS, &getPos);
 		if (getPos.z <= 123)
@@ -92,6 +103,11 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	}
 	else if(m_doorOption==2)
 	{
+		if (!m_isBackSound)
+			CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+		m_isSound = false;
+		m_isBackSound = true;
+
 		m_bDraw = true;
 		_vec3 getPos;
 		m_pTransformCom->Get_Info(INFO_POS, &getPos);
@@ -106,6 +122,11 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 
 	if (m_doorOption == 4 && m_isFloorSwitch)
 	{
+		if (!m_isSound)
+			CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+		m_isSound = true;
+		m_isBackSound = false;
+
 		_vec3 getPos;
 		m_pTransformCom->Get_Info(INFO_POS, &getPos);
 		if (getPos.z <= (m_firstPos.z +2.5))
@@ -119,6 +140,11 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	}
 	else if (m_doorOption == 4)
 	{
+		if (!m_isBackSound)
+			CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+		m_isSound = false;
+		m_isBackSound = true;
+
 		m_bDraw = true;
 		_vec3 getPos;
 		m_pTransformCom->Get_Info(INFO_POS, &getPos);
@@ -132,13 +158,59 @@ Engine::_int CLeftDoor::Update_Object(const _float& fTimeDelta)
 	}
 
 
+	if (m_doorOption == 5)
+	{
+		if (m_isFloorSwitch)
+		{
+			if (!m_isSound)
+				CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+			m_isSound = true;
 
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+
+			_vec3 getPos;
+			m_pTransformCom->Get_Info(INFO_POS, &getPos);
+			if (getPos.x < 111)
+			{
+				m_isOpen = false;
+				m_bDraw = false;
+			}
+		}
+	}
 
 
 	if (m_doorOption == 6)
 	{
 		if (m_isOpen)
 		{
+			if (!m_isSound)
+				CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+			m_isSound = true;
+
+			_vec3					m_vDir;
+			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
+			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);
+
+			_vec3 getPos;
+			m_pTransformCom->Get_Info(INFO_POS, &getPos);
+			if (getPos.z > 188)
+			{
+				m_isOpen = false;
+				m_bDraw = false;
+			}
+		}
+	}
+
+	if (m_doorOption == 7)
+	{
+		if (m_isFloorSwitch)
+		{
+			if (!m_isSound)
+				CSoundMgr::Get_Instance()->PlaySound(L"Door_Open.ogg", CSoundMgr::PLAYER);
+			m_isSound = true;
+
 			_vec3					m_vDir;
 			m_pTransformCom->Get_Info(INFO_LOOK, &m_vDir);
 			m_pTransformCom->Move_Pos(&m_vDir, -80.f, fTimeDelta);

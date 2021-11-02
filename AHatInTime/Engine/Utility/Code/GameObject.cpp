@@ -8,6 +8,7 @@ Engine::CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_bDraw(true)
 	, m_bSensorColl(false)
 	, m_stopPlayer{ false,false ,false ,false }
+	, m_isDie(false)
 {
 	m_pGraphicDev->AddRef();
 }

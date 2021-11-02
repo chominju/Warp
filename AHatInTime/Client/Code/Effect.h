@@ -9,6 +9,7 @@ class CRcTex;
 class CTexture;
 class CTransform;
 class CRenderer;
+class CShader;
 
 END
 class CEffect : public CGameObject
@@ -25,12 +26,13 @@ public:
 
 private:
 	HRESULT					Add_Component(void);
-
+	HRESULT					SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 private:
 	CRcTex*					m_pBufferCom = nullptr;
 	CTexture*				m_pTextureCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
+	CShader*				m_pShaderCom = nullptr;
 
 	_float					m_fFrame = 0.f;
 

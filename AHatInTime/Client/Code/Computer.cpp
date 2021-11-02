@@ -55,6 +55,12 @@ Engine::_int CComputer::Update_Object(const _float& fTimeDelta)
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
+	if (m_bColl)
+	{
+		auto getPlayer = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"Player_Layer")->begin();
+		dynamic_cast<CPlayer*>(getPlayer->second)->Set_IsCollComputer(true);
+	}
+
 	//IsCollisionBall();
 
 	//if (m_bSensorColl)

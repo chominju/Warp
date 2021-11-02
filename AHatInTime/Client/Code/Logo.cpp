@@ -18,6 +18,7 @@ CLogo::~CLogo(void)
 HRESULT CLogo::Ready_Scene(void)
 {
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
+	CSoundMgr::Get_Instance()->PlayBGM(L"Logo.ogg");
 	FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment"), E_FAIL);
@@ -26,7 +27,6 @@ HRESULT CLogo::Ready_Scene(void)
 	m_pLoading = CLoading::Create(m_pGraphicDev, CLoading::LOADING_STAGE);
 	NULL_CHECK_RETURN(m_pLoading, E_FAIL);
 
-	
 	return S_OK;
 }
 
@@ -55,7 +55,7 @@ Engine::_int CLogo::Update_Scene(const _float& fTimeDelta)
 void CLogo::Render_Scene(void)
 {
 	// debug ¿ë
-	Render_Font(L"Font_Jinji", m_pLoading->Get_String(), &_vec2(10.f, 20.f), D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	Render_Font(L"Font_Jinji", m_pLoading->Get_String(), &_vec2(10.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 
 }
 

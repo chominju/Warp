@@ -36,8 +36,18 @@ int Engine::CLayer::Update_Layer(const _float& fTimeDelta)
 	{
 		iResult = iter.second->Update_Object(fTimeDelta);
 
+		if (iResult == 10)
+			break;
+
 		if (iResult & 0x8000000)
 			return iResult;
+		if (iter.second->Get_IsDie())
+		{
+			Safe_Release(iter.second);
+			m_mapObject.erase(iter.first);
+		}
+		if (m_mapObject.size() == 0)
+			break;
 	}
 
 	return iResult;

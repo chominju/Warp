@@ -8,6 +8,7 @@
 CHeavyMetal_Barrel::CHeavyMetal_Barrel(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CInteractionObject(pGraphicDev)
 	, m_speed(10.f)
+	, m_isSound(false)
 {
 
 }
@@ -73,10 +74,17 @@ Engine::_int CHeavyMetal_Barrel::Update_Object(const _float& fTimeDelta)
 		{
 			if (!m_pCalculatorCom->Collision_Object_StaticObject(m_pColliderCom))
 			{
+				if (!m_isSound)
+				{
+					CSoundMgr::Get_Instance()->PlaySound(L"Button.ogg", CSoundMgr::PLAYER);
+					m_isSound = true;
+				}
+				
 				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 			}
 			else
 			{
+				m_isSound = false;
 				m_isObject_PlayerWarpMove = false;
 				m_isObject_PlayerWarpMoveFirst = false;
 			}

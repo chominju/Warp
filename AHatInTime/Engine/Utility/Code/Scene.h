@@ -24,6 +24,8 @@ public:
 	multimap<const _tchar*, CGameObject*>* Get_Layer_GameObjects(const _tchar* pLayerTag);
 
 	//CGameObject* Get_Player(const _tchar* pLayerTag, const _tchar * pObjTag);
+	map<const _tchar*, CLayer*> * Get_MapLayer() { return &m_mapLayer; }
+
 
 public:
 	virtual HRESULT		Ready_Scene(void);

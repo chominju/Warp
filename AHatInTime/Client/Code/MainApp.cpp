@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainApp.h"
 #include "Logo.h"
+#include "SoundMgr.h"
 
 CMainApp::CMainApp(void)
 {
@@ -14,11 +15,14 @@ CMainApp::~CMainApp(void)
 
 HRESULT CMainApp::Ready_MainApp(void)
 {
+
+	CSoundMgr::Get_Instance()->Initialize();
 	FAILED_CHECK_RETURN(SetUp_DefaultSetting(&m_pGraphicDev), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
 
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 
 	return S_OK;
 }
@@ -67,7 +71,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 
 	// ÆùÆ®
 
-	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Default", L"¹ÙÅÁ", 30, 50, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Font((*ppGraphicDev), L"Font_Jinji", L"±Ã¼­", 30, 30, FW_HEAVY), E_FAIL);
 
 	// InputDev
@@ -85,7 +89,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, CManagement ** ppMa
 {
 	CScene*		pScene = nullptr;
 
-	FAILED_CHECK_RETURN(Create_Management(ppManagementClass), E_FAIL);
+	FAILED_CHECK_RETURN(Create_Management(pGraphicDev,ppManagementClass), E_FAIL);
 
 	(*ppManagementClass)->AddRef();
 		

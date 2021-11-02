@@ -124,6 +124,21 @@
     <Filter Include="04. SoundManager">
       <UniqueIdentifier>{fda65013-e6a0-4a54-adcc-f5eb2b1caf25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Player\00. PlayerAim">
+      <UniqueIdentifier>{38cbda86-c2fd-474e-929f-022843533925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Player\01. WarpSprite">
+      <UniqueIdentifier>{6b5f4ace-d791-4f41-91a2-9de8f4a3801e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\03. EndLogo">
+      <UniqueIdentifier>{a23d1452-bfaa-4c3e-8d97-fb540fea0e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\12. InteractionObject\13. EndSpace">
+      <UniqueIdentifier>{c05c4dc5-988f-4bf8-9f8e-27b2d4b1ec82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\00. BackGround\00.EndBackGround">
+      <UniqueIdentifier>{450f3f30-8f13-47fe-be68-49361d06ac72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -183,9 +198,6 @@
     <ClInclude Include="..\Code\Tree.h">
       <Filter>02. GameObject\08. Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Effect.h">
-      <Filter>02. GameObject\09. Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\UI.h">
       <Filter>02. GameObject\10. UI</Filter>
     </ClInclude>
@@ -240,8 +252,26 @@
     <ClInclude Include="..\Code\OrderTile_Manager.h">
       <Filter>02. GameObject\12. InteractionObject\12. OrderTile\01. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\PlayerAim.h">
+      <Filter>02. GameObject\01. Player\00. PlayerAim</Filter>
+    </ClInclude>
     <ClInclude Include="..\Code\SoundMgr.h">
       <Filter>04. SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\WrapSprite.h">
+      <Filter>02. GameObject\01. Player\01. WarpSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Effect.h">
+      <Filter>02. GameObject\09. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\EndLogo.h">
+      <Filter>01. Scene\03. EndLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\EndSpace.h">
+      <Filter>02. GameObject\12. InteractionObject\13. EndSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\EndBackGround.h">
+      <Filter>02. GameObject\00. BackGround\00.EndBackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +319,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Tree.cpp">
       <Filter>02. GameObject\08. Tree</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Effect.cpp">
-      <Filter>02. GameObject\09. Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\UI.cpp">
       <Filter>02. GameObject\10. UI</Filter>
@@ -347,8 +374,26 @@
     <ClCompile Include="..\Code\OrderTile_Manager.cpp">
       <Filter>02. GameObject\12. InteractionObject\12. OrderTile\01. Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\PlayerAim.cpp">
+      <Filter>02. GameObject\01. Player\00. PlayerAim</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\SoundMgr.cpp">
       <Filter>04. SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\WrapSprite.cpp">
+      <Filter>02. GameObject\01. Player\01. WarpSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Effect.cpp">
+      <Filter>02. GameObject\09. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndLogo.cpp">
+      <Filter>01. Scene\03. EndLogo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndSpace.cpp">
+      <Filter>02. GameObject\12. InteractionObject\13. EndSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndBackGround.cpp">
+      <Filter>02. GameObject\00. BackGround\00.EndBackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

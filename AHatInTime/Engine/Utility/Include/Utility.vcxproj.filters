@@ -201,6 +201,9 @@
     <ClCompile Include="..\Code\SphereCollider.cpp">
       <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Shader.cpp">
+      <Filter>04. Component\10. Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\Management.h">
@@ -301,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\SphereCollider.h">
       <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader.h">
+      <Filter>04. Component\10. Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Shader_Effect.hpp">
+      <Filter>04. Component\10. Shader\hpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

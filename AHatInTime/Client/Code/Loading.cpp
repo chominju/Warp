@@ -30,7 +30,7 @@ HRESULT CLoading::Ready_Loading(LOADINGID eID)
 
 Engine::_uint CLoading::LoadingForStage(void)
 {
-	lstrcpy(m_szLoading, L"Texture Loading.................");
+	lstrcpy(m_szLoading, L"Loading.................");
 	// ¹öÆÛ
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_TerrainTex", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Buffer_CubeTex", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
@@ -39,7 +39,7 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TYPE_NORMAL, 2)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Terrain2", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Terrain0.png", TYPE_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_SkyBox", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TYPE_CUBE, 4)), E_FAIL);
-	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Explosion/Explosion%d.png", TYPE_NORMAL, 90)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_Effect", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_%d.tga", TYPE_NORMAL, 16)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Texture_UI", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/hpbar.png", TYPE_NORMAL, 1)), E_FAIL);
 
 
@@ -65,6 +65,28 @@ Engine::_uint CLoading::LoadingForStage(void)
 	FAILED_CHECK_RETURN(Ready_Proto(L"iceTerrain.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/iceTerrain.jpg", TYPE_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"TileSound.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/TileSound.jpg", TYPE_NORMAL, 1)), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"TileSoundOn.jpg", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Terrain/TileSoundOn.jpg", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"CircleAim.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Player/CircleAim.tga", TYPE_NORMAL, 1)), E_FAIL);
+
+
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_0.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_0.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_1.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_1.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_2.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_2.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_3.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_3.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_4.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_4.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_5.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_5.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_6.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_6.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_7.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_7.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_8.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_8.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_9.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_9.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_10.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_10.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_11.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_11.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_12.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_12.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_13.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_13.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_14.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_14.tga", TYPE_NORMAL, 1)), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Proto(L"WARPSTART_15.tga", CTexture::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/Texture/Effect/WARPSTART2/WARPSTART_15.tga", TYPE_NORMAL, 1)), E_FAIL);
+	
+
+
 	//FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Transform", CTransform::Create(m_pGraphicDev)) , E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Bed.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Bed.X")), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Proto(L"Proto_Mesh_Box1.x", CStaticMesh::Create(m_pGraphicDev, L"../../MapToolMFC/Bin/Resource3/UseStaticMesh/", L"Box1.X")), E_FAIL);

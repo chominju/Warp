@@ -40,7 +40,7 @@ private:
 //	CCollider*				m_pColliderCom = nullptr;
 	CGameObject*					m_targetBall;
 	_float							m_speed;
-
+	_bool							m_isSound;
 public:
 	static CHeavyMetal_Barrel*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

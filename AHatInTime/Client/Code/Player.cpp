@@ -1,8 +1,13 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "PlayerAim.h"
 #include "InteractionObject.h"
 #include "EmptyObject.h"
 #include "Export_Function.h"
+#include "LeftDoor.h"
+#include "RightDoor.h"
+#include "WrapSprite.h"
+#include "Effect.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -22,7 +27,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 	, m_isFrozenRoadWalk(false)
 	, m_isColl_StaticObject(false)
 	, m_isColl_InteractionObject(false)
-	, m_isWrapSkillItem(true)
+	, m_isWrapSkillItem(false)
+	, m_isColl_Computer(false)
 {
 
 }
@@ -45,11 +51,11 @@ HRESULT CPlayer::Ready_Object(void)
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
 	//ºùÆÇ¸Ê
-	m_pTransformCom->Set_Pos(80.f, 0.f, 180.f);
+	//m_pTransformCom->Set_Pos(80.f, 0.f, 180.f);
 	//¹°Ã¼¹Ì´Â¸Ê
 	//m_pTransformCom->Set_Pos(180.f, 0.f, 150.f);
 	//±âÁ¸À§Ä¡
-	//m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
+	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
 
 	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
 	
@@ -62,7 +68,6 @@ HRESULT CPlayer::Ready_Object(void)
 Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
-
 	m_startTime += fTimeDelta;
 	if (m_startTime > 1.f)
 	{
@@ -105,6 +110,8 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	m_pMeshCom->Play_Animation(fTimeDelta);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
+	if (m_isWrapSkillItem)
+		m_playerAim->Update_Object(fTimeDelta);
 	//Add_RenderGroup(RENDER_PLAYER, this);
 	return 0;
 }
@@ -142,7 +149,8 @@ void CPlayer::Render_Object(void)
 		newWorldMatrix2._41 += 10;
 
 	m_pWrapSphereColliderCom->Render_SphereCollider(&newWorldMatrix2/*m_pTransformCom->Get_WorldMatrix()*/);
-
+	if (m_isWrapSkillItem)
+		m_playerAim->Render_Object();
 }
 
 HRESULT CPlayer::Add_Component(void)
@@ -196,6 +204,7 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_WrapSphereCollider", pComponent);
 
+	m_playerAim = CPlayerAim::Create(m_pGraphicDev);
 	return S_OK;
 
 }
@@ -340,6 +349,21 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			{
 				if (m_isWrapKeyable)
 				{
+					CSoundMgr::Get_Instance()->PlaySound(L"Player_Warp.ogg", CSoundMgr::PLAYER);
+					/*CEffect* newEffect = CEffect::Create(m_pGraphicDev);
+					pLayer->Add_GameObject(L"WarpSprite", newEffect);
+					CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"Effect_Layer", pLayer, L"WarpSprite", newEffect);*/
+					if (!m_isHideObject)
+					{
+						CLayer*		pLayer = CLayer::Create();
+						CWarpSprite* newWarpSprite = CWarpSprite::Create(m_pGraphicDev);
+						const _matrix* playerWorld = m_pTransformCom->Get_WorldMatrix();
+						newWarpSprite->Get_Transform_Component()->Set_Pos(playerWorld->_41, 5.f, playerWorld->_43);
+
+						pLayer->Add_GameObject(L"WarpSprite", newWarpSprite);
+						CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"Effect_Layer", pLayer, L"WarpSprite", newWarpSprite);
+					}
+
 					m_isWrapKeyable = false;
 					if (m_isHideObjectAble)
 					{
@@ -352,6 +376,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 						m_pTransformCom->Set_Pos(getWorld->_41, temp.y, getWorld->_43);
 						m_pMeshCom->Set_AnimationIndex(10);
 						m_hideObject = m_hideObjectAble;
+
 					}
 					else
 					{
@@ -665,6 +690,25 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_pMeshCom->Set_AnimationIndex(23);
 				m_isFrozenRoadWalk = false;
 			}*/
+		}
+	}
+
+	if (m_isColl_Computer)
+	{
+		if (GetAsyncKeyState('G') & 0x8000)	// G¸¦ ´­·¶À» ¶§
+		{
+			auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+			for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+			{
+				for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+				{
+					if (iter->first == L"LeftDoor5")
+						dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
+
+					if (iter->first == L"RightDoor5")
+						dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
+				}
+			}
 		}
 	}
 }

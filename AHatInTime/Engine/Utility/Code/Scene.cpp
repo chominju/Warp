@@ -92,6 +92,9 @@ Engine::_int Engine::CScene::Update_Scene(const _float& fTimeDelta)
 
 		if (iResult & 0x80000000)
 			return iResult;
+
+		if (iResult == 10)
+			break;
 	}
 		
 	return iResult;

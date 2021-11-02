@@ -16,6 +16,7 @@
 #include "OrderTile.h"
 #include "Effect.h"
 #include "OrderTile_Manager.h"
+#include "EndSpace.h"
 
 
 #include "Export_Function.h"
@@ -35,6 +36,9 @@ HRESULT CStage::Ready_Scene(void)
 {
 	FAILED_CHECK_RETURN(CScene::Ready_Scene(), E_FAIL);
 
+	CSoundMgr::Get_Instance()->StopAll();
+	CSoundMgr::Get_Instance()->PlayBGM(L"StageBgm.ogg");
+
 	FAILED_CHECK_RETURN(Ready_Environment_Layer(L"Environment_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic_Layer"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_StaticObject_Layer(L"StaticObject_Layer"), E_FAIL);
@@ -44,6 +48,9 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI_Layer"), E_FAIL);
 
 	FAILED_CHECK_RETURN(Ready_LightInfo(), E_FAIL);
+
+
+
 
 	//m_pGraphicDev->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	//m_pGraphicDev->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
@@ -67,12 +74,12 @@ void CStage::Render_Scene(void)
 
 	if (m_fTime >= 1.f)
 	{
-		wsprintf(m_szFPS, L"FPS : %d", m_dwRenderCnt);
+		//wsprintf(m_szFPS, L"FPS : %d", m_dwRenderCnt);
 		m_fTime = 0.f;
 		m_dwRenderCnt = 0;
 	}
 
-	Render_Font(L"Font_Jinji", m_szFPS, &_vec2(400.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+	//Render_Font(L"Font_Jinji", m_szFPS, &_vec2(400.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 
 }
 
@@ -123,7 +130,7 @@ HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
 	/*CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);*/
 	
 	
-	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh410.dat", pLayer, m_pGraphicDev);
+	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh416.dat", pLayer, m_pGraphicDev);
 	
 	
 	//CGameObject*			pGameObject = nullptr;
@@ -241,7 +248,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(6);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 150.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor6", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
@@ -249,7 +256,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(6);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor6", pGameObject), E_FAIL);
 
 
@@ -259,7 +266,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(7);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 150.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor7", pGameObject), E_FAIL);
 
 	pGameObject = CRightDoor::Create(m_pGraphicDev);
@@ -267,7 +274,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(7);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor7", pGameObject), E_FAIL);
 
 #pragma endregion
@@ -502,7 +509,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	// ¹Ù´Ú ½ºÀ§Ä¡
 	pGameObject = CFloorSwitch::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(191.f, 0.f, 154.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(190.f, 0.f, 153.f);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Set_SwitchOption(2);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch2", pGameObject), E_FAIL);
@@ -511,7 +518,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	// ¹Ù´Ú ½ºÀ§Ä¡
 	pGameObject = CFloorSwitch::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(175.f, 0.f, 125.f);
+	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Pos(176.f, 0.f, 124.f);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	dynamic_cast<CFloorSwitch*>(pGameObject)->Set_SwitchOption(3);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FloorSwitch3", pGameObject), E_FAIL);
@@ -531,7 +538,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(127.f, 0.f, 188.f);
-	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.06f);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag00", pGameObject), E_FAIL);
 
@@ -539,7 +546,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(132.f, 0.f, 188.f);
-	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.06f);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag000", pGameObject), E_FAIL);
 
@@ -547,7 +554,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(137.f, 0.f, 188.f);
-	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
+	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.06f);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag0000", pGameObject), E_FAIL);
 
@@ -676,6 +683,19 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CComputer*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.05f, 0.05f, 0.05f);
 	dynamic_cast<CComputer*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Computer", pGameObject), E_FAIL);
+
+#pragma endregion
+
+
+#pragma region Out
+
+	// ºùÆÇ
+	pGameObject = CEndSpace::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CEndSpace*>(pGameObject)->Get_Transform_Component()->Set_Pos(110.f, 0.f, 228.f);
+	dynamic_cast<CEndSpace*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Ending", pGameObject), E_FAIL);
+
 
 #pragma endregion
 

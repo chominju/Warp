@@ -3,6 +3,9 @@
 #include "Ball.h"
 #include "Player.h"
 #include "OrderTile_Manager.h"
+#include "LeftDoor.h"
+#include "RightDoor.h"
+#include "SoundMgr.h"
 
 #include "Export_Function.h"
 
@@ -97,6 +100,7 @@ Engine::_int COrderTile::Update_Object(const _float& fTimeDelta)
 				{
 					auto object = COrderTile_Manger::GetInstance()->Get_GameObjectOrder1(m_orderTileIndex);
 					dynamic_cast<COrderTile*>(object)->Set_ShowTile(true);
+					dynamic_cast<COrderTile*>(object)->Sound_OrderTile();
 					m_timer = 0.f;
 					if (m_orderTileIndex > 0)
 					{
@@ -125,7 +129,10 @@ Engine::_int COrderTile::Update_Object(const _float& fTimeDelta)
 					m_check = true;
 					m_orderTileIndex++;
 					if (COrderTile_Manger::GetInstance()->IsSameOrder1(m_orderTileIndex, this))
+					{
+						Sound_OrderTile();
 						m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"TileSoundOn.jpg"));
+					}
 					else
 					{
 						m_isEnd1 = false;
@@ -166,6 +173,7 @@ Engine::_int COrderTile::Update_Object(const _float& fTimeDelta)
 				if (m_orderTileIndex < COrderTile_Manger::GetInstance()->Get_GameObjectOrder2Size())
 				{
 					auto object = COrderTile_Manger::GetInstance()->Get_GameObjectOrder2(m_orderTileIndex);
+					dynamic_cast<COrderTile*>(object)->Sound_OrderTile();
 					dynamic_cast<COrderTile*>(object)->Set_ShowTile(true);
 					m_timer = 0.f;
 					if (m_orderTileIndex > 0)
@@ -195,7 +203,10 @@ Engine::_int COrderTile::Update_Object(const _float& fTimeDelta)
 					m_check = true;
 					m_orderTileIndex++;
 					if (COrderTile_Manger::GetInstance()->IsSameOrder2(m_orderTileIndex, this))
+					{
+						Sound_OrderTile();
 						m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"TileSoundOn.jpg"));
+					}
 					else
 					{
 						m_isEnd2 = false;
@@ -221,6 +232,19 @@ Engine::_int COrderTile::Update_Object(const _float& fTimeDelta)
 				m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"TileSoundOn.jpg"));
 			else
 				m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"TileSound.jpg"));
+		}
+	}
+	if (m_isFinish2)
+	{
+		auto getInteractionObject = CManagement::GetInstance()->Get_Scene()->Get_Layer_GameObjects(L"InteractionObject_Layer");
+
+		for (auto iter = getInteractionObject->begin(); iter != getInteractionObject->end(); iter++)
+		{
+			if (iter->first == L"LeftDoor7")
+				dynamic_cast<CLeftDoor*>(iter->second)->Set_FloorSwitch(true);
+
+			if (iter->first == L"RightDoor7")
+				dynamic_cast<CRightDoor*>(iter->second)->Set_FloorSwitch(true);
 		}
 	}
 	/*if(m_bColl || m_showTile)
@@ -323,6 +347,26 @@ void COrderTile::Render_Object(void)
 //
 //	m_objectData.m_objectIndex = objectData.m_objectIndex;
 //}
+
+void COrderTile::Sound_OrderTile()
+{
+	if (m_tileNum == 1) // 위
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"OrderUp.ogg", CSoundMgr::PLAYER);
+	}
+	else if (m_tileNum == 2) // 아래
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"OrderDown.ogg", CSoundMgr::PLAYER);
+	}
+	else if (m_tileNum == 3) // 왼쪽
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"OrderLeft.ogg", CSoundMgr::PLAYER);
+	}
+	else if (m_tileNum == 4) // 오른쪽
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"OrderRight.ogg", CSoundMgr::PLAYER);
+	}
+}
 
 HRESULT COrderTile::Add_Component(void)
 {

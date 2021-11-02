@@ -14,6 +14,8 @@ class CCollider;
 class CNaviMesh;
 class CSphereCollider;
 class CStaticMesh;
+class CRcTex;
+class CTexture;
 
 END
 class CPlayer : public CGameObject
@@ -29,7 +31,7 @@ public:
 	virtual void Render_Object(void) override;
 
 	CTransform* Get_Transform_Component() { return m_pTransformCom; }
-
+	CSphereCollider* Get_WrapSphereCollider() { return m_pWrapSphereColliderCom; }
 	_bool*		Get_PushKey() { return m_pushKey; }
 	_bool*		Get_LastPushKey() { return m_lastPushKey; }
 
@@ -44,6 +46,9 @@ public:
 	void					Set_IsFrozenRoadOn(_bool frozenRoad) { m_isFrozenRoadOn = frozenRoad; }
 	_bool					Get_IsWrapSkillItem() { return m_isWrapSkillItem; }
 	void					Set_IsWrapSkillItem(_bool wrapSkill) { m_isWrapSkillItem = wrapSkill; }
+
+	_bool					Get_IsCollComputer() { return m_isColl_Computer; }
+	void					Set_IsCollComputer(_bool isCollComputer) { m_isColl_Computer = isCollComputer; }
 
 private:
 	HRESULT					Add_Component(void);
@@ -79,7 +84,7 @@ private:
 	_bool					m_isFrozenRoadWalk;					// ºùÆÇ À§¸¦ °È°íÀÖ´ÂÁö
 	_bool					m_isColl_StaticObject;
 	_bool					m_isColl_InteractionObject;
-
+	_bool					m_isColl_Computer;
 
 	_float					m_startTime;						
 	_float					m_speed;
@@ -88,6 +93,8 @@ private:
 	CGameObject*			m_hideObjectAble;
 	CGameObject*			m_hideObject;
 	CGameObject*			m_FrozenObject;
+
+	CGameObject*			m_playerAim;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

@@ -33,10 +33,15 @@ public:
 	void			Set_Draw(_bool setDraw) { m_bDraw = setDraw; }
 	_bool			Get_Draw() { return m_bDraw; }
 
+	_bool			Get_IsDie() { return m_isDie; }
+	void			Set_IsDie(bool die) { m_isDie = die; }
+
 public:
 	virtual		HRESULT		Ready_Object(void);
 	virtual		_int		Update_Object(const _float& fTimeDelta);
 	virtual		void		Render_Object(void);
+
+
 
 public:
 	void					Compute_ViewZ(const _vec3* pPos);
@@ -50,7 +55,7 @@ protected:
 	_bool								m_bSensorColl;
 	_bool								m_bDraw;
 	_bool								m_stopPlayer[KEY_END];
-
+	_bool								m_isDie;
 private:
 	CComponent*			Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
 

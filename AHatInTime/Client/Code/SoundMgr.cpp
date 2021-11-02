@@ -1,4 +1,4 @@
-#include "framework.h"
+#include "stdafx.h"
 #include "SoundMgr.h"
 
 CSoundMgr* CSoundMgr::m_pInstance = nullptr;
@@ -89,14 +89,14 @@ void CSoundMgr::LoadSoundFile()
 {
 	_finddata_t fd; 
 
-	long handle = _findfirst("../Sound/*.*", &fd);
+	long handle = _findfirst("../../MapToolMFC/Bin/Resource3/SoundFile/*.*", &fd);
 
 	if (handle == 0)
 		return; 
 
 	int iResult = 0; 
 
-	char szCurPath[128] = "../Sound/";
+	char szCurPath[128] = "../../MapToolMFC/Bin/Resource3/SoundFile/";
 	char szFullPath[128] = ""; 
 
 	while (iResult != -1)

@@ -117,6 +117,16 @@ ERR:
 	return E_FAIL;
 }
 
+void Engine::CTexture::Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName, const _uint& iIndex /*= 0*/)
+{
+	if (m_vecTexture.size() < iIndex)
+		return;
+
+	pEffect->SetTexture(pConstantName, m_vecTexture[iIndex]);
+}
+
+
+
 const Texture_Info* CTexture::Get_TextureInfo(const wstring & stateKey, const DWORD & index)
 {
 	return &m_textureInfo;

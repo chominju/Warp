@@ -32,6 +32,7 @@ public:
 	void	Set_ShowTile(_bool showTile) { m_showTile = showTile; }
 	_bool	Get_ShowTile() { return m_showTile; }
 
+	void	Sound_OrderTile();
 	//void	IsCollisionBall();
 
 private:

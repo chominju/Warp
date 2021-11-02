@@ -166,8 +166,8 @@ void CMapToolMFCView::OnInitialUpdate()
 
 
 
-
-
+	Ready_Proto(L"T_Computer.x", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"T_Computer.X"));
+	Ready_Proto(L"Alien_Tank_Glass.x", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Alien_Tank_Glass.X"));
 	Ready_Proto(L"Proto_Mesh_Bed.x", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Bed.X"));
 	Ready_Proto(L"Proto_Mesh_Box1.x", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Box1.X"));
 	Ready_Proto(L"Proto_Mesh_Box2.x", CStaticMesh::Create(m_pGraphicDev, L"../Bin/Resource3/UseStaticMesh/", L"Box2.X"));

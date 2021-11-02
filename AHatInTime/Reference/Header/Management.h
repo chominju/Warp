@@ -25,6 +25,7 @@ public:
 public:
 	HRESULT			Set_Scene(CScene* pScene);
 	_int			Update_Scene(const _float& fTimeDelta);
+	HRESULT			Ready_Shader(LPDIRECT3DDEVICE9& pGraphicDev);
 	void			Render_Scene(LPDIRECT3DDEVICE9& pGraphicDev);
 
 private:
