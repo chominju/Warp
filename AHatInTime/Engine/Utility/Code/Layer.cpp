@@ -1,4 +1,5 @@
 #include "Layer.h"
+#include "Engine_Macro.h"
 
 USING(Engine)
 
@@ -36,7 +37,7 @@ int Engine::CLayer::Update_Layer(const _float& fTimeDelta)
 	{
 		iResult = iter.second->Update_Object(fTimeDelta);
 
-		if (iResult == 10)
+		if (iResult == SCENE_END)
 			break;
 
 		if (iResult & 0x8000000)

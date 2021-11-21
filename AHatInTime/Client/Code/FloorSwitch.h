@@ -35,14 +35,8 @@ public:
 	_bool	Get_IsObjectColl() { return m_isObjectColl; }
 private:
 	virtual HRESULT			Add_Component(void);
-	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
-//	CStaticMesh*			m_pMeshCom = nullptr;
-//	CTransform*				m_pTransformCom = nullptr;
-//	CRenderer*				m_pRendererCom = nullptr;
-//	CCalculator*			m_pCalculatorCom = nullptr;
-//	CCollider*				m_pColliderCom = nullptr;
 	CGameObject*					m_targetBall;
 	_bool							m_isBallColl;
 	_bool							m_isObjectColl;
@@ -57,4 +51,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // FloorSwitch_h__

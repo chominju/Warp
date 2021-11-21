@@ -50,4 +50,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // PlayerAim_h__

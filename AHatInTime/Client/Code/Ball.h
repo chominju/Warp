@@ -28,7 +28,6 @@ public:
 
 private:
 	virtual HRESULT			Add_Component(void);
-	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
 	_bool					isBall;
@@ -36,12 +35,6 @@ private:
 	_bool					m_firstPushKey[KEY_END];
 	_float					m_speed;
 	_float					m_angle[2];
-//	CStaticMesh*			m_pMeshCom = nullptr;
-//	CTransform*				m_pTransformCom = nullptr;
-//	CRenderer*				m_pRendererCom = nullptr;
-//	CCalculator*			m_pCalculatorCom = nullptr;
-//	CCollider*				m_pColliderCom = nullptr;
-
 
 public:
 	static CBall*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -51,4 +44,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // Ball_h__

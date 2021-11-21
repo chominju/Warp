@@ -28,19 +28,10 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
-	//void	IsCollisionBall();
-
 private:
 	virtual HRESULT			Add_Component(void);
-	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
-	//CRcTex*					m_pBufferCom = nullptr;
-	//CTexture*				m_pTextureCom = nullptr;
-	//CTransform*				m_pTransformCom = nullptr;
-	//CRenderer*				m_pRendererCom = nullptr;
-	//CCalculator*			m_pCalculatorCom = nullptr;
-	//CCollider*				m_pColliderCom = nullptr;
 
 	_int					m_startIndex;
 	_int					m_lastIndex;
@@ -53,4 +44,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // WarpSprite_h__

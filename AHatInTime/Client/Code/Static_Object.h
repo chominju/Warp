@@ -2,7 +2,6 @@
 #define Static_Objects_h__
 
 #include "GameObject.h"
-//#include "Define.h"
 
 BEGIN(Engine)
 
@@ -46,7 +45,6 @@ private:
 	CRenderer*				m_pRendererCom		= nullptr;
 	CCalculator*			m_pCalculatorCom	= nullptr;
 	CCollider*				m_pColliderCom		= nullptr;
-	//COptimization*			m_pOptimizationCom	= nullptr;
 
 	Object_Data				m_objectData;
 
@@ -63,4 +61,4 @@ private:
 };
 
 
-#endif // Stone_h__
+#endif // Static_Objects_h__

@@ -29,9 +29,6 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object(void) override;
 
-	//void Set_Static_Objects_Data(Object_Data objectData);
-	//Object_Data Get_Static_Objects_Data() { return m_objectData; }
-
 	void Set_StaticMesh_Component(const _tchar* pTextureProtoTag);
 
 	CStaticMesh* Get_StaticMesh_Component() { return m_pMeshCom; }
@@ -59,9 +56,7 @@ protected:
 	CCollider*				m_pColliderCom		= nullptr;
 	CCollider*				m_pColliderSensorCom = nullptr;
 	CSphereCollider*		m_pSphereColliderCom = nullptr;
-	//COptimization*			m_pOptimizationCom	= nullptr;
-
-	//Object_Data				m_objectData;
+	
 	_bool					m_isObject_PlayerHide;
 	_bool					m_isObject_PlayerWarpMove;
 	_bool					m_isObject_PlayerWarpMoveFirst;
@@ -79,4 +74,4 @@ private:
 };
 
 
-#endif // Stone_h__
+#endif // Interaction_Object_h__

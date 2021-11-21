@@ -3,11 +3,8 @@
 
 #include "Scene.h"
 #include "Define.h"
-#include "BackGround.h"
-#include "Player.h"
-#include "Monster.h"
 
-#include "Loading.h"
+class CLoading;
 
 class CLogo : public CScene
 {

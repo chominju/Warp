@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif // BackGround_h__
+#endif // EndBackGround_h__

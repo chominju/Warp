@@ -34,7 +34,6 @@ public:
 	CTexture* Get_Texture_Component() { return m_pTextureCom; }
 	CTransform* Get_Transform_Component() {return m_pTransformCom; }
 
-
 private:
 	HRESULT					Add_Component(void);
 	HRESULT					SetUp_Material(void);
@@ -44,7 +43,6 @@ private:
 	CTexture*					m_pTextureCom = nullptr;
 	CTransform*					m_pTransformCom = nullptr;
 	CRenderer*					m_pRendererCom = nullptr;
-	//COptimization*				m_pOptimizationCom = nullptr;
 
 	INDEX32*					m_pIndex = nullptr;
 	_ulong						m_dwTriCnt = 0;

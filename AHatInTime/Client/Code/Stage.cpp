@@ -17,7 +17,11 @@
 #include "Effect.h"
 #include "OrderTile_Manager.h"
 #include "EndSpace.h"
-
+#include "BackGround.h"
+#include "Player.h"
+#include "Terrain.h"
+#include "DynamicCamera.h"
+#include "SkyBox.h"
 
 #include "Export_Function.h"
 
@@ -74,13 +78,9 @@ void CStage::Render_Scene(void)
 
 	if (m_fTime >= 1.f)
 	{
-		//wsprintf(m_szFPS, L"FPS : %d", m_dwRenderCnt);
 		m_fTime = 0.f;
 		m_dwRenderCnt = 0;
 	}
-
-	//Render_Font(L"Font_Jinji", m_szFPS, &_vec2(400.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
-
 }
 
 HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
@@ -96,16 +96,6 @@ HRESULT CStage::Ready_Environment_Layer(const _tchar * pLayerTag)
 		D3DXToRadian(30.f), (_float)WINCX / (_float)WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
-
-	//// SkyBox
-	//pGameObject = CSkyBox::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
-
-
-
-	
-
 	
 	m_mapLayer.emplace(pLayerTag, pLayer);
 
@@ -118,7 +108,6 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 	CLoad_Manager::Load_Terrain_Data(L"../Data/terrain6.dat" , pLayer,m_pGraphicDev);
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
-
 	m_mapLayer.emplace(pLayerTag, pLayer);
 
 	return S_OK;
@@ -127,18 +116,9 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 HRESULT CStage::Ready_StaticObject_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
-	/*CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh39.dat", pLayer, m_pGraphicDev);*/
-	
 	
 	CLoad_Manager::Load_Static_Object_Data(L"../Data/mesh416.dat", pLayer, m_pGraphicDev);
-	
-	
-	//CGameObject*			pGameObject = nullptr;
 
-	//pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor", pGameObject), E_FAIL);
-	
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	m_mapLayer.emplace(pLayerTag, pLayer);
@@ -148,7 +128,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 {
 	CLayer*		pLayer = CLayer::Create();
 	CGameObject*			pGameObject = nullptr;
-#pragma region Door
+#pragma region Room1
 	// 1번문
 	pGameObject = CLeftDoor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -166,6 +146,9 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(89.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor", pGameObject), E_FAIL);
 
+#pragma endregion
+
+#pragma region Room2_Ball
 
 	// 2번문
 	pGameObject = CLeftDoor::Create(m_pGraphicDev);
@@ -184,102 +167,6 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(133.f, -0.1f, 120.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor2", pGameObject), E_FAIL);
 
-
-	//// 3번문
-	pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(3);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor3", pGameObject), E_FAIL);
-
-	pGameObject = CRightDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(3);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor3", pGameObject), E_FAIL);
-
-
-
-	//// 4번문
-	pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(4);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor4", pGameObject), E_FAIL);
-
-	pGameObject = CRightDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(4);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor4", pGameObject), E_FAIL);
-
-
-	//// 5번문
-	pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(5);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 150.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor5", pGameObject), E_FAIL);
-
-	pGameObject = CRightDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(5);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 192.5f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor5", pGameObject), E_FAIL);
-
-
-
-
-	//// 6번문
-	pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(6);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor6", pGameObject), E_FAIL);
-
-	pGameObject = CRightDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(6);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor6", pGameObject), E_FAIL);
-
-
-	//// 7번문
-	pGameObject = CLeftDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(7);
-	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor7", pGameObject), E_FAIL);
-
-	pGameObject = CRightDoor::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(7);
-	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor7", pGameObject), E_FAIL);
-
-#pragma endregion
-
-#pragma region Room2_Ball
 	// 볼
 	pGameObject = CBall::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -300,6 +187,24 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 #pragma endregion
 
 #pragma region Room3_Conveyor
+
+	//// 3번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(3);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor3", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(152.f, -0.1f, 120.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(3);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(152.f, -0.1f, 120.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor3", pGameObject), E_FAIL);
+
 	// 컨베이너1
 	pGameObject = CConveyor::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -493,6 +398,23 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 #pragma region Room5_ObjectMove
 
+	//// 4번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(4);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor4", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(161.f, -0.1f, 151.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(4);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(161.f, -0.1f, 151.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor4", pGameObject), E_FAIL);
+
 	pGameObject = CHeavyMetal_Barrel::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CHeavyMetal_Barrel*>(pGameObject)->Get_Transform_Component()->Set_Pos(175.f, 0.f, 130.f);
@@ -525,16 +447,9 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 #pragma endregion
 
-#pragma region RoadTrash
-	//// 빙판 위 쓰레기
-	//pGameObject = CGarbageBag::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(122.f, 0.f, 188.f);
-	//dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Scale(0.07f, 0.07, 0.07f);
-	//dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag0", pGameObject), E_FAIL);
+#pragma region Room7_Road
 
-	// 빙판 위 쓰레기
+	// 빙판 위 장애물
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(127.f, 0.f, 188.f);
@@ -542,7 +457,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag00", pGameObject), E_FAIL);
 
-	// 빙판 위 쓰레기
+	// 빙판 위 장애물
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(132.f, 0.f, 188.f);
@@ -550,7 +465,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"CGarbageBag000", pGameObject), E_FAIL);
 
-	// 빙판 위 쓰레기
+	// 빙판 위 장애물
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(137.f, 0.f, 188.f);
@@ -562,55 +477,44 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 #pragma region Room6_Order
 
-	//// 가운데 발판
-	//pGameObject = COrderTile::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Pos(68.f, 0.2f, 185.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Scale(2.f, 2.f, 2.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Rotation(90.f, 0.f, 0.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Set_TileNum(0);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"OrderTile0", pGameObject), E_FAIL);
+	//// 6번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(6);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor6", pGameObject), E_FAIL);
 
-	//// 맨위 발판
-	//pGameObject = COrderTile::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Pos(68.f, 0.2f, 195.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Scale(2.f, 2.f, 2.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Rotation(90.f, 0.f, 0.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Set_TileNum(1);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"OrderTile1", pGameObject), E_FAIL);
-
-	//// 맨아래 발판
-	//pGameObject = COrderTile::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Pos(68.f, 0.2f, 175.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Scale(2.f, 2.f, 2.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Rotation(90.f, 0.f, 0.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Set_TileNum(2);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"OrderTile2", pGameObject), E_FAIL);
-
-	//// 맨왼쪽 발판
-	//pGameObject = COrderTile::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Pos(58.f, 0.2f, 185.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Scale(2.f, 2.f, 2.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Rotation(90.f, 0.f, 0.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Set_TileNum(3);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"OrderTile3", pGameObject), E_FAIL);
-
-	//// 맨오른쪽 발판
-	//pGameObject = COrderTile::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Pos(78.f, 0.2f, 185.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Scale(2.f, 2.f, 2.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Get_Transform_Component()->Set_Rotation(90.f, 0.f, 0.f);
-	//dynamic_cast<COrderTile*>(pGameObject)->Set_TileNum(4);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"OrderTile4", pGameObject), E_FAIL);
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(107.f, -0.1f, 185.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(6);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(107.f, -0.1f, 185.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor6", pGameObject), E_FAIL);
 
 #pragma endregion
 
-
 #pragma region Room7_Frozen
+	
+	//// 7번문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(7);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor7", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(120.9f, -0.1f, 185.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 180.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(7);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(120.9f, -0.1f, 185.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor7", pGameObject), E_FAIL);
+
 	// 빙판
 	pGameObject = CEmptyObject::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -618,15 +522,7 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 	dynamic_cast<CEmptyObject*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 0.f, 0.f);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FrozenLoad", pGameObject), E_FAIL);
 
-	//// 빙판
-	//pGameObject = CIceBackGround::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//dynamic_cast<CIceBackGround*>(pGameObject)->Get_Transform_Component()->Set_Pos(78.f, 5.f, 120.f);
-	//dynamic_cast<CIceBackGround*>(pGameObject)->Get_Transform_Component()->Set_Scale(10.f, 10.f, 10.f);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"FrozenTexture", pGameObject), E_FAIL);
-
-
-	// 빙판 위 쓰레기
+	// 빙판 위 장애물
 	pGameObject = CGarbageBag::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	dynamic_cast<CGarbageBag*>(pGameObject)->Get_Transform_Component()->Set_Pos(197.f, 0.f, 195.f);
@@ -686,8 +582,24 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 #pragma endregion
 
+#pragma region Last
 
-#pragma region Out
+	//// 마지막 문
+	pGameObject = CLeftDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_DoorOption(5);
+	dynamic_cast<CLeftDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 150.f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LeftDoor5", pGameObject), E_FAIL);
+
+	pGameObject = CRightDoor::Create(m_pGraphicDev);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Pos(114.f, -0.1f, 192.5f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Get_Transform_Component()->Set_Rotation(0.f, 90.f, 0.f);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_DoorOption(5);
+	dynamic_cast<CRightDoor*>(pGameObject)->Set_FirstPos(114.f, -0.1f, 192.5f);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RightDoor5", pGameObject), E_FAIL);
 
 	// 빙판
 	pGameObject = CEndSpace::Create(m_pGraphicDev);
@@ -698,7 +610,6 @@ HRESULT CStage::Ready_InteractionObject_Layer(const _tchar * pLayerTag)
 
 
 #pragma endregion
-
 
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
@@ -795,20 +706,6 @@ HRESULT CStage::Ready_Player_Layer(const _tchar * pLayerTag)
 
 HRESULT CStage::Ready_UI_Layer(const _tchar * pLayerTag)
 {
-	//CLayer*		pLayer = CLayer::Create();
-	//NULL_CHECK_RETURN(pLayer, E_FAIL);
-
-	//CGameObject*			pGameObject = nullptr;
-
-
-	//// UI
-	//pGameObject = CUI::Create(m_pGraphicDev);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"UI", pGameObject), E_FAIL);
-
-
-	//m_mapLayer.emplace(pLayerTag, pLayer);
-
 	return S_OK;
 }
 

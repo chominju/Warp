@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Logo.h"
 #include "Stage.h"
+#include "BackGround.h"
+#include "Player.h"
+#include "Monster.h"
+#include "Loading.h"
 
 #include "Export_Function.h"
 
@@ -54,9 +58,7 @@ Engine::_int CLogo::Update_Scene(const _float& fTimeDelta)
 
 void CLogo::Render_Scene(void)
 {
-	// debug 용
 	Render_Font(L"Font_Jinji", m_pLoading->Get_String(), &_vec2(10.f, 20.f), D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
-
 }
 
 HRESULT CLogo::Ready_Environment_Layer(const _tchar * pLayerTag)
@@ -66,20 +68,11 @@ HRESULT CLogo::Ready_Environment_Layer(const _tchar * pLayerTag)
 	
 	CGameObject*			pGameObject = nullptr;
 
-	// background
+	// 배경
 	pGameObject = CBackGround::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
 
-	/*pGameObject = CPlayer::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-
-	pGameObject = CMonster::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Monster", pGameObject), E_FAIL);*/
-
-	
 	m_mapLayer.emplace(pLayerTag, pLayer);
 
 	return S_OK;
@@ -87,30 +80,6 @@ HRESULT CLogo::Ready_Environment_Layer(const _tchar * pLayerTag)
 
 HRESULT CLogo::Ready_GameLogic_Layer(const _tchar * pLayerTag)
 {
-
-	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-	FAR, FAG, FAB		 	(1 - FA)R, (1 - FA)G, (1 - FA)B
-
-	PLAYER->Render();
-
-
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);*/
-
-
-	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xff);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
-
-	// 이 둘은 직접 지정해주지 않으면 기본값으로 TRUE 상태
-	//m_pGraphicDev->SetRenderState(D3DRS_ZENABLE, TRUE);		// 깊이버퍼에 깊이 값을 무조건 기록은 한다, 하지만 자동 정렬을 수행할 지 말 지 결정
-	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE); // 깊이버퍼에 깊이 값을 저장할 지 말 지 결정
-
-
 	return S_OK;
 }
 

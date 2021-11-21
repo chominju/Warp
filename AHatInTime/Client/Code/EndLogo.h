@@ -3,11 +3,6 @@
 
 #include "Scene.h"
 #include "Define.h"
-#include "EndBackGround.h"
-#include "Player.h"
-#include "Monster.h"
-
-#include "Loading.h"
 
 class CEndLogo : public CScene
 {
@@ -28,7 +23,6 @@ private:
 	HRESULT			Ready_Resource(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
-	CLoading*			m_pLoading = nullptr;
 
 public:
 	static CEndLogo*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -39,4 +33,4 @@ private:
 
 };
 
-#endif // Logo_h__
+#endif // EndLogo_h__

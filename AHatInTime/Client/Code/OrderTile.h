@@ -33,18 +33,11 @@ public:
 	_bool	Get_ShowTile() { return m_showTile; }
 
 	void	Sound_OrderTile();
-	//void	IsCollisionBall();
 
 private:
 	virtual HRESULT			Add_Component(void);
-	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
-//	CStaticMesh*			m_pMeshCom = nullptr;
-//	CTransform*				m_pTransformCom = nullptr;
-//	CRenderer*				m_pRendererCom = nullptr;
-//	CCalculator*			m_pCalculatorCom = nullptr;
-//	CCollider*				m_pColliderCom = nullptr;
 	_float							m_speed;
 	_int							m_tileNum;
 	_bool							m_isStart1;
@@ -68,4 +61,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // OrderTile_h__

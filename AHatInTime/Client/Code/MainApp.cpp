@@ -33,16 +33,6 @@ int CMainApp::Update_MainApp(const float& fTimeDelta)
 		return -1;
 
 	Update_InputDev();
-
-
-	/*_long			MouseMove = 0;
-
-	if (MouseMove = Get_DIMouseMove(DIMS_Z))
-	{
-		int a = 0;
-	}*/
-
-
 	m_pManagementClass->Update_Scene(fTimeDelta);
 
 	return 0;
@@ -78,7 +68,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 *ppGraphicDev)
 
 	FAILED_CHECK_RETURN(Ready_InputDev(g_hInst, g_hWnd), E_FAIL);
 
-
+	
 
 	return S_OK;
 }

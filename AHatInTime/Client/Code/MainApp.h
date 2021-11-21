@@ -1,7 +1,6 @@
 #ifndef MainApp_h__
 #define MainApp_h__
 
-// 객체의 생성 및 소멸을 아무 곳에서 할 수 있도록 허용하지 않겠다 ; 방어적인 코드
 #include "Define.h"
 #include "Base.h"
 #include "Engine_Define.h"
@@ -17,13 +16,11 @@ END
 
 class CMainApp : public CBase
 {
-private:						// 생성자, 소멸자
-	explicit CMainApp(void);	// 묵시적 형변환 불가
+private:						
+	explicit CMainApp(void);	
 	virtual ~CMainApp(void);
 
-	// public 함수, 변수
-	// prorected 함수, 변수
-	// private 함수, 변수
+
 public:
 	HRESULT				Ready_MainApp(void);
 	int					Update_MainApp(const float& fTimeDelta);
@@ -41,8 +38,8 @@ private:
 	CTriCol*				m_pBuffer = nullptr;
 
 public:
-	static CMainApp*		Create(void);		// 생성 함수
-	virtual void			Free(void);			// 소멸 함수
+	static CMainApp*		Create(void);	
+	virtual void			Free(void);		
 
 };
 

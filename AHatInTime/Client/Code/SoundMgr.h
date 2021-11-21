@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef SoundMgr_h__
+#define SoundMgr_h__
 
 class CSoundMgr
 {
@@ -49,3 +49,4 @@ private:
 
 };
 
+#endif // SoundMgr_h__

@@ -50,16 +50,8 @@ HRESULT CPlayer::Ready_Object(void)
 	FAILED_CHECK_RETURN(CGameObject::Ready_Object(), E_FAIL);
 
 	m_pTransformCom->Set_Scale(0.05f, 0.05f, 0.05f);
-	//빙판맵
-	//m_pTransformCom->Set_Pos(80.f, 0.f, 180.f);
-	//물체미는맵
-	//m_pTransformCom->Set_Pos(180.f, 0.f, 150.f);
-	//기존위치
 	m_pTransformCom->Set_Pos(78.f, 0.f, 120.f);
-
 	m_pTransformCom->Set_Rotation(0.f, 0.f, 0.f);
-	
-	//m_pNaviCom->Set_CellIndex(1);
 	m_pMeshCom->Set_AnimationIndex(11);
 
 	return S_OK;
@@ -71,20 +63,20 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	m_startTime += fTimeDelta;
 	if (m_startTime > 1.f)
 	{
-		_vec3 playerRot;
-		m_pTransformCom->Get_Rotation(&playerRot);
-		m_pCalculatorCom->Collision_InteractionObjectSensor(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), playerRot);
-		/*m_isColl_StaticObject = */m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
+		_vec3 getPlayerRot;
+		m_pTransformCom->Get_Rotation(&getPlayerRot);
+		m_pCalculatorCom->Collision_InteractionObjectSensor(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(), getPlayerRot);
+		m_pCalculatorCom->Collision_StaticObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 		m_isColl_InteractionObject = m_pCalculatorCom->Collision_InteractionObject(m_pSphereColliderCom, m_pushKey, m_isKeyStop);
 
 
-		_bool temp1;
-		_bool temp2;
-		temp1 =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObjectAble);
-		temp2 =m_pCalculatorCom->Collision_Warp_StaticObject(m_pWrapSphereColliderCom);
+		_bool isWarp_interationObj;
+		_bool isWarp_staticObj;
+		isWarp_interationObj =m_pCalculatorCom->Collision_Warp_InteractionObject(m_pWrapSphereColliderCom , &m_isHideObjectAble , m_hideObjectAble);
+		isWarp_staticObj =m_pCalculatorCom->Collision_Warp_StaticObject(m_pWrapSphereColliderCom);
 		m_pCalculatorCom->Collision_OrderTile(m_pSphereColliderCom);
 		
-		if((temp1==false ||(temp1==true && m_isHideObjectAble ==true))&&temp2==false)
+		if((isWarp_interationObj==false ||(isWarp_interationObj==true && m_isHideObjectAble ==true))&&isWarp_staticObj==false)
 			m_isWrapable = true;
 		else
 			m_isWrapable = false;
@@ -112,7 +104,6 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	if (m_isWrapSkillItem)
 		m_playerAim->Update_Object(fTimeDelta);
-	//Add_RenderGroup(RENDER_PLAYER, this);
 	return 0;
 }
 
@@ -121,20 +112,17 @@ void CPlayer::Render_Object(void)
 	if (m_bDraw)
 	{
 		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransformCom->Get_WorldMatrix());
-
-		//m_pNaviCom->Render_NaviMesh();
-
 		m_pMeshCom->Render_Meshes();
 
 		const _matrix* getTemp = m_pTransformCom->Get_WorldMatrix();
 		_matrix newWorldMatrix = *getTemp;
 		newWorldMatrix._42 += 3;
 
-		// @@@@@@@@안보이게 주석
-		m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix/*m_pTransformCom->Get_WorldMatrix()*/);
+		m_pSphereColliderCom->Render_SphereCollider(&newWorldMatrix);
 		m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
 	}
+
 	const _matrix* getTemp2 = m_pTransformCom->Get_WorldMatrix();
 	_matrix newWorldMatrix2 = *getTemp2;
 	newWorldMatrix2._42 += 3;
@@ -166,17 +154,10 @@ HRESULT CPlayer::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);
 
-
-
 	// DynamicMesh
 	pComponent = m_pMeshCom = dynamic_cast<CDynamicMesh*>(Clone_Proto(L"Proto_Mesh_Player"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_STATIC].emplace(L"Com_Mesh", pComponent);
-
-	//// NaviMesh
-	//pComponent = m_pNaviCom = dynamic_cast<CNaviMesh*>(Clone_Proto(L"Proto_Mesh_Navi"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Navi", pComponent);
 
 	// Transform
 	pComponent = m_pTransformCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_Transform"));
@@ -217,18 +198,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		{
 			if (GetAsyncKeyState('W') & 0x8000)	// W를 눌렀을 때
 			{
-				/*if (m_lastPushKey[KEY_DOWN])
-				{
-				}
-				else if(m_lastPushKey[KEY_UP])
-				{
-
-				}
-				else if (m_lastPushKey[KEY_LEFT])
-				{
-
-				}
-				else if(m_lastPushKey[KEY_RIGHT])*/
 				dynamic_cast<CInteractionObject*>(m_hideObject)->Set_IsObject_PlayerWarpMove(true);
 				m_isHideObject = false;
 				m_bDraw = true;
@@ -243,7 +212,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			if (!m_isKeyStop[KEY_DOWN] && !m_isHideObject)
 			{
 				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-				//m_isKeyStop[KEY_UP] = false;
 			}
 			m_pushKey[KEY_DOWN] = true;
 			m_pushKey[KEY_UP] = false;
@@ -256,8 +224,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_lastPushKey[KEY_RIGHT] = false;
 			m_pMeshCom->Set_AnimationIndex(11);
 		}
-		//else
-		//	m_pushKey[KEY_DOWN] = false;
 
 		else if (GetAsyncKeyState(VK_UP) & 0x8000)
 		{
@@ -267,7 +233,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			if (!m_isKeyStop[KEY_UP] && !m_isHideObject)
 			{
 				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-				//m_isKeyStop[KEY_DOWN] = false;
 			}
 			m_pushKey[KEY_DOWN] = false;
 			m_pushKey[KEY_UP] = true;
@@ -280,8 +245,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_lastPushKey[KEY_RIGHT] = false;
 			m_pMeshCom->Set_AnimationIndex(11);
 		}
-		//else
-		//	m_pushKey[KEY_UP] = false;
 
 		else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
@@ -291,7 +254,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			if (!m_isKeyStop[KEY_LEFT] && !m_isHideObject)
 			{
 				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-				//m_isKeyStop[KEY_RIGHT] = false;
 			}
 			m_pushKey[KEY_DOWN] = false;
 			m_pushKey[KEY_UP] = false;
@@ -304,8 +266,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			m_lastPushKey[KEY_RIGHT] = false;
 			m_pMeshCom->Set_AnimationIndex(11);
 		}
-		/*else
-			m_pushKey[KEY_LEFT] = false;*/
 
 		else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		{
@@ -315,7 +275,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			if (!m_isKeyStop[KEY_RIGHT] && !m_isHideObject)
 			{
 				m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
-				//m_isKeyStop[KEY_LEFT] = false;
 			}
 			m_pushKey[KEY_DOWN] = false;
 			m_pushKey[KEY_UP] = false;
@@ -350,9 +309,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				if (m_isWrapKeyable)
 				{
 					CSoundMgr::Get_Instance()->PlaySound(L"Player_Warp.ogg", CSoundMgr::PLAYER);
-					/*CEffect* newEffect = CEffect::Create(m_pGraphicDev);
-					pLayer->Add_GameObject(L"WarpSprite", newEffect);
-					CManagement::GetInstance()->Get_Scene()->Add_LayerGameObject(L"Effect_Layer", pLayer, L"WarpSprite", newEffect);*/
 					if (!m_isHideObject)
 					{
 						CLayer*		pLayer = CLayer::Create();
@@ -395,25 +351,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		}
 		else
 			m_isWrapKeyable = true;
-		//else
-		//	m_pushKey[KEY_RIGHT] = false;
-
-		//if(m_pushKey[0]|| m_pushKey[1]|| m_pushKey[2]|| m_pushKey[3])
-		//	m_pTransformCom->Move_Pos(&m_vDir, +10.f, fTimeDelta);
-		/*if (Get_DIMouseState(DIM_LB) & 0X80)
-		{
-			_vec3	vPos = PickUp_OnTerrain();
-
-			m_pTransformCom->Move_PickingPos(&vPos, 10.f, fTimeDelta);
-		}*/
-
-		//if (Get_DIMouseState(DIM_RB) & 0X80)
-		//{
-		//	m_pMeshCom->Set_AnimationIndex(11);
-		//}
-
-		//if (true == m_pMeshCom->Is_AnimationsetFinish())
-		//	m_pMeshCom->Set_AnimationIndex(11);
 	}
 	else
 	{
@@ -463,7 +400,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 					{
 						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 					}
-					//m_isKeyStop[KEY_UP] = false;
 				}
 				m_pushKey[KEY_DOWN] = true;
 				m_pushKey[KEY_UP] = false;
@@ -477,8 +413,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_pMeshCom->Set_AnimationIndex(11);
 				m_isFrozenRoadWalk = true;
 			}
-			//else
-			//	m_pushKey[KEY_DOWN] = false;
 
 			else if (GetAsyncKeyState(VK_UP) & 0x8000)
 			{
@@ -491,7 +425,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 					{
 						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 					}
-					//m_isKeyStop[KEY_DOWN] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
 				m_pushKey[KEY_UP] = true;
@@ -505,8 +438,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_pMeshCom->Set_AnimationIndex(11);
 				m_isFrozenRoadWalk = true;
 			}
-			//else
-			//	m_pushKey[KEY_UP] = false;
 
 			else if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 			{
@@ -519,7 +450,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 					{
 						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 					}
-					//m_isKeyStop[KEY_RIGHT] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
 				m_pushKey[KEY_UP] = false;
@@ -533,8 +463,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				m_pMeshCom->Set_AnimationIndex(11);
 				m_isFrozenRoadWalk = true;
 			}
-			/*else
-			m_pushKey[KEY_LEFT] = false;*/
 
 			else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 			{
@@ -547,7 +475,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 					{
 						m_pTransformCom->Move_Pos(&m_vDir, m_speed, fTimeDelta);
 					}
-					//m_isKeyStop[KEY_LEFT] = false;
 				}
 				m_pushKey[KEY_DOWN] = false;
 				m_pushKey[KEY_UP] = false;
@@ -580,9 +507,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		}
 		else	// 걷고 있을 때 장애물 없을 때 까지 쭉 걷기
 		{
-			//if (!m_isColl_StaticObject && !m_isColl_InteractionObject)
-			//{
-			//	
 				if (m_lastPushKey[KEY_DOWN])
 				{
 					if (vDestMin.z < playerPos.z)
@@ -678,22 +602,10 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 						Reset_Speed();
 					}
 				}
-
-			/*}
-			else
-			{
-				m_pMeshCom->Set_AnimationIndex(23);
-				m_isFrozenRoadWalk = false;
-			}*/
-			/*else
-			{
-				m_pMeshCom->Set_AnimationIndex(23);
-				m_isFrozenRoadWalk = false;
-			}*/
 		}
 	}
 
-	if (m_isColl_Computer)
+	if (m_isColl_Computer)		// 컴퓨터와 상호작용 될 때
 	{
 		if (GetAsyncKeyState('G') & 0x8000)	// G를 눌렀을 때
 		{
@@ -715,45 +627,9 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 void CPlayer::SetUp_OnTerrain(void)
 {
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-
 	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic_Layer", L"Terrain", L"Com_Buffer", ID_STATIC));
 	NULL_CHECK(pTerrainBufferCom);
-
-	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
-
-
-	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
-
-	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
-
-_bool CPlayer::Collision_ToObject(/*const _tchar * pLayerTag, const _tchar * pObjTag*/)
-{
-	/*CCollider*		pObjectColliderCom = dynamic_cast<CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", ID_STATIC));
-	NULL_CHECK_RETURN(pObjectColliderCom, false);*/
-
-	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
-
-	return m_pCalculatorCom->Collision_StaticObject(/*pObjectColliderCom->Get_Min(), pObjectColliderCom->Get_Max(), pObjectColliderCom->Get_CollWorldMatrix(),*/
-		m_pSphereColliderCom , m_pushKey,m_isKeyStop);
-
-}
-
-//Engine::_vec3 CPlayer::PickUp_OnTerrain(void)
-//{
-//	CTerrainTex*		pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Buffer", ID_STATIC));
-//	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
-//
-//	CTransform*		pTerrainTransCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"GameLogic", L"Terrain", L"Com_Transform", ID_DYNAMIC));
-//	NULL_CHECK_RETURN(pTerrainTransCom, _vec3());
-//
-//	_vec3 temp{};
-//	return temp;
-//	//return m_pCalculatorCom->Picking_OnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransCom);
-//}
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {

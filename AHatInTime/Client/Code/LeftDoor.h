@@ -36,17 +36,11 @@ public:
 
 private:
 	virtual HRESULT			Add_Component(void);
-	//_bool					Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 
 private:
 	_bool					m_isOpen;
 	_bool					m_isFloorSwitch;
 
-//	CStaticMesh*			m_pMeshCom = nullptr;
-//	CTransform*				m_pTransformCom = nullptr;
-//	CRenderer*				m_pRendererCom = nullptr;
-//	CCalculator*			m_pCalculatorCom = nullptr;
-//	CCollider*				m_pColliderCom = nullptr;
 	int						m_doorOption;
 	_vec3					m_firstPos;
 
@@ -61,4 +55,4 @@ private:
 };
 
 
-#endif // Sword_h__
+#endif // LeftDoor_h__

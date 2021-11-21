@@ -3,19 +3,6 @@
 
 #include "Scene.h"
 #include "Define.h"
-#include "BackGround.h"
-#include "Player.h"
-#include "Monster.h"
-
-#include "Terrain.h"
-#include "DynamicCamera.h"
-#include "SkyBox.h"
-
-#include "Stone.h"
-#include "Sword.h"
-#include "Tree.h"
-#include "Effect.h"
-#include "UI.h"
 
 class CStage : public CScene
 {

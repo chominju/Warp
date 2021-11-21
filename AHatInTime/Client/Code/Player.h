@@ -54,14 +54,10 @@ private:
 	HRESULT					Add_Component(void);
 	void					Key_Input(const _float& fTimeDelta);
 	void					SetUp_OnTerrain(void);
-	//_vec3					PickUp_OnTerrain(void);
-
-	_bool					Collision_ToObject(/*const _tchar* pLayerTag, const _tchar* pObjTag*/);
 
 private:
 	CStaticMesh*			m_pStatic_MeshCom = nullptr;
 	CDynamicMesh*			m_pMeshCom = nullptr;
-	//CNaviMesh*				m_pNaviCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CCollider*				m_pColliderCom = nullptr;
@@ -82,17 +78,17 @@ private:
 	_bool					m_isHideObjectAble;					// 오브젝트 안에 들어갈수있는지
 	_bool					m_isFrozenRoadOn;					// 빙판 위에 있는지
 	_bool					m_isFrozenRoadWalk;					// 빙판 위를 걷고있는지
-	_bool					m_isColl_StaticObject;
-	_bool					m_isColl_InteractionObject;
+	_bool					m_isColl_StaticObject;				// static 오브젝트랑 충돌 중인지
+	_bool					m_isColl_InteractionObject;			// interaction 오브젝트랑 충돌 중인지
 	_bool					m_isColl_Computer;
 
 	_float					m_startTime;						
 	_float					m_speed;
 	_float					m_firstSpeed;
 
-	CGameObject*			m_hideObjectAble;
-	CGameObject*			m_hideObject;
-	CGameObject*			m_FrozenObject;
+	CGameObject*			m_hideObjectAble;					// 현재 숨을 수 있는 오브젝트
+	CGameObject*			m_hideObject;						// 현재 숨은 오브젝트
+	CGameObject*			m_FrozenObject;						// 빙판 오브젝트
 
 	CGameObject*			m_playerAim;
 public:

@@ -27,8 +27,6 @@ HRESULT CStatic_Objects::Ready_Object(void)
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
 	m_pTransformCom->Set_Pos(5.f, 0.f, 5.f);
-	//m_pTransformCom->Rotation(ROT_Y, D3DXToRadian(60.f));
-
 	return S_OK;
 }
 
@@ -40,20 +38,6 @@ Engine::_int CStatic_Objects::Update_Object(const _float& fTimeDelta)
 	NULL_CHECK_RETURN(getPlayer);
 
 	SetUp_OnTerrain();
-	//m_bColl
-	//m_bColl = Collision_ToPlayer(L"Player_Layer", L"Player");
-
-	//if (m_bColl)
-	//{
-	//	CManagement::GetInstance()->Get_Scene()->Get_MapLayer(L"Player_Layer", L"Player",0);
-	//	//CPlayer * getPlayer = CManagement::GetInstance()
-	//	// 플레이어 세팅
-	//}
-
-	_vec3	vPos;
-	m_pTransformCom->Get_Info(INFO_POS, &vPos);
-
-	//m_bDraw = m_pOptimizationCom->Isin_FrustumForObject(&vPos);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -78,26 +62,15 @@ void CStatic_Objects::Render_Object(void)
 		m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 		m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xc0);
 
-		//m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 		m_pMeshCom->Render_Meshes();
 
 		m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-		//m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	}
 	else
 		m_pMeshCom->Render_Meshes();
 	
-	/*m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xff);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);*/
-	//m_pMeshCom->Render_Meshes();
-
-	// @@@@@@@@안보이게 주석
 	m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_WorldMatrix());
 
-	//m_pColliderCom->Render_Collider(COLLTYPE(m_bColl), m_pTransformCom->Get_NRotWorldMatrix());
 }
 
 void CStatic_Objects::Set_StaticMesh_Component(const _tchar* pMeshProtoTag)
@@ -153,16 +126,6 @@ HRESULT CStatic_Objects::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_mapComponent[ID_DYNAMIC].emplace(L"Com_Calculator", pComponent);
 
-	// Collider
-	/*pComponent = m_pColliderCom = CCollider::Create(m_pGraphicDev, m_pMeshCom->Get_VtxPos(), m_pMeshCom->Get_NumVtx(), m_pMeshCom->Get_VtxSize());
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].emplace(L"Com_Collider", pComponent);*/
-
-	//// Optimization
-	//pComponent = m_pOptimizationCom = dynamic_cast<COptimization*>(Clone_Proto(L"Proto_Optimization"));
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_mapComponent[ID_STATIC].emplace(L"Com_Optimization", pComponent);
-	//
 	return S_OK;
 
 }
@@ -176,10 +139,6 @@ void CStatic_Objects::SetUp_OnTerrain(void)
 	NULL_CHECK(pTerrainBufferCom);
 
 	const _vec3*	ptPos = pTerrainBufferCom->Get_VtxPos();
-
-
-	//_float		fHeight = m_pCalculatorCom->Compute_HeightOnTerrain(&vPos, pTerrainBufferCom->Get_VtxPos(), VTXCNTX, VTXCNTZ);
-	//m_pTransformCom->Set_Pos(vPos.x, fHeight, vPos.z);
 	m_pTransformCom->Set_Pos(vPos.x, vPos.y, vPos.z);
 }
 
@@ -188,17 +147,7 @@ Engine::_bool CStatic_Objects::Collision_ToPlayer(const _tchar* pLayerTag, const
 	CSphereCollider*		pPlayerColliderCom = dynamic_cast<CSphereCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_SphereCollider", ID_STATIC));
 	NULL_CHECK_RETURN(pPlayerColliderCom, false);
 
-	/*return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-											m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());*/
-
-
-	//return m_pCalculatorCom->Collision_Object(m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix(),
-	//	pPlayerColliderCom/*m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix()*/);
-
 	return true;
-	//return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(), pPlayerColliderCom->Get_Max(), pPlayerColliderCom->Get_CollWorldMatrix(),
-	//	m_pColliderCom->Get_Min(), m_pColliderCom->Get_Max(), m_pColliderCom->Get_CollWorldMatrix());
-
 }
 
 CStatic_Objects* CStatic_Objects::Create(LPDIRECT3DDEVICE9 pGraphicDev)

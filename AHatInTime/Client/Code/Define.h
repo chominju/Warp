@@ -3,6 +3,7 @@
 
 #define	WINCX		800
 #define WINCY		600
+#define SCENE_END	10
 
 extern HWND		g_hWnd;
 extern HINSTANCE g_hInst;
