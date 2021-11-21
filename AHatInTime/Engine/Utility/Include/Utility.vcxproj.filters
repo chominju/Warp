@@ -94,12 +94,6 @@
     <Filter Include="04. Component\09. NaviMesh\01. Cell">
       <UniqueIdentifier>{1b53ceed-3585-491b-a9f6-2444acd182cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. Component\10. Shader">
-      <UniqueIdentifier>{4c40320a-453f-40b2-b96d-13ef33312098}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04. Component\10. Shader\hpp">
-      <UniqueIdentifier>{9692f30a-7855-4ff5-9d14-b8d3c448119a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Component\07. Collider\00. Collider">
       <UniqueIdentifier>{e29ee6f8-14ca-41b9-918b-8657123735a0}</UniqueIdentifier>
     </Filter>
@@ -201,9 +195,6 @@
     <ClCompile Include="..\Code\SphereCollider.cpp">
       <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Shader.cpp">
-      <Filter>04. Component\10. Shader</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\Management.h">
@@ -296,20 +287,11 @@
     <ClInclude Include="..\Code\Cell.h">
       <Filter>04. Component\09. NaviMesh\01. Cell</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Shader_Sample.hpp">
-      <Filter>04. Component\10. Shader\hpp</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Collider.h">
       <Filter>04. Component\07. Collider\00. Collider</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\SphereCollider.h">
       <Filter>04. Component\07. Collider\01. SphereCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Shader.h">
-      <Filter>04. Component\10. Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Shader_Effect.hpp">
-      <Filter>04. Component\10. Shader\hpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

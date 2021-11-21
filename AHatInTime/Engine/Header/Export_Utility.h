@@ -24,8 +24,6 @@
 #include "DynamicMesh.h"
 #include "NaviMesh.h"
 
-#include "Shader.h"
-
 #include "LightMgr.h"
 
 BEGIN(Engine)

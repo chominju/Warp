@@ -3,8 +3,6 @@ HRESULT			Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppMana
 	CManagement*		pManagement = CManagement::GetInstance();
 	NULL_CHECK_RETURN(pManagement, E_FAIL);
 
-	FAILED_CHECK_RETURN(pManagement->Ready_Shader(pGraphicDev), E_FAIL);
-
 	*ppManagement = pManagement;
 
 	return S_OK;

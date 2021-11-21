@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include "Engine_Macro.h"
+#include "../Client/Code/Define.h"
 
 USING(Engine)
 
